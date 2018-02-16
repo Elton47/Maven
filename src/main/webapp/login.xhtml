@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Insert your uncrative title here</title>
+	<link href="./css/style.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
+	<div class="login-page">
+		<div class="form">
+			<h:form class="register-form">
+				<p:panel header="Login"
+					style="width:30%;margin: 0 auto;margin-top:10%;text-align:center;">
+					<p:growl id="msgs" showDetail="true" sticky="true" />
+					<h:panelGrid columns="2" cellpadding="5">
+						<p:outputLabel for="username" value="Username:" />
+						<p:inputText id="username" value="#{manageUserBean.user.username}"
+							required="true" label="username"
+							requiredMessage="Username is required">
+							<f:validateLength minimum="5" />
+						</p:inputText>
+						<p:outputLabel for="password" value="Password:" />
+						<p:password id="password" value="#{manageUserBean.user.password}"
+							label="password" required="true"
+							requiredMessage="Password is required">
+							<f:validateLength minimum="5" />
+						</p:password>
+					</h:panelGrid>
+					<p:commandButton value="SUBMIT" update="msgs" process="@this"
+						ajax="false" action="#{manageUserBean.validateLogin}" />
+				</p:panel>
+			</h:form>
+		</div>
+	</div>
+</h:body>
+</html>
