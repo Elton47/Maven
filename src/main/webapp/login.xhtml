@@ -1,40 +1,48 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<title>Insert your uncrative title here</title>
-	<link href="./css/style.css" rel="stylesheet" type="text/css" />
-</h:head>
-<h:body>
-	<div class="login-page">
-		<div class="form">
-			<h:form class="register-form">
-				<p:panel header="Login"
-					style="width:30%;margin: 0 auto;margin-top:10%;text-align:center;">
-					<p:growl id="msgs" showDetail="true" sticky="true" />
-					<h:panelGrid columns="2" cellpadding="5">
-						<p:outputLabel for="username" value="Username:" />
-						<p:inputText id="username" value="#{manageUserBean.user.username}"
-							required="true" label="username"
-							requiredMessage="Username is required">
-							<f:validateLength minimum="5" />
-						</p:inputText>
-						<p:outputLabel for="password" value="Password:" />
-						<p:password id="password" value="#{manageUserBean.user.password}"
-							label="password" required="true"
-							requiredMessage="Password is required">
-							<f:validateLength minimum="5" />
-						</p:password>
-					</h:panelGrid>
-					<p:commandButton value="SUBMIT" update="msgs" process="@this"
-						ajax="false" action="#{manageUserBean.validateLogin}" />
-				</p:panel>
-			</h:form>
+	<h:head>
+		<title>Insert your uncrative title here</title>
+		<!--Import Google Icon Font-->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+		<!--Import style.css-->
+		<link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
+	</h:head>
+	<h:body>
+		<!--Import jQuery before materialize.js-->
+    	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    	<script type="text/javascript" src="js/materialize.min.js"></script>
+		<div class="login-page">
+			<div class="row">
+				<h:form class="login-form">
+					<p:panel header="Login"
+						style="width: 30%; margin: 0 auto; margin-top: 10%; text-align: center;">
+						<p:growl id="msgs" showDetail="true" sticky="true" />
+						<h:panelGrid columns="2" cellpadding="5">
+							<p:outputLabel for="username" value="Username:" />
+							<div class="input-field col s6">
+								<h:inputText class="validate" id="username" value="#{manageUserBean.user.username}"
+									required="true" label="username"
+									requiredMessage="Username is required">
+									<f:validateLength minimum="5" />
+								</h:inputText>
+							</div>
+							<p:outputLabel for="password" value="Password:" />
+							<h:inputSecret id="password" value="#{manageUserBean.user.password}"
+								label="password" required="true"
+								requiredMessage="Password is required">
+								<f:validateLength minimum="5" />
+							</h:inputSecret>
+						</h:panelGrid>
+						<h:commandButton styleClass="waves-effect waves-light btn blue" title="Login" value="Login" update="msgs" process="@this"
+							ajax="false" action="#{manageUserBean.validateLogin}" />
+					</p:panel>
+				</h:form>
+			</div>
 		</div>
-	</div>
-</h:body>
+	</h:body>
 </html>

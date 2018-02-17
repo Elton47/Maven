@@ -86,5 +86,15 @@
     		<version>8.0</version>
     		<scope>provided</scope>
 		</dependency>
+		<dependency>
+    		<groupId>org.webjars.bower</groupId>
+    		<artifactId>materialize</artifactId>
+    		<version>1.0.0-alpha.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>jquery</artifactId>
+		    <version>3.2.1</version>
+		</dependency>
 	</dependencies>
 </project>
