@@ -17,10 +17,10 @@ public class ManageUserBean implements Serializable {
     private List<User> users;
     @PostConstruct
     public void init() {
-        users = userDao.getAll();
+        users = userDao.getUsers();
     }
     public String validateLogin() {
-        return userDao.validateUser(user.getUsername(), user.getPassword()) ? "private/user/index.xhtml?faces-redirect=true" : "login.xhtml?faces-redirect=true";
+        return userDao.validateUser(user.getUsername(), user.getPassword()) ? "private/user/index.xhtml?faces-redirect=true" : "";
     }
     public List<User> getUsers() {
         return users;

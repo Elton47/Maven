@@ -8,14 +8,11 @@ import project.util.HibernateUtil;
 
 public class UserDao extends DbOps<User> {
     private Session session = HibernateUtil.getSessionFactory().openSession();
-    public User getUserById(int id) {
-        return null;
-    }
-    public List<User> getAll() {
+    public List<User> getUsers() {
         try {
-            TypedQuery<User> query = session.createQuery("from User u", User.class);
-            List<User> userList = query.getResultList();
-            return userList;
+            TypedQuery<User> query = session.createQuery("from User", User.class);
+            List<User> users = query.getResultList();
+            return users;
         } catch(Exception e) {
             return null;
         }

@@ -3,10 +3,14 @@
  * Copyright 2014-2017 Materialize
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
- @font-face {
+@font-face {
 	font-family: "Product Sans";
 	src: url("fonts/Product_Sans.ttf");
 }
+.no-uppercase {
+	text-transform: none;
+}
+
 .materialize-red {
 	background-color: #e51c23 !important
 }
@@ -4736,7 +4740,6 @@ small {
 	margin-right: 24px;
 	-webkit-transition: color .3s ease;
 	transition: color .3s ease;
-	text-transform: uppercase
 }
 
 .card .card-action a:not (.btn ):not (.btn-large ):not (.btn-large ):not
@@ -4982,7 +4985,6 @@ small {
 	height: 36px;
 	line-height: 36px;
 	padding: 0 2rem;
-	text-transform: uppercase;
 	vertical-align: middle;
 	-webkit-tap-highlight-color: transparent
 }

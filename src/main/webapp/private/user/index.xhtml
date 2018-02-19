@@ -3,32 +3,56 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 	<h:head>
-		<title>User Panel</title>
+		<title>Panel</title>
 		<!--Import Google Icon Font-->
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-		<!--Import style.css-->
-		<link type="text/css" rel="stylesheet" href="../../css/materialize.min.css" media="screen,projection" />
+		<!-- Compiled and minified CSS -->
+  	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"/>
+	    <!-- Compiled and minified JavaScript -->
+  	    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 	</h:head>
 	<h:body>
-		<!--Import jQuery before materialize.js-->
-	    <script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>
-	    <script type="text/javascript" src="../../js/materialize.min.js"></script>
-	    <div class="row">
-    		<p:growl autoUpdate="true" />
-    		<div class="row">
-    			<h:form class="col s12">
-    				<div class="row">
-		    			<div class="col s12 input-field">
-		          			<h:inputText class="validate" id="username" required="true" requiredMessage="Username is required!" />
-		          			<label for="username">Username</label>
-		       			</div>
-	       			</div>
-	       			<h:commandButton id="btn_doNotClick" class="waves-effect waves-light btn blue" value="Do not click!"/>
-       			</h:form>
+	    <nav class="teal lighten-1">
+	    	<div class="nav-wrapper">
+	    		<a href="#" class="brand-logo">Logo</a>
+	    		<ul class="right hide-on-med-and-down">
+	    			<li><a href="#">Departments</a></li>
+	    			<li><a href="#">Sectors</a></li>
+	    			<li><a href="#">Roles</a></li>
+	    			<li><a href="#">Permissions</a></li>
+	    			<li><a href="#">Users</a></li>
+	    			<li><a href="#">Countries</a></li>
+	    			<li><a href="#">Employees</a></li>
+	    			<li><a href="#">Children</a></li>
+	    			<li><a href="http://localhost:8080/maven/login.xhtml">Logout</a></li>
+	    		</ul>
     		</div>
-	    </div>
+	    </nav>
+    	<div id="tableDiv" style="width: 80%; height: 80%; position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
+    		<h:panelGroup id="departmentsDiv">
+				<h:dataTable styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Code" />
+						</f:facet>
+						<h:outputText value="#{department.code}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						<h:outputText value="#{department.name}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Budget" />
+						</f:facet>
+						<h:outputText value="#{department.budget}" />
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+		</div>
 	</h:body>
 </html>
