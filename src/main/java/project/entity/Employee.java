@@ -32,8 +32,6 @@ public class Employee {
 	private Country country;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Sector sector;
-	@OneToOne(fetch = FetchType.LAZY)
-	private User user;
 	@Column(name = "Validity")
 	private int validity;
 	public Employee() {}
@@ -78,12 +76,6 @@ public class Employee {
 	}
 	public void setSector(Sector sector) {
 		this.sector = sector;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
 	}
 	public int getValidity() {
 		return validity;

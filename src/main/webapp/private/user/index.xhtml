@@ -16,40 +16,312 @@
 	<h:body>
 	    <nav class="teal lighten-1">
 	    	<div class="nav-wrapper">
-	    		<a href="#" class="brand-logo">Logo</a>
+	    		<a href="" class="brand-logo"><i class="material-icons" style="font-size: 24pt; margin-left: 16px;">insert_emoticon</i></a>
 	    		<ul class="right hide-on-med-and-down">
-	    			<li><a href="#">Departments</a></li>
-	    			<li><a href="#">Sectors</a></li>
-	    			<li><a href="#">Roles</a></li>
-	    			<li><a href="#">Permissions</a></li>
-	    			<li><a href="#">Users</a></li>
-	    			<li><a href="#">Countries</a></li>
-	    			<li><a href="#">Employees</a></li>
-	    			<li><a href="#">Children</a></li>
+	    		<h:form>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Departments')}">Departments</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Sectors')}">Sectors</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Roles')}">Roles</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Permissions')}">Permissions</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Users')}">Users</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Countries')}">Countries</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Employees')}">Employees</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Children')}">Children</h:commandLink></li>
 	    			<li><a href="http://localhost:8080/maven/login.xhtml">Logout</a></li>
+    			</h:form>
 	    		</ul>
     		</div>
 	    </nav>
     	<div id="tableDiv" style="width: 80%; height: 80%; position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
-    		<h:panelGroup id="departmentsDiv">
+    		<h:panelGroup rendered="#{visibilityController.show == 'Departments'}">
 				<h:dataTable styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Code" />
 						</f:facet>
-						<h:outputText value="#{department.code}" />
+						#{department.code}
 					</h:column>
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Name" />
 						</f:facet>
-						<h:outputText value="#{department.name}" />
+						#{department.name}
 					</h:column>
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Budget" />
 						</f:facet>
-						<h:outputText value="#{department.budget}" />
+						<h:form>
+							#{department.budget}
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Sectors'}">
+				<h:dataTable styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Code" />
+						</f:facet>
+						#{sector.code}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						#{sector.name}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Department" />
+						</f:facet>
+						#{sector.department.code}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Manager" />
+						</f:facet>
+						<h:form>
+							#{sector.employee.fullName}
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Roles'}">
+				<h:dataTable styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						#{role.name}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Permissions" />
+						</f:facet>
+						<ul class="collection">
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+						</ul>
+						<h:form>
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Permissions'}">
+				<h:dataTable styleClass="highlight" value="#{managePermissionBean.permissions}" var="permission">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						#{permission.name}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Roles" />
+						</f:facet>
+						<ul class="collection">
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+							<li class="collection-item">
+								<h:form>
+									<div>TODO
+										<h:commandLink class="material-icons secondary-content" value="delete" />
+										<h:commandLink class="material-icons secondary-content" value="edit" />
+									</div>
+								</h:form>
+							</li>
+						</ul>
+						<h:form>
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Users'}">
+				<h:dataTable styleClass="highlight" value="#{manageUserBean.users}" var="user">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="First Name" />
+						</f:facet>
+						#{user.firstName}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Middle Name" />
+						</f:facet>
+						#{user.middleName}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Last Name" />
+						</f:facet>
+						#{user.lastName}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Username" />
+						</f:facet>
+						#{user.username}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Password" />
+						</f:facet>
+						#{user.password}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Role" />
+						</f:facet>
+						<h:form>
+							#{user.role.name}
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Countries'}">
+				<h:dataTable styleClass="highlight" value="#{manageCountryBean.countries}" var="country">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						<h:form>
+							#{country.name}
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Employees'}">
+				<h:dataTable styleClass="highlight" value="#{manageEmployeeBean.employees}" var="employee">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="SSN" />
+						</f:facet>
+						#{employee.ssn}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Full Name" />
+						</f:facet>
+						#{employee.fullName}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="CellNo" />
+						</f:facet>
+						#{employee.cellNo}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Wage" />
+						</f:facet>
+						#{employee.wage}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Country" />
+						</f:facet>
+						#{employee.country.name}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Sector" />
+						</f:facet>
+						<h:form>
+							#{employee.sector.code}
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Children'}">
+				<h:dataTable styleClass="highlight" value="#{manageChildBean.children}" var="child">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Full Name" />
+						</f:facet>
+						#{child.fullName}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Age" />
+						</f:facet>
+						#{child.age}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Parent" />
+						</f:facet>
+						<h:form>
+							#{child.employee.fullName}
+							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
 					</h:column>
 				</h:dataTable>
 			</h:panelGroup>
