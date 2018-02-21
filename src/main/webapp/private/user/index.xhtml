@@ -34,28 +34,58 @@
 	    </nav>
     	<div id="tableDiv" style="width: 80%; height: 80%; position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
     		<h:panelGroup rendered="#{visibilityController.show == 'Departments'}">
+    			<h:form>
+	    			<h:panelGroup rendered="#{!manageDepartmentBean.adding}" class="waves-effect waves-light btn white black-text"
+						style="padding: 0; width: 64px;">
+						<h:commandButton
+							style="width: 64px; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-transform: none;"
+							title="Add" value="Add"	action="#{manageDepartmentBean.addDepartment()}" />
+					</h:panelGroup>
+	    			<h:panelGroup styleClass="row" rendered="#{manageDepartmentBean.adding}">
+						<div class="input-field col s4">
+							<h:inputText id = "code" value="#{manageDepartmentBean.code}" required="true" />
+							<label for="code">Code</label>
+						</div>
+						<div class="input-field col s4" style="width: 25%;">
+							<h:inputText id="name" value="#{manageDepartmentBean.name}" required="true" />
+							<label for="name">Name</label>
+						</div>
+						<div class="input-field col s4" style="width: 25%;">
+							<h:inputText id="budget" value="#{manageDepartmentBean.budget}" required="true" />
+							<label for="budget">Budget</label>
+						</div>
+						<div class="waves-effect waves-light btn white black-text"
+							style="padding: 0; width: 64px;">
+							<h:commandButton
+								style="width: 64px; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-transform: none;"
+								title="Done" value="Done" process="@this" action="#{manageDepartmentBean.addDepartment()}" />
+						</div>
+						<div class="waves-effect waves-light btn white black-text"
+							style="padding: 0; width: 64px;">
+							<h:commandButton
+								style="width: 64px; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-transform: none;"
+								title="Cancel" value="Cancel" process="@this" action="#{manageDepartmentBean.setAdding(false)}" />
+						</div>
+					</h:panelGroup>
+				</h:form>
 				<h:dataTable styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Code" />
 						</f:facet>
-						#{department.code}
+						<h:outputText value="#{department.code}" />
 					</h:column>
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Name" />
 						</f:facet>
-						#{department.name}
+						<h:outputText value="#{department.name}" />
 					</h:column>
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Budget" />
 						</f:facet>
-						<h:form>
-							#{department.budget}
-							<h:commandLink class="material-icons secondary-content" value="delete" />
-							<h:commandLink class="material-icons secondary-content" value="edit" />
-						</h:form>
+						<h:outputText value="#{department.budget}" />
 					</h:column>
 				</h:dataTable>
 			</h:panelGroup>

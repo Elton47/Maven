@@ -34,4 +34,10 @@ public class ManageUserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+    public void addUser(String firstName, String middleName, String lastName, String username, String password, String department, String role) {
+    	userDao.addUser(firstName, middleName, lastName, username, password, department, role);
+    }
+    public void removeUser(String username) {
+    	userDao.removeUser(username);
+    }
 }

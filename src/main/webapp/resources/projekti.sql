@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `projekti` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `projekti`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: projekti
@@ -86,7 +88,7 @@ CREATE TABLE `department` (
   `Validity` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Code` (`Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +97,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'D0001','Networking',1000000,1),(2,'D0002','Information Technology',2000000,1);
+INSERT INTO `department` VALUES (1,'D0001','Networking',1000000,1),(2,'D0002','Information Technology',2000000,0),(3,'D0003','Test',3000000,1),(4,'D0004','Testt',100000,1);
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,8 +114,8 @@ CREATE TABLE `employee` (
   `Full Name` varchar(45) NOT NULL,
   `CellNo` varchar(16) NOT NULL,
   `Wage` int(11) NOT NULL,
-  `Country_ID` int(11) NOT NULL,
-  `Sector_ID` int(11) NOT NULL,
+  `Country_ID` int(11) DEFAULT NULL,
+  `Sector_ID` int(11) DEFAULT NULL,
   `Validity` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `SSN` (`SSN`),
@@ -225,7 +227,7 @@ CREATE TABLE `sector` (
   `Code` varchar(16) NOT NULL,
   `Name` varchar(45) NOT NULL,
   `Department_ID` int(11) NOT NULL,
-  `Employee_ID` int(11) DEFAULT '0',
+  `Employee_ID` int(11) DEFAULT NULL,
   `Validity` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Code` (`Code`),
@@ -291,4 +293,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-20 18:12:59
+-- Dump completed on 2018-02-21 18:17:13

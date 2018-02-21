@@ -31,4 +31,10 @@ public class ManageCountryBean implements Serializable {
 	public void setCountry(Country country) {
 		this.country = country;
 	}
+	public void addCountry(String name) {
+		countryDao.addCountry(name);
+	}
+	public void removeCountry(String name) {
+		countryDao.removeCountry(name);
+	}
 }

@@ -1,5 +1,6 @@
 package project.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -14,7 +15,8 @@ import org.hibernate.annotations.NaturalId;
 
 @Entity
 @Table(name = "Permission")
-public class Permission {
+public class Permission implements Serializable {
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")

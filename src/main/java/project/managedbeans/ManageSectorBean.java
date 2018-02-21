@@ -31,4 +31,10 @@ public class ManageSectorBean implements Serializable {
 	public void setSector(Sector sector) {
 		this.sector = sector;
 	}
+	public void addSector(String code, String name, String department, String employee) {
+		sectorDao.addSector(code, name, department, employee);
+	}
+	public void removeSector(String code) {
+		sectorDao.removeSector(code);
+	}
 }

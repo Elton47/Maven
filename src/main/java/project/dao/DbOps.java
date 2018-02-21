@@ -41,4 +41,10 @@ public abstract class DbOps<T> {
         }
         return false;
     }
+    public void writeToDb(String statement) {
+		session.getTransaction().begin();
+	    session.createNativeQuery(statement).executeUpdate();
+	    session.getTransaction().commit();
+	    session.close();
+    }
 }

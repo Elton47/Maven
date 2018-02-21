@@ -12,12 +12,12 @@ import project.entity.Child;
 @ManagedBean(name = "manageChildBean")
 public class ManageChildBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final ChildDao countryDao = new ChildDao();
-	private Child country = new Child();
+	private final ChildDao childDao = new ChildDao();
+	private Child child = new Child();
 	private List<Child> children;
 	@PostConstruct
 	public void init() {
-		children = countryDao.getChildren();
+		children = childDao.getChildren();
 	}
 	public List<Child> getChildren() {
 		return children;
@@ -26,9 +26,15 @@ public class ManageChildBean implements Serializable {
 		this.children = children;
 	}
 	public Child getChild() {
-		return country;
+		return child;
 	}
-	public void setChild(Child country) {
-		this.country = country;
+	public void setChild(Child child) {
+		this.child = child;
+	}
+	public void addChild(String fullName, String age, String parent) {
+		childDao.addChild(fullName, age, parent);
+	}
+	public void removeChild(String fullName) {
+		childDao.removeChild(fullName);
 	}
 }

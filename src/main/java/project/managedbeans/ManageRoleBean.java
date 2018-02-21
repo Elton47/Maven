@@ -31,4 +31,10 @@ public class ManageRoleBean implements Serializable {
 	public void setRole(Role role) {
 		this.role = role;
 	}
+	public void addRole(String name) {
+		roleDao.addRole(name);
+	}
+	public void removeRole(String name) {
+		roleDao.removeRole(name);
+	}
 }

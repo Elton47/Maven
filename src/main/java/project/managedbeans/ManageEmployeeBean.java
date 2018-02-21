@@ -31,4 +31,10 @@ public class ManageEmployeeBean implements Serializable {
 	public void setEmployee(Employee employee) {
 		this.employee = employee;
 	}
+	public void addEmployee(String ssn, String fullName, String cellNo, String wage, String country, String sector) {
+		employeeDao.addEmployee(ssn, fullName, cellNo, wage, country, sector);
+	}
+	public void removeEmployee(String ssn) {
+		employeeDao.removeEmployee(ssn);
+	}
 }
