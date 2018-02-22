@@ -38,7 +38,7 @@ public class SectorDao extends DbOps<Sector> implements Serializable {
 		}
 	}
 	public void removeSector(String code) {
-		List<Sector> sectors = session.createQuery("from Sectors where Code = '" + code + "'", Sector.class).getResultList();
+		List<Sector> sectors = session.createQuery("from Sector where Code = '" + code + "'", Sector.class).getResultList();
 		if(!sectors.isEmpty() || sectors != null) {
 			writeToDb("update Sector set Validity = 0 where ID = " + sectors.get(0).getId() + "");
 			writeToDb("update Employee set Sector_ID = null where Sector_ID = " + sectors.get(0).getId());

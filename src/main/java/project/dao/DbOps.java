@@ -45,6 +45,5 @@ public abstract class DbOps<T> {
 		session.getTransaction().begin();
 	    session.createNativeQuery(statement).executeUpdate();
 	    session.getTransaction().commit();
-	    session.close();
     }
 }

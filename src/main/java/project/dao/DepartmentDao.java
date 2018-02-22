@@ -26,12 +26,12 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 	}
 	public void removeDepartment(String code) {
 		List<Department> departments = session.createQuery("from Department where Code = '" + code + "'", Department.class).getResultList();
-		if(!departments.isEmpty() || departments != null) {
-			writeToDb("update Department set Validity = 0 where ID = " + departments.get(0).getId());
+		if(departments.size() > 0) {
 			writeToDb("update User set Validity = 0 where Department_ID = " + departments.get(0).getId()); // Removing Department's User/s.
 			List<Sector> sectors = session.createQuery("from Sector where Department_ID = " + departments.get(0).getId(), Sector.class).getResultList();
-			if(!sectors.isEmpty() || sectors != null) // Removing Sectors of this Department.
+			if(sectors.size() > 0) // Removing Sectors of this Department.
 				new SectorDao().removeSector(sectors.get(0).getCode());
+			writeToDb("update Department set Validity = 0 where ID = " + departments.get(0).getId()); // Finally Removing Department.
 		}
 	}
 }

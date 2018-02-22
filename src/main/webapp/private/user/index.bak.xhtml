@@ -20,32 +20,26 @@
 			src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 	</h:head>
 	<h:body>
-   		<div class="side-nav fixed">
-   			<div class="valign-wrapper" style="width: 100%; height: 80%;">
-	   			<ul style="width: 100%;">
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#departmentsDiv')">Departments</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#sectorsDiv')">Sectors</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#rolesDiv')">Roles</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#permissionsDiv')">Permissions</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#usersDiv')">Users</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#countriesDiv')">Countries</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#employeesDiv')">Employees</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#childrenDiv')">Children</a></li>
-		  			<li><div class="divider"></div></li>
-		  			<li><a class="waves-effect waves-teal lighten-4 dropdown-button" data-activates="settingsDropDown">Settings</a></li>
-		  			<ul id="settingsDropDown" class="dropdown-content">
-		  				<li><a class="waves-effect waves-teal lighten-4">Settings</a></li>
-		  				<li><a class="waves-effect waves-teal lighten-4" >Change Password</a></li>
-		  				<li><a class="waves-effect waves-teal lighten-4" href="http://localhost:8080/maven/login.xhtml">Logout</a></li>
-		  			</ul>
-		  			</ul>
-  			</div>
-   		</div>
-   		<script>
-			function showTable(div) {$(div).toggle("fast");}
-   		</script>
-    	<div id="tableDiv" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 332px; transform: translate(0, -50%);">
-    		<div id="departmentsDiv" style="display: none;">
+	    <nav class="teal lighten-1">
+	    	<div class="nav-wrapper">
+	    		<a href="" class="brand-logo"><i class="material-icons" style="font-size: 24pt; margin-left: 16px;">insert_emoticon</i></a>
+	    		<ul class="right">
+	    		<h:form>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Departments')}">Departments</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Sectors')}">Sectors</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Roles')}">Roles</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Permissions')}">Permissions</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Users')}">Users</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Countries')}">Countries</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Employees')}">Employees</h:commandLink></li>
+	    			<li><h:commandLink action="#{visibilityController.setShow('Children')}">Children</h:commandLink></li>
+	    			<li><a href="http://localhost:8080/maven/login.xhtml">Logout</a></li>
+    			</h:form>
+	    		</ul>
+    		</div>
+	    </nav>
+    	<div id="tableDiv" style="width: 80%; height: 80%; position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
+    		<h:panelGroup rendered="#{visibilityController.show == 'Departments'}">
 				<h:dataTable styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
 					<h:column>
 						<f:facet name="header">
@@ -63,50 +57,49 @@
 						<f:facet name="header">
 							<h:outputText value="Budget" />
 						</f:facet>
-						#{department.budget}
-						<a class="material-icons secondary-content" onclick="deleteButtonClicked(department.code)">delete</a>
-						<a class="material-icons secondary-content" onclick="editButtonClicked(department.code)">edit</a>
+						<h:form>
+							#{department.budget}
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department.code)}" />
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
 					</h:column>
 				</h:dataTable>
-				<button id="addRecordButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addRecordButtonClicked()">Add</button>
-				<button id="doneButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked()">Done</button>
-				<button id="cancelButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked()">Cancel</button>
-				<script> // To Add Record for ANY Table.
-					function addRecordButtonClicked() {
-						$('#addRecordDiv').toggle('fast');
-						$('#doneButton').toggle();
-						$('#cancelButton').toggle();
-						$('#addRecordButton').toggle();
-					}
-					function doneButtonClicked() {
-						
-					}
-					function cancelButtonClicked() {
-						addRecordButtonClicked();
-					}
-					function deleteButtonClicked(code) {
-						
-					}
-					function editBUttonClicked(code) {
-						
-					}
-				</script>
-    			<div id="addRecordDiv" class="row" style="display: none;">
-					<div class="input-field col s4">
-						<h:inputText styleClass="validate" id = "addDepartmentCode" required="true" />
-						<label for="code">Code</label>
-					</div>
-					<div class="input-field col s4">
-						<h:inputText styleClass="validate" id="addDepartmentName" required="true" />
-						<label for="name">Name</label>
-					</div>
-					<div class="input-field col s4">
-						<h:inputText styleClass="validate" id="addDepartmentBudget" required="true" />
-						<label for="budget">Budget</label>
-					</div>
-				</div>
-			</div>
-			<div id="sectorsDiv" style="display: none;">
+				<h:form>
+	    			<h:panelGroup rendered="#{!manageDepartmentBean.adding}" class="waves-effect waves-light btn right"
+						style="padding: 0; width: 64px;">
+						<h:commandButton
+							style="width: 64px; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-transform: none;"
+							title="Add" value="Add"	action="#{manageDepartmentBean.addDepartment()}" />
+					</h:panelGroup>
+	    			<h:panelGroup styleClass="row" rendered="#{manageDepartmentBean.adding}">
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate" id = "code" value="#{manageDepartmentBean.code}" required="true" />
+							<label for="code">Code</label>
+						</div>
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate" id="name" value="#{manageDepartmentBean.name}" required="true" />
+							<label for="name">Name</label>
+						</div>
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate" id="budget" value="#{manageDepartmentBean.budget}" required="true" />
+							<label for="budget">Budget</label>
+						</div>
+						<div class="waves-effect waves-light btn right"
+							style="padding: 0; width: 64px;">
+							<h:commandButton
+								style="width: 64px; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-transform: none;"
+								title="Cancel" value="Cancel" immediate="true" action="#{manageDepartmentBean.setAdding(false)}" />
+						</div>
+						<div class="waves-effect waves-light btn right"
+							style="padding: 0; width: 64px;">
+							<h:commandButton
+								style="width: 64px; position: absolute; top: 0; left: 0; bottom: 0; right: 0; text-transform: none;"
+								title="Done" value="Done" action="#{manageDepartmentBean.addDepartment()}" />
+						</div>
+					</h:panelGroup>
+				</h:form>
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Sectors'}">
 				<h:dataTable styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
 					<h:column>
 						<f:facet name="header">
@@ -137,8 +130,8 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
-			<div id="rolesDiv" style="display: none;">
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Roles'}">
 				<h:dataTable styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
 					<h:column>
 						<f:facet name="header">
@@ -190,8 +183,8 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
-			<div id="permissionsDiv" style="display: none;">
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Permissions'}">
 				<h:dataTable styleClass="highlight" value="#{managePermissionBean.permissions}" var="permission">
 					<h:column>
 						<f:facet name="header">
@@ -243,8 +236,8 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
-			<div id="usersDiv" style="display: none;">
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Users'}">
 				<h:dataTable styleClass="highlight" value="#{manageUserBean.users}" var="user">
 					<h:column>
 						<f:facet name="header">
@@ -293,8 +286,8 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
-			<div id="countriesDiv" style="display: none;">
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Countries'}">
 				<h:dataTable styleClass="highlight" value="#{manageCountryBean.countries}" var="country">
 					<h:column>
 						<f:facet name="header">
@@ -307,8 +300,8 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
-			<div id="employeesDiv" style="display: none;">
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Employees'}">
 				<h:dataTable styleClass="highlight" value="#{manageEmployeeBean.employees}" var="employee">
 					<h:column>
 						<f:facet name="header">
@@ -351,8 +344,8 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
-			<div id="childrenDiv" style="display: none;">
+			</h:panelGroup>
+			<h:panelGroup rendered="#{visibilityController.show == 'Children'}">
 				<h:dataTable styleClass="highlight" value="#{manageChildBean.children}" var="child">
 					<h:column>
 						<f:facet name="header">
@@ -377,7 +370,7 @@
 						</h:form>
 					</h:column>
 				</h:dataTable>
-			</div>
+			</h:panelGroup>
 		</div>
 	</h:body>
 </html>
