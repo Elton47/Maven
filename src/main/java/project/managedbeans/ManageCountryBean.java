@@ -32,9 +32,13 @@ public class ManageCountryBean implements Serializable {
 		this.country = country;
 	}
 	public void addCountry(String name) {
-		countryDao.addCountry(name);
+		if(name.length() > 0) {
+			countryDao.addCountry(name);
+			countries = countryDao.getCountries(); // Refresh.
+		}
 	}
 	public void removeCountry(String name) {
 		countryDao.removeCountry(name);
+		countries = countryDao.getCountries(); // Refresh.
 	}
 }

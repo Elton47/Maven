@@ -32,10 +32,13 @@ public class ManageDepartmentBean implements Serializable {
 		this.department = department;
 	}
 	public void addDepartment(String code, String name, String budget) {
-		if(code != null && name != null && budget != null)
+		if(code.length() > 0 && name.length() > 0 && budget.length() > 0) {
 			departmentDao.addDepartment(code, name, budget);
+			departments = departmentDao.getDepartments(); // Refresh.
+		}
 	}
 	public void removeDepartment(String code) {
 		departmentDao.removeDepartment(code);
+		departments = departmentDao.getDepartments(); // Refresh.
 	}
 }

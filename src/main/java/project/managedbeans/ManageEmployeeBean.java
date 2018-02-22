@@ -32,9 +32,13 @@ public class ManageEmployeeBean implements Serializable {
 		this.employee = employee;
 	}
 	public void addEmployee(String ssn, String fullName, String cellNo, String wage, String country, String sector) {
-		employeeDao.addEmployee(ssn, fullName, cellNo, wage, country, sector);
+		if(ssn.length() > 0 && fullName.length() > 0 && cellNo.length() > 0 && wage.length() > 0 && country.length() > 0 && sector.length() > 0) {
+			employeeDao.addEmployee(ssn, fullName, cellNo, wage, country, sector);
+			employees = employeeDao.getEmployees(); // Refresh.
+		}
 	}
 	public void removeEmployee(String ssn) {
 		employeeDao.removeEmployee(ssn);
+		employees = employeeDao.getEmployees(); // Refresh.
 	}
 }

@@ -32,9 +32,13 @@ public class ManagePermissionBean implements Serializable {
 		this.permission = permission;
 	}
 	public void addPermission(String name) {
-		permissionDao.addPermission(name);
+		if(name.length() > 0) {
+			permissionDao.addPermission(name);
+			permissions = permissionDao.getPermissions(); // Refresh.
+		}
 	}
 	public void removePermission(String name) {
 		permissionDao.removePermission(name);
+		permissions = permissionDao.getPermissions(); // Refresh.
 	}
 }

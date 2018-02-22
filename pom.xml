@@ -69,6 +69,12 @@
     		<scope>provided</scope>
 		</dependency>
 		<dependency>
+		    <groupId>javax.enterprise</groupId>
+		    <artifactId>cdi-api</artifactId>
+		    <version>2.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
     		<groupId>org.webjars.bower</groupId>
     		<artifactId>materialize</artifactId>
     		<version>1.0.0-alpha.2</version>

@@ -2,7 +2,6 @@ package project.dao;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.TypedQuery;
 import org.hibernate.Session;
 import project.entity.Permission;
 import project.util.HibernateUtil;
@@ -12,9 +11,11 @@ public class PermissionDao extends DbOps<Permission> implements Serializable {
 	private Session session = HibernateUtil.getSessionFactory().openSession();
 	public List<Permission> getPermissions() {
 		try {
-			TypedQuery<Permission> query = session.createQuery("from Permission where Validity = 1", Permission.class);
-			List<Permission> permissions = query.getResultList();
-			return permissions;
+			List<Permission> permissions = session.createQuery("from Permission where Validity = 1", Permission.class).getResultList();
+			if(permissions.size() > 0)
+				return permissions;
+			else
+				return null;
 		} catch(Exception e) {
 			return null;
 		}
@@ -25,7 +26,7 @@ public class PermissionDao extends DbOps<Permission> implements Serializable {
 	}
 	public void removePermission(String name) {
 		List<Permission> permissions = session.createQuery("from Permission where Name = '" + name + "'", Permission.class).getResultList();
-		if(!permissions.isEmpty() || permissions != null)
+		if(permissions.size() > 0)
 			writeToDb("update Permission set Validity = 0 where Name = '" + name + "'");
 	}
 }

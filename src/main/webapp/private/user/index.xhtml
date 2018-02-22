@@ -20,6 +20,38 @@
 			src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 	</h:head>
 	<h:body>
+   		<script>
+			function showTable(div) {
+				hideTables();
+				if($(div).is(":visible"))
+					$(div).hide("fast");
+				else
+					$(div).show("fast");
+			}
+			function hideTables() {
+				$("#departmentsDiv").hide("fast");
+				$("#sectorsDiv").hide("fast");
+				$("#rolesDiv").hide("fast");
+				$("#permissionsDiv").hide("fast");
+				$("#usersDiv").hide("fast");
+				$("#countriesDiv").hide("fast");
+				$("#employeesDiv").hide("fast");
+				$("#childrenDiv").hide("fast");
+			}
+			function addButtonClicked(tableName) { // To Add Records for ANY Table.
+				$('#add' + tableName + 'Div').toggle('fast');
+				$('#done' + tableName + 'Button').toggle();
+				$('#cancel' + tableName + 'Button').toggle();
+				$('#add' + tableName + 'Button').toggle();
+			}
+			function doneButtonClicked(tableName) {
+				document.getElementsByClassName('add' + tableName + 'Form')[0].submit();
+			}
+			function cancelButtonClicked(tableName) {
+				document.getElementsByClassName('add' + tableName + 'Form')[0].reset();
+				addButtonClicked(tableName); // Toggles again.
+			}
+   		</script>
    		<div class="side-nav fixed">
    			<div class="valign-wrapper" style="width: 100%; height: 80%;">
 	   			<ul style="width: 100%;">
@@ -38,15 +70,12 @@
 		  				<li><a class="waves-effect waves-teal lighten-4" >Change Password</a></li>
 		  				<li><a class="waves-effect waves-teal lighten-4" href="http://localhost:8080/maven/login.xhtml">Logout</a></li>
 		  			</ul>
-		  			</ul>
+	  			</ul>
   			</div>
    		</div>
-   		<script>
-			function showTable(div) {$(div).toggle("fast");}
-   		</script>
-    	<div id="tableDiv" style="width: 80%; height: 80%; position: absolute; top: 50%; left: 332px; transform: translate(0, -50%);">
+    	<div id="tableDiv" style="width: 73%; height: 80%; position: absolute; top: 50%; left: 332px; transform: translate(0, -50%);">
     		<div id="departmentsDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
+				<h:dataTable id="departmentsTable" styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Code" />
@@ -63,51 +92,38 @@
 						<f:facet name="header">
 							<h:outputText value="Budget" />
 						</f:facet>
-						#{department.budget}
-						<a class="material-icons secondary-content" onclick="deleteButtonClicked(department.code)">delete</a>
-						<a class="material-icons secondary-content" onclick="editButtonClicked(department.code)">edit</a>
+						<h:form>
+							#{department.budget}
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department.code)}">
+								<f:ajax execute="@form" render="@form departmentsTable" />
+							</h:commandLink>
+							<h:commandLink class="material-icons secondary-content" value="edit" />
+						</h:form>
 					</h:column>
 				</h:dataTable>
-				<button id="addRecordButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addRecordButtonClicked()">Add</button>
-				<button id="doneButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked()">Done</button>
-				<button id="cancelButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked()">Cancel</button>
-				<script> // To Add Record for ANY Table.
-					function addRecordButtonClicked() {
-						$('#addRecordDiv').toggle('fast');
-						$('#doneButton').toggle();
-						$('#cancelButton').toggle();
-						$('#addRecordButton').toggle();
-					}
-					function doneButtonClicked() {
-						
-					}
-					function cancelButtonClicked() {
-						addRecordButtonClicked();
-					}
-					function deleteButtonClicked(code) {
-						
-					}
-					function editBUttonClicked(code) {
-						
-					}
-				</script>
-    			<div id="addRecordDiv" class="row" style="display: none;">
-					<div class="input-field col s4">
-						<h:inputText styleClass="validate" id = "addDepartmentCode" required="true" />
-						<label for="code">Code</label>
+				<br />
+				<button id="addDepartmentButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Department')">Add</button>
+				<button id="doneDepartmentButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Department')">Done</button>
+				<button id="cancelDepartmentButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Department')">Cancel</button>
+				<h:form styleClass="addDepartmentForm">
+	    			<div id="addDepartmentDiv" class="row" style="display: none;">
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addDepartmentField" required="true" />
+							<label>Code</label>
+						</div>
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addDepartmentField" required="true" />
+							<label>Name</label>
+						</div>
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addDepartmentCodeField" required="true" />
+							<label>Budget</label>
+						</div>
 					</div>
-					<div class="input-field col s4">
-						<h:inputText styleClass="validate" id="addDepartmentName" required="true" />
-						<label for="name">Name</label>
-					</div>
-					<div class="input-field col s4">
-						<h:inputText styleClass="validate" id="addDepartmentBudget" required="true" />
-						<label for="budget">Budget</label>
-					</div>
-				</div>
+				</h:form>
 			</div>
 			<div id="sectorsDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
+				<h:dataTable id="sectorsTable" styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Code" />
@@ -132,14 +148,40 @@
 						</f:facet>
 						<h:form>
 							#{sector.employee.fullName}
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageSectorBean.removeSector(sector.code)}">
+								<f:ajax execute="@form" render="@form sectorsTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addSectorButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Sector')">Add</button>
+				<button id="doneSectorButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Sector')">Done</button>
+				<button id="cancelSectorButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Sector')">Cancel</button>
+				<h:form styleClass="addSectorForm">
+	    			<div id="addSectorDiv" class="row" style="display: none;">
+						<div class="input-field col s3">
+							<h:inputText styleClass="validate addSectorField" required="true" />
+							<label>Code</label>
+						</div>
+						<div class="input-field col s3">
+							<h:inputText styleClass="validate addSectorField" required="true" />
+							<label>Name</label>
+						</div>
+						<div class="input-field col s3">
+							<h:inputText styleClass="validate addSectorField" required="true" />
+							<label>Department</label>
+						</div>
+						<div class="input-field col s3">
+							<h:inputText styleClass="validate addSectorField" required="false" />
+							<label>Manager</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 			<div id="rolesDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
+				<h:dataTable id="rolesTable" styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Name" />
@@ -150,49 +192,64 @@
 						<f:facet name="header">
 							<h:outputText value="Permissions" />
 						</f:facet>
-						<ul class="collection">
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-						</ul>
 						<h:form>
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<a style="width: 100%;" class="dropdown-button black-text" href="#" data-activates="rolePermissionsDropDown">Show</a>
+							<ul id="rolePermissionsDropDown" class="collection dropdown-content">
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+							</ul>
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageRoleBean.removeRole(role.name)}">
+								<f:ajax execute="@form" render="@form rolesTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addRoleButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Role')">Add</button>
+				<button id="doneRoleButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Role')">Done</button>
+				<button id="cancelRoleButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Role')">Cancel</button>
+				<h:form styleClass="addRoleForm">
+	    			<div id="addRoleDiv" class="row" style="display: none;">
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addRoleField" required="true" />
+							<label>Name</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 			<div id="permissionsDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{managePermissionBean.permissions}" var="permission">
+				<h:dataTable id="permissionsTable" styleClass="highlight" value="#{managePermissionBean.permissions}" var="permission">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Name" />
@@ -203,49 +260,64 @@
 						<f:facet name="header">
 							<h:outputText value="Roles" />
 						</f:facet>
-						<ul class="collection">
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-							<li class="collection-item">
-								<h:form>
-									<div>TODO
-										<h:commandLink class="material-icons secondary-content" value="delete" />
-										<h:commandLink class="material-icons secondary-content" value="edit" />
-									</div>
-								</h:form>
-							</li>
-						</ul>
 						<h:form>
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<a style="width: 100%;" class="dropdown-button black-text" href="#" data-activates="permissionRolesDropDown">Show</a>
+							<ul id="permissionRolesDropDown" class="dropdown-content collection">
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+								<li class="collection-item">
+									<h:form>
+										<div>TODO
+											<h:commandLink class="material-icons secondary-content" value="delete" />
+											<h:commandLink class="material-icons secondary-content" value="edit" />
+										</div>
+									</h:form>
+								</li>
+							</ul>		
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{managePermissionBean.removePermission(permission.name)}">
+								<f:ajax execute="@form" render="@form permissionsTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addPermissionButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Permission')">Add</button>
+				<button id="donePermissionButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Permission')">Done</button>
+				<button id="cancelPermissionButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Permission')">Cancel</button>
+				<h:form styleClass="addPermissionForm">
+	    			<div id="addPermissionDiv" class="row" style="display: none;">
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addPermissionField" required="true" />
+							<label>Name</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 			<div id="usersDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageUserBean.users}" var="user">
+				<h:dataTable id="usersTable" styleClass="highlight" value="#{manageUserBean.users}" var="user">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="First Name" />
@@ -288,28 +360,80 @@
 						</f:facet>
 						<h:form>
 							#{user.role.name}
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageUserBean.removeSector(user.username)}">
+								<f:ajax execute="@form" render="@form usersTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addUserButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('User')">Add</button>
+				<button id="doneUserButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('User')">Done</button>
+				<button id="cancelUserButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('User')">Cancel</button>
+				<h:form styleClass="addUserForm">
+	    			<div id="addUserDiv" class="row" style="display: none;">
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>First Name</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>Middle Name</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>Last Name</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>Username</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>Password</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>Department</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addUserField" required="true" />
+							<label>Role</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 			<div id="countriesDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageCountryBean.countries}" var="country">
+				<h:dataTable id="countriesTable" styleClass="highlight" value="#{manageCountryBean.countries}" var="country">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Name" />
 						</f:facet>
 						<h:form>
 							#{country.name}
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageCountryBean.removeCountry(country.name)}">
+								<f:ajax execute="@form" render="@form countriesTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addCountryButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Country')">Add</button>
+				<button id="doneCountryButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Country')">Done</button>
+				<button id="cancelCountryButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Country')">Cancel</button>
+				<h:form styleClass="addCountryForm">
+	    			<div id="addCountryDiv" class="row" style="display: none;">
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addCountryField" required="true" />
+							<label>Name</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 			<div id="employeesDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageEmployeeBean.employees}" var="employee">
+				<h:dataTable id="employeesTable" styleClass="highlight" value="#{manageEmployeeBean.employees}" var="employee">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="SSN" />
@@ -346,14 +470,48 @@
 						</f:facet>
 						<h:form>
 							#{employee.sector.code}
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageEmployeeBean.removeSector(employee.ssn)}">
+								<f:ajax execute="@form" render="@form employeesTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addEmployeeButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Employee')">Add</button>
+				<button id="doneEmployeeButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Employee')">Done</button>
+				<button id="cancelEmployeeButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Employee')">Cancel</button>
+				<h:form styleClass="addEmployeeForm">
+	    			<div id="addEmployeeDiv" class="row" style="display: none;">
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addEmployeeField" required="true" />
+							<label>SSN</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addEmployeeField" required="true" />
+							<label>Full Name</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addEmployeeField" required="true" />
+							<label>CellNo</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addEmployeeField" required="true" />
+							<label>Wage</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addEmployeeField" required="true" />
+							<label>Country</label>
+						</div>
+						<div class="input-field col s2">
+							<h:inputText styleClass="validate addEmployeeField" required="true" />
+							<label>Sector</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 			<div id="childrenDiv" style="display: none;">
-				<h:dataTable styleClass="highlight" value="#{manageChildBean.children}" var="child">
+				<h:dataTable id="childrenTable" styleClass="highlight" value="#{manageChildBean.children}" var="child">
 					<h:column>
 						<f:facet name="header">
 							<h:outputText value="Full Name" />
@@ -371,12 +529,34 @@
 							<h:outputText value="Parent" />
 						</f:facet>
 						<h:form>
-							#{child.employee.fullName}
-							<h:commandLink class="material-icons secondary-content" value="delete" />
+							#{children.employee.fullName}
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageChildBean.removeSector(child.fullName)}">
+								<f:ajax execute="@form" render="@form childrenTable" />
+							</h:commandLink>
 							<h:commandLink class="material-icons secondary-content" value="edit" />
 						</h:form>
 					</h:column>
 				</h:dataTable>
+				<br />
+				<button id="addChildButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Child')">Add</button>
+				<button id="doneChildButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Child')">Done</button>
+				<button id="cancelChildButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Child')">Cancel</button>
+				<h:form styleClass="addChildForm">
+	    			<div id="addChildDiv" class="row" style="display: none;">
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addChildField" required="true" />
+							<label>Full Name</label>
+						</div>
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addChildField" required="true" />
+							<label>Age</label>
+						</div>
+						<div class="input-field col s4">
+							<h:inputText styleClass="validate addChildField" required="true" />
+							<label>Parent</label>
+						</div>
+					</div>
+				</h:form>
 			</div>
 		</div>
 	</h:body>

@@ -32,9 +32,13 @@ public class ManageChildBean implements Serializable {
 		this.child = child;
 	}
 	public void addChild(String fullName, String age, String parent) {
-		childDao.addChild(fullName, age, parent);
+		if(fullName.length() > 0 && age.length() > 0 && parent.length() > 0) {
+			childDao.addChild(fullName, age, parent);
+			children = childDao.getChildren(); // Refresh.
+		}
 	}
 	public void removeChild(String fullName) {
 		childDao.removeChild(fullName);
+		children = childDao.getChildren(); // Refresh.
 	}
 }

@@ -2,7 +2,9 @@ package project.dao;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.TypedQuery;
+
+import javax.servlet.ServletContext;
+
 import org.hibernate.Session;
 import project.entity.Department;
 import project.entity.Sector;
@@ -13,9 +15,11 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 	private Session session = HibernateUtil.getSessionFactory().openSession();
 	public List<Department> getDepartments() {
 		try {
-			TypedQuery<Department> query = session.createQuery("from Department where Validity = 1", Department.class);
-			List<Department> departments = query.getResultList();
-			return departments;
+			List<Department> departments = session.createQuery("from Department where Validity = 1", Department.class).getResultList();
+			if(departments.size() > 0)
+				return departments;
+			else
+				return null;
 		} catch(Exception e) {
 			return null;
 		}
