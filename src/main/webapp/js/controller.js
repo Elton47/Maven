@@ -1,5 +1,9 @@
 var adding = false;
 var editing = false;
+var codeToEdit = "";
+function setCodeToEdit(codeToEditFromCall) {
+	codeToEdit = codeToEditFromCall;
+}
 function showTable(div) {
 	hideTables();
 	if($(div).is(":visible"))
@@ -30,7 +34,13 @@ function doneButtonClicked(tableName) {
 		Materialize.toast(tableName + " added successfully!", 4000);
 	}
 	else if(editing) { // Edit Record.
+		document.getElementsByClassName('codeToEdit' + tableName + 'Field')[0].value = codeToEdit;
+		document.getElementsByClassName('edit' + tableName + 'HiddenButton')[0].click();
+		Materialize.toast(tableName + " updated successfully!", 4000);
 	}
+	adding = false;
+	editing = false;
+	codeToEdit = "";
 	cancelButtonClicked(tableName); // So it reverts back to "Add" button only.
 }
 function cancelButtonClicked(tableName) {

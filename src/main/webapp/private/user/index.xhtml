@@ -66,7 +66,7 @@
 							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department.code)}">
 								<f:ajax execute="@form" render="departmentsTable" />
 							</h:commandLink>
-							<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Department')">
+							<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Department')" onmousedown="setCodeToEdit(department.code)">
 								<f:ajax execute="none" />
 							</h:commandLink>
 						</h:form>
@@ -91,7 +91,11 @@
 							<label>Budget</label>
 						</div>
 					</div>
+					<h:inputText style="display: none;" styleClass="codeToEditDepartmentField" required="true" value="#{manageDepartmentBean.codeToEdit}" />
 					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
+						<f:ajax execute="@form" render="departmentsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
 						<f:ajax execute="@form" render="departmentsTable" />
 					</h:commandButton>
 				</h:form>
