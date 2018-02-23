@@ -25,7 +25,7 @@ public class SectorDao extends DbOps<Sector> implements Serializable {
 	public void addSector(String code, String name, String department, String employee) {
 		if(employee.length() > 0) {
 			List<Department> departments = session.createQuery("from Department where Name = '" + department + "'", Department.class).getResultList();
-			List<Employee> employees = session.createQuery("from Employees where `Full Name` = '" + employee + "'", Employee.class).getResultList();
+			List<Employee> employees = session.createNativeQuery("select * from Employee where `Full Name` = '" + employee + "'", Employee.class).getResultList();
 			if((!departments.isEmpty() || departments != null) && (!employees.isEmpty() || employees != null))
 				writeToDb("insert into Sector(Code, Name, Department_ID, Employee_ID, Validity)"
 						+ "values('" + code + "', '" + name + "', " + departments.get(0).getId() + ", " + employees.get(0).getId() + ", 1)");

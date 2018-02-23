@@ -42,8 +42,12 @@ public abstract class DbOps<T> {
         return false;
     }
     public void writeToDb(String statement) {
+    	if(!session.isOpen())
+    		session = HibernateUtil.getSessionFactory().openSession();
 		session.getTransaction().begin();
 	    session.createNativeQuery(statement).executeUpdate();
 	    session.getTransaction().commit();
+	    if(session.isOpen())
+	    	session.close();
     }
 }

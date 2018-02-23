@@ -22,13 +22,13 @@ public class ChildDao extends DbOps<Child> implements Serializable {
 		}
 	}
 	public void addChild(String fullName, String age, String parent) {
-		List<Employee> employees = session.createQuery("from Employee where `Full Name` = '" + parent + "'", Employee.class).getResultList();
+		List<Employee> employees = session.createNativeQuery("select * from Employee where `Full Name` = '" + parent + "'", Employee.class).getResultList();
 		if(employees.size() > 0)
 			writeToDb("insert into Child(`Full Name`, Age, Employee_ID, Validity)"
 					+ "values('" + fullName + "', " + age + ", " + employees.get(0).getId() + ", 1)");
 	}
 	public void removeChild(String fullName) {
-		List<Child> children = session.createQuery("from Child where `Full Name` = '" + fullName + "'", Child.class).getResultList();
+		List<Child> children = session.createNativeQuery("from Child where `Full Name` = '" + fullName + "'", Child.class).getResultList();
 		if(children.size() > 0)
 			writeToDb("update Child set Validity = 0 where ID = " + children.get(0).getId());
 	}

@@ -25,7 +25,7 @@ public class RoleDao extends DbOps<Role> implements Serializable {
 				+ "values('" + name + "', 1)");
 	}
 	public void removeRole(String name) {
-		List<Role> roles = session.createQuery("from Roles where Name = '" + name + "'", Role.class).getResultList();
+		List<Role> roles = session.createQuery("from Role where Name = '" + name + "'", Role.class).getResultList();
 		if(roles.size() > 0) {
 			writeToDb("update User set Validity = 0 where Role_ID = " + roles.get(0).getId());
 			writeToDb("update Role set Validity = 0 where ID = " + roles.get(0).getId());

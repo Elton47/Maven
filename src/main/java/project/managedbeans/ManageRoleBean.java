@@ -4,20 +4,22 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 import project.dao.RoleDao;
 import project.entity.Role;
 
-@ViewScoped
+@RequestScoped
 @ManagedBean(name = "manageRoleBean")
 public class ManageRoleBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final RoleDao roleDao = new RoleDao();
 	private Role role = new Role();
 	private List<Role> roles;
+	private String name;
 	@PostConstruct
 	public void init() {
 		roles = roleDao.getRoles();
+		name = null;
 	}
 	public List<Role> getRoles() {
 		return roles;
@@ -31,14 +33,18 @@ public class ManageRoleBean implements Serializable {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	public void addRole(String name) {
-		if(name.length() > 0) {
-			roleDao.addRole(name);
-			roles = roleDao.getRoles(); // Refresh.
-		}
+	public void addRole() {	
+		roleDao.addRole(name);
+		init(); // Refresh.
 	}
 	public void removeRole(String name) {
 		roleDao.removeRole(name);
-		roles = roleDao.getRoles(); // Refresh.
+		init(); // Refresh.
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

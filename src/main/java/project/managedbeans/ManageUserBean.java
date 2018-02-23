@@ -4,20 +4,28 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.view.ViewScoped;
+import javax.faces.bean.RequestScoped;
 import project.dao.UserDao;
 import project.entity.User;
 
-@ViewScoped
+@RequestScoped
 @ManagedBean(name = "manageUserBean")
 public class ManageUserBean implements Serializable {
     private static final long serialVersionUID = 1L;
     private final UserDao userDao = new UserDao();
     private User user = new User();
     private List<User> users;
+    private String firstName, middleName, lastName, username, password, department, role;
     @PostConstruct
     public void init() {
         users = userDao.getUsers();
+        firstName = null;
+        middleName = null;
+        lastName = null;
+        username = null;
+        password = null;
+        department = null;
+        role = null;
     }
     public String validateLogin() {
         return userDao.validateUser(user.getUsername(), user.getPassword()) ? "private/user/index.xhtml?faces-redirect=true" : "";
@@ -34,14 +42,54 @@ public class ManageUserBean implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-    public void addUser(String firstName, String middleName, String lastName, String username, String password, String department, String role) {
-    	if(firstName.length() > 0 && middleName.length() > 0 && lastName.length() > 0 && username.length() > 0 && password.length() > 0 && department.length() > 0 && role.length() > 0) {
-    		userDao.addUser(firstName, middleName, lastName, username, password, department, role);
-    		users = userDao.getUsers(); // Refresh.
-    	}
+    public void addUser() {
+		userDao.addUser(firstName, middleName, lastName, username, password, department, role);
+		init(); // Refresh.
     }
     public void removeUser(String username) {
     	userDao.removeUser(username);
-    	users = userDao.getUsers(); // Refresh.
+    	init(); // Refresh.
     }
+	public String getFirstName() {
+		return firstName;
+	}
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	public String getMiddleName() {
+		return middleName;
+	}
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+	public String getLastName() {
+		return lastName;
+	}
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getDepartment() {
+		return department;
+	}
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
 }

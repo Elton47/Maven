@@ -4,20 +4,22 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 import project.dao.PermissionDao;
 import project.entity.Permission;
 
-@ViewScoped
+@RequestScoped
 @ManagedBean(name = "managePermissionBean")
 public class ManagePermissionBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final PermissionDao permissionDao = new PermissionDao();
 	private Permission permission = new Permission();
 	private List<Permission> permissions;
+	private String name;
 	@PostConstruct
 	public void init() {
 		permissions = permissionDao.getPermissions();
+		name = null;
 	}
 	public List<Permission> getPermissions() {
 		return permissions;
@@ -31,14 +33,18 @@ public class ManagePermissionBean implements Serializable {
 	public void setPermission(Permission permission) {
 		this.permission = permission;
 	}
-	public void addPermission(String name) {
-		if(name.length() > 0) {
-			permissionDao.addPermission(name);
-			permissions = permissionDao.getPermissions(); // Refresh.
-		}
+	public void addPermission() {
+		permissionDao.addPermission(name);
+		init(); // Refresh.
 	}
 	public void removePermission(String name) {
 		permissionDao.removePermission(name);
-		permissions = permissionDao.getPermissions(); // Refresh.
+		init(); // Refresh.
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 }

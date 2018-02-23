@@ -26,7 +26,7 @@ public class EmployeeDao extends DbOps<Employee> implements Serializable {
 		List<Country> countries = session.createQuery("from Country where Name = '" + country + "'", Country.class).getResultList();
 		List<Sector> sectors = session.createQuery("from Sector where Name = '" + sector + "'", Sector.class).getResultList();
 		if(countries.size() > 0 && sectors.size() > 0)
-			writeToDb("insert into Employee(SSN, `Full Name`, CellNo, Wage, Country, Sector, Validity"
+			writeToDb("insert into Employee(SSN, `Full Name`, CellNo, Wage, Country_ID, Sector_ID, Validity)"
 					+ "values('" + ssn + "', '" + fullName + "', '" + cellNo + "', " + wage + ", " + countries.get(0).getId() + ", " + sectors.get(0).getId() + ", 1)");
 	}
 	public void removeEmployee(String ssn) {

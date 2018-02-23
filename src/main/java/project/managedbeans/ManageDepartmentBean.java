@@ -4,20 +4,24 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.RequestScoped;
 import project.dao.DepartmentDao;
 import project.entity.Department;
 
-@ViewScoped
+@RequestScoped
 @ManagedBean(name = "manageDepartmentBean")
 public class ManageDepartmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final DepartmentDao departmentDao = new DepartmentDao();
 	private Department department = new Department();
 	private List<Department> departments;
+	private String code, name, budget;
 	@PostConstruct
 	public void init() {
 		departments = departmentDao.getDepartments();
+		code = null;
+		name = null;
+		budget = null;
 	}
 	public List<Department> getDepartments() {
 		return departments;
@@ -31,14 +35,30 @@ public class ManageDepartmentBean implements Serializable {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-	public void addDepartment(String code, String name, String budget) {
-		if(code.length() > 0 && name.length() > 0 && budget.length() > 0) {
-			departmentDao.addDepartment(code, name, budget);
-			departments = departmentDao.getDepartments(); // Refresh.
-		}
+	public void addDepartment() {
+		departmentDao.addDepartment(code, name, budget);
+		init(); // Refresh.
 	}
 	public void removeDepartment(String code) {
 		departmentDao.removeDepartment(code);
-		departments = departmentDao.getDepartments(); // Refresh.
+		init(); // Refresh.
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getBudget() {
+		return budget;
+	}
+	public void setBudget(String budget) {
+		this.budget = budget;
 	}
 }
