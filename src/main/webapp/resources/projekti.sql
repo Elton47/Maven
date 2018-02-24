@@ -34,7 +34,7 @@ CREATE TABLE `child` (
   UNIQUE KEY `Full Name` (`Full Name`),
   KEY `Employee_ID` (`Employee_ID`),
   CONSTRAINT `child_ibfk_1` FOREIGN KEY (`Employee_ID`) REFERENCES `employee` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `child` (
 
 LOCK TABLES `child` WRITE;
 /*!40000 ALTER TABLE `child` DISABLE KEYS */;
-INSERT INTO `child` VALUES (1,'Test Child',15,6,1);
+INSERT INTO `child` VALUES (1,'Test Child',15,6,1),(2,'AAA',11,6,1);
 /*!40000 ALTER TABLE `child` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +89,7 @@ CREATE TABLE `department` (
   `Validity` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Code` (`Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'D0001','Networking',1000000,1),(2,'D0002','Information Technology',2000000,1),(3,'D0003','Test',3000000,1),(4,'D0004','Testt',100000,1),(5,'D0005','Testtt',200000,1),(7,'D0006','Testttt',300000,1),(8,'D0007','Testtttt',400000,1),(9,'D0008','Testttttt',500000,1),(10,'D0009','Testtttttt',600000,1);
+INSERT INTO `department` VALUES (1,'D0001','Networking',1000000,1),(2,'D0002','Information Technology',2000000,1),(3,'D0003','Test',3000000,1),(4,'D0004','Testt',100000,1),(5,'D0005','Testtt',200000,1),(7,'D0006','Testttt',300000,1),(8,'D0007','Testtttt',400000,1),(9,'D0008','Testttttt',500000,1),(10,'D0009','Testtttttt',600000,1),(11,'D0010','Testttttttt',700000,1),(12,'asd','a',1,1);
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,9 +175,10 @@ CREATE TABLE `role` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(45) NOT NULL,
   `Validity` int(11) NOT NULL,
+  `role_permissions` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,34 +187,8 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'Administrator',1),(2,'Manager',1),(3,'User',1);
+INSERT INTO `role` VALUES (1,'Administrator',1,NULL),(2,'Manager',1,NULL),(3,'User',1,NULL),(4,'asd',1,NULL),(5,'asdasdasd',1,NULL),(6,'sadasdasdasd',1,NULL),(7,'Finally',1,NULL),(8,'123456',1,NULL);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `role_has_permission`
---
-
-DROP TABLE IF EXISTS `role_has_permission`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `role_has_permission` (
-  `Role_ID` int(11) NOT NULL,
-  `Permission_ID` int(11) NOT NULL,
-  KEY `Role_ID` (`Role_ID`),
-  KEY `Permission_ID` (`Permission_ID`),
-  CONSTRAINT `role_has_permission_ibfk_1` FOREIGN KEY (`Role_ID`) REFERENCES `role` (`ID`),
-  CONSTRAINT `role_has_permission_ibfk_2` FOREIGN KEY (`Permission_ID`) REFERENCES `permission` (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `role_has_permission`
---
-
-LOCK TABLES `role_has_permission` WRITE;
-/*!40000 ALTER TABLE `role_has_permission` DISABLE KEYS */;
-/*!40000 ALTER TABLE `role_has_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -224,12 +199,12 @@ DROP TABLE IF EXISTS `role_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role_permission` (
-  `ID` int(11) DEFAULT NULL,
-  `Permission_ID` int(11) NOT NULL,
-  KEY `Role_ID` (`ID`),
-  KEY `Permission_ID` (`Permission_ID`),
-  CONSTRAINT `role_permission_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `role` (`ID`),
-  CONSTRAINT `role_permission_ibfk_2` FOREIGN KEY (`Permission_ID`) REFERENCES `permission` (`ID`)
+  `Role_ID` int(11) NOT NULL,
+  `permissions_id` int(11) DEFAULT NULL,
+  KEY `Role_ID` (`Role_ID`),
+  KEY `Permission_ID` (`permissions_id`),
+  CONSTRAINT `role_permission_ibfk_1` FOREIGN KEY (`Role_ID`) REFERENCES `role` (`ID`),
+  CONSTRAINT `role_permission_ibfk_2` FOREIGN KEY (`permissions_id`) REFERENCES `permission` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -239,7 +214,7 @@ CREATE TABLE `role_permission` (
 
 LOCK TABLES `role_permission` WRITE;
 /*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
-INSERT INTO `role_permission` VALUES (1,1);
+INSERT INTO `role_permission` VALUES (7,1),(7,2),(8,2),(8,3);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -263,7 +238,7 @@ CREATE TABLE `sector` (
   KEY `Employee_ID` (`Employee_ID`),
   CONSTRAINT `sector_ibfk_1` FOREIGN KEY (`Department_ID`) REFERENCES `department` (`ID`),
   CONSTRAINT `sector_ibfk_2` FOREIGN KEY (`Employee_ID`) REFERENCES `employee` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -272,7 +247,7 @@ CREATE TABLE `sector` (
 
 LOCK TABLES `sector` WRITE;
 /*!40000 ALTER TABLE `sector` DISABLE KEYS */;
-INSERT INTO `sector` VALUES (1,'S0001','Hardware',1,NULL,1),(6,'S0002','Devices',1,5,1),(7,'S0003','Information',2,NULL,1);
+INSERT INTO `sector` VALUES (1,'S0001','Hardware',1,NULL,1),(6,'S0002','Devices',1,5,1),(7,'S0003','Information',2,NULL,1),(8,'a','a',12,NULL,0),(9,'asd','asd',12,NULL,1),(12,'asdasdas','asdasd',2,NULL,1),(14,'asdasdasdasd','asdaasd',1,NULL,1),(16,'S0004','Finally',3,NULL,1),(17,'adsasdasdasd','asdasd',2,NULL,1),(18,'asdsad','ssssa',4,NULL,1),(19,'asdxzxbn','asd',2,6,1);
 /*!40000 ALTER TABLE `sector` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -321,4 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-23  2:25:59
+-- Dump completed on 2018-02-25  0:31:01
