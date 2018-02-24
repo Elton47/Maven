@@ -24,21 +24,24 @@
    		<div class="side-nav fixed" style="position: absolute; top: 0; left: 0; bottom: 0; right: 80%; width: auto; height: 100%; transform: translateX(0%) !important;">
    			<div class="valign-wrapper" style="width: 100%; height: 80%;">
 	   			<ul style="width: 100%;">
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#departmentsDiv')">Departments</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#sectorsDiv')">Sectors</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#rolesDiv')">Roles</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#permissionsDiv')">Permissions</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#usersDiv')">Users</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#countriesDiv')">Countries</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#employeesDiv')">Employees</a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#childrenDiv')">Children</a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#departmentsDiv')">Departments<i class="material-icons">business</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#sectorsDiv')">Sectors<i class="material-icons">work</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#rolesDiv')">Roles<i class="material-icons">verified_user</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#permissionsDiv')">Permissions<i class="material-icons">thumbs_up_down</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#usersDiv')">Users<i class="material-icons">group</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#countriesDiv')">Countries<i class="material-icons">terrain</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#employeesDiv')">Employees<i class="material-icons">face</i></a></li>
+		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#childrenDiv')">Children<i class="material-icons">child_care</i></a></li>
 		  			<li><div class="divider"></div></li>
-		  			<li><a class="waves-effect waves-teal lighten-4 dropdown-button" data-activates="settingsDropDown">Settings</a></li>
-		  			<ul id="settingsDropDown" class="dropdown-content">
-		  				<li><a class="waves-effect waves-teal lighten-4">Settings</a></li>
-		  				<li><a class="waves-effect waves-teal lighten-4" >Change Password</a></li>
-		  				<li><a class="waves-effect waves-teal lighten-4" href="http://localhost:8080/maven/login.xhtml">Logout</a></li>
-		  			</ul>
+		  			<li><a class="waves-effect waves-teal lighten-4 dropdown-button" data-activates="settingsDropDown">Settings<i class="material-icons">settings</i></a>
+			  			<ul id="settingsDropDown" class="dropdown-content">
+			  				<li><a class="waves-effect waves-teal lighten-4">Settings<i class="material-icons">settings</i></a></li>
+			  				<li><a class="waves-effect waves-teal lighten-4" >Change Password<i class="material-icons">vpn_key</i></a></li>
+			  				<li><a class="waves-effect waves-teal lighten-4" >Help<i class="material-icons">help_outline</i></a></li>
+			  				<li><a class="waves-effect waves-teal lighten-4" >About<i class="material-icons">info_outline</i></a></li>
+			  				<li><a class="waves-effect waves-teal lighten-4" href="http://localhost:8080/maven/login.xhtml">Logout<i class="material-icons">power_settings_new</i></a></li>
+			  			</ul>
+		  			</li>
 	  			</ul>
   			</div>
    		</div>
@@ -63,10 +66,10 @@
 						</f:facet>
 						<h:form>
 							#{department.budget}
-							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department.code)}">
-								<f:ajax execute="@form" render="departmentsTable" />
+							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department.code)}" onclick="deleteButtonClicked('Department')">
+								<f:ajax execute="none" render="@this departmentsTable sectorsTable usersTable"/>
 							</h:commandLink>
-							<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Department')" onmousedown="setCodeToEdit(department.code)">
+							<h:commandLink class="material-icons secondary-content" value="edit" action="#{sessionScopedValuesBean.setCodeToEditRecord(department.code)}" onclick="editButtonClicked('Department')">
 								<f:ajax execute="none" />
 							</h:commandLink>
 						</h:form>
@@ -91,12 +94,14 @@
 							<label>Budget</label>
 						</div>
 					</div>
-					<h:inputText style="display: none;" styleClass="codeToEditDepartmentField" required="true" value="#{manageDepartmentBean.codeToEdit}" />
 					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable" />
+						<f:ajax execute="@form" render="departmentsTable sectorsTable usersTable" />
 					</h:commandButton>
 					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable" />
+						<f:ajax execute="@form" render="departmentsTable sectorsTable usersTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
+						<f:ajax execute="none" render="departmentsTable sectorsTable usersTable" />
 					</h:commandButton>
 				</h:form>
 			</div>

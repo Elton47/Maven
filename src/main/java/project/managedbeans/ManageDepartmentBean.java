@@ -15,14 +15,13 @@ public class ManageDepartmentBean implements Serializable {
 	private final DepartmentDao departmentDao = new DepartmentDao();
 	private Department department = new Department();
 	private List<Department> departments;
-	private String code, name, budget, codeToEdit;
+	private String code, name, budget;
 	@PostConstruct
 	public void init() {
 		departments = departmentDao.getDepartments();
 		code = null;
 		name = null;
 		budget = null;
-		codeToEdit = null;
 	}
 	public List<Department> getDepartments() {
 		return departments;
@@ -36,20 +35,30 @@ public class ManageDepartmentBean implements Serializable {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-	public boolean addDepartment() {
-		boolean isAdded = departmentDao.addDepartment(code, name, budget);
+	public void addDepartment() {
+		if(code != null && name != null && budget != null)
+			SessionScopedValuesBean.setSucceeded(departmentDao.addDepartment(code, name, budget));
+		else
+			SessionScopedValuesBean.setSucceeded(false);
 		init(); // Refresh.
-		return isAdded;
 	}
-	public boolean removeDepartment(String code) {
-		boolean isRemoved = departmentDao.removeDepartment(code);
+	public void removeDepartment(String code) {
+		SessionScopedValuesBean.setCodeToRestoreRecord(code);
+		departmentDao.removeDepartment(code);
 		init(); // Refresh.
-		return isRemoved;
 	}
-	public boolean editDepartment() {
-		boolean isEdited = departmentDao.editDepartment(code, name, budget, codeToEdit);
+	public void restoreDepartment() {
+		SessionScopedValuesBean.setSucceeded(departmentDao.restoreDepartment(SessionScopedValuesBean.getCodeToRestoreRecord()));
+		SessionScopedValuesBean.setCodeToRestoreRecord("");
 		init(); // Refresh.
-		return isEdited;
+	}
+	public void editDepartment() {
+		if(code != null && name != null && budget != null)
+			SessionScopedValuesBean.setSucceeded(departmentDao.editDepartment(code, name, budget, SessionScopedValuesBean.getCodeToEditRecord()));
+		else
+			SessionScopedValuesBean.setSucceeded(false);
+		SessionScopedValuesBean.setCodeToEditRecord("");
+		init(); // Refresh.
 	}
 	public String getCode() {
 		return code;
@@ -68,11 +77,5 @@ public class ManageDepartmentBean implements Serializable {
 	}
 	public void setBudget(String budget) {
 		this.budget = budget;
-	}
-	public String getCodeToEdit() {
-		return codeToEdit;
-	}
-	public void setCodeToEdit(String codeToEdit) {
-		this.codeToEdit = codeToEdit;
 	}
 }

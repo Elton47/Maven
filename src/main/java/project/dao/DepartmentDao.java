@@ -29,8 +29,8 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 			    + "values('" + code + "', '" + name + "', " + budget + ", 1)");
 		return session.createQuery("from Department where Code = '" + code + "'", Department.class).getResultList().size() > 0; // Return true if added successfully.
 	}
-	public boolean removeDepartment(String code) {
-		List<Department> departments = session.createQuery("from Department where Code = '" + code + "'", Department.class).getResultList();
+	public boolean removeDepartment(String codeToDelete) {
+		List<Department> departments = session.createQuery("from Department where Code = '" + codeToDelete + "'", Department.class).getResultList();
 		if(departments.size() > 0) {
 			writeToDb("update User set Validity = 0 where Department_ID = " + departments.get(0).getId()); // Removing Department's User/s.
 			List<Sector> sectors = session.createQuery("from Sector where Department_ID = " + departments.get(0).getId(), Sector.class).getResultList();
@@ -41,8 +41,20 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 		}
 		return false;
 	}
-	public boolean editDepartment(String code, String name, String budget, String previousCode) {
-		writeToDb("update Department set Code = '" + code + "', Name = '" + name + "', Budget = " + budget + " where ID = " + session.createQuery("from Department where Code = '" + previousCode + "'", Department.class).getResultList().get(0).getId());
+	public boolean restoreDepartment(String codeToRestore) {
+		List<Department> departments = session.createQuery("from Department where Code = '" + codeToRestore + "'", Department.class).getResultList();
+		if(departments.size() > 0) {
+			writeToDb("update User set Validity = 1 where Department_ID = " + departments.get(0).getId()); // Removing Department's User/s.
+			/*List<Sector> sectors = session.createQuery("from Sector where Department_ID = " + departments.get(0).getId(), Sector.class).getResultList();
+			if(sectors.size() > 0) // Removing Sectors of this Department.
+				new SectorDao().removeSector(sectors.get(0).getCode());*/ // Restore Sector too.
+			writeToDb("update Department set Validity = 1 where ID = " + departments.get(0).getId()); // Finally Removing Department.
+			return true;
+		}
+		return false;
+	}
+	public boolean editDepartment(String code, String name, String budget, String codeToEdit) {
+		writeToDb("update Department set Code = '" + code + "', Name = '" + name + "', Budget = " + budget + " where ID = " + session.createQuery("from Department where Code = '" + codeToEdit + "'", Department.class).getResultList().get(0).getId());
 		return session.createQuery("from Department where Code = '" + code + "'", Department.class).getResultList().size() > 0;	
 	}
 }
