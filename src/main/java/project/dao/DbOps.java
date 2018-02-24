@@ -45,9 +45,12 @@ public abstract class DbOps<T> {
     	if(!session.isOpen())
     		session = HibernateUtil.getSessionFactory().openSession();
 		session.getTransaction().begin();
-	    session.createNativeQuery(statement).executeUpdate();
+		try {
+			session.createNativeQuery(statement).executeUpdate();
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
 	    session.getTransaction().commit();
-	    if(session.isOpen())
-	    	session.close();
+    	session.close();
     }
 }

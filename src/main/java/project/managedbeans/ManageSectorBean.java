@@ -37,10 +37,8 @@ public class ManageSectorBean implements Serializable {
 		this.sector = sector;
 	}
 	public void addSector() {
-		if(employee != null)
+		if(code != null && name != null && department != null) // employee can be null.
 			sectorDao.addSector(code, name, department, employee);
-		else
-			sectorDao.addSector(code, name, department, ""); // Adding Sector without a Manager.
 		init();
 	}
 	public void removeSector(String code) {

@@ -1,9 +1,11 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<h:head>
 		<title>Panel</title>
 		<!--Import Google Icon Font-->
@@ -19,6 +21,11 @@
 		<script
 			src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 		<script type="text/javascript" src="../../js/controller.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('select').material_select();
+			});
+		</script>
 	</h:head>
 	<h:body>
    		<div class="side-nav fixed" style="position: absolute; top: 0; left: 0; bottom: 0; right: 80%; width: auto; height: 100%; transform: translateX(0%) !important;">
@@ -66,9 +73,9 @@
 						</f:facet>
 						<h:form>
 							#{department.budget}
-							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department.code)}" onclick="deleteButtonClicked('Department')">
+							<a class="material-icons secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete" jsf:value="delete" jsf:action="#{manageDepartmentBean.removeDepartment(department.code)}" jsf:onclick="deleteButtonClicked('Department')">
 								<f:ajax execute="none" render="@this departmentsTable sectorsTable usersTable"/>
-							</h:commandLink>
+							</a>
 							<h:commandLink class="material-icons secondary-content" value="edit" action="#{sessionScopedValuesBean.setCodeToEditRecord(department.code)}" onclick="editButtonClicked('Department')">
 								<f:ajax execute="none" />
 							</h:commandLink>
@@ -82,15 +89,15 @@
 				<h:form styleClass="inputDepartmentForm">
 	    			<div id="inputDepartmentDiv" class="row" style="display: none;">
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" required="true" value="#{manageDepartmentBean.code}"/>
+							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
 							<label>Code</label>
 						</div>
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" required="true" value="#{manageDepartmentBean.name}"/>
+							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.name}" maxlength="45" data-length="45" />
 							<label>Name</label>
 						</div>
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" required="true" value="#{manageDepartmentBean.budget}" />
+							<input type="text" class="validate" jsf:required="true" value="#{manageDepartmentBean.budget}" maxlength="16" data-length="16" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
 							<label>Budget</label>
 						</div>
 					</div>
@@ -147,19 +154,28 @@
 				<h:form styleClass="inputSectorForm">
 	    			<div id="inputSectorDiv" class="row" style="display: none;">
 						<div class="input-field col s3">
-							<h:inputText styleClass="validate" value="#{manageSectorBean.code}" required="true" />
+							<input  type="text" class="validate" jsf:value="#{manageSectorBean.code}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>Code</label>
 						</div>
 						<div class="input-field col s3">
-							<h:inputText styleClass="validate" value="#{manageSectorBean.name}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageSectorBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
 						</div>
 						<div class="input-field col s3">
-							<h:inputText styleClass="validate" value="#{manageSectorBean.department}" required="true" />
+							<f:ajax>
+								<h:selectOneMenu value="#{manageSectorBean.department}" required="true" >
+									<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+								</h:selectOneMenu>
+							</f:ajax>
 							<label>Department</label>
 						</div>
 						<div class="input-field col s3">
-							<h:inputText styleClass="validate" value="#{manageSectorBean.employee}" required="false" />
+							<f:ajax>
+								<h:selectOneMenu value="#{manageSectorBean.employee}" required="false" >
+									<f:selectItem itemValue="" itemLabel="None" />
+									<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
+								</h:selectOneMenu>
+							</f:ajax>
 							<label>Manager</label>
 						</div>
 					</div>
@@ -181,41 +197,6 @@
 							<h:outputText value="Permissions" />
 						</f:facet>
 						<h:form>
-							<a style="width: 100%;" class="dropdown-button black-text" href="#" data-activates="rolePermissionsDropDown">Show</a>
-							<ul id="rolePermissionsDropDown" class="collection dropdown-content">
-								<li class="collection-item">
-									<h:form>
-										<div>TODO
-											<h:commandLink class="material-icons secondary-content" value="delete" />
-											<h:commandLink class="material-icons secondary-content" value="edit" />
-										</div>
-									</h:form>
-								</li>
-								<li class="collection-item">
-									<h:form>
-										<div>TODO
-											<h:commandLink class="material-icons secondary-content" value="delete" />
-											<h:commandLink class="material-icons secondary-content" value="edit" />
-										</div>
-									</h:form>
-								</li>
-								<li class="collection-item">
-									<h:form>
-										<div>TODO
-											<h:commandLink class="material-icons secondary-content" value="delete" />
-											<h:commandLink class="material-icons secondary-content" value="edit" />
-										</div>
-									</h:form>
-								</li>
-								<li class="collection-item">
-									<h:form>
-										<div>TODO
-											<h:commandLink class="material-icons secondary-content" value="delete" />
-											<h:commandLink class="material-icons secondary-content" value="edit" />
-										</div>
-									</h:form>
-								</li>
-							</ul>
 							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageRoleBean.removeRole(role.name)}">
 								<f:ajax execute="@form" render="@form rolesTable" />
 							</h:commandLink>
@@ -223,6 +204,16 @@
 								<f:ajax execute="none" />
 							</h:commandLink>
 						</h:form>
+						<ul class="collapsible left" data-collapsible="accordion" style="margin-left: 50%; width: 300px;">
+							<li>
+								<div class="collapsible-header">Show</div>
+								<div class="collapsible-body">
+									<ui:repeat value="#{role.permissions}" var="permission">
+										<div>#{permission.name}</div>
+									</ui:repeat>
+								</div>
+							</li>
+						</ul>
 					</h:column>
 				</h:dataTable>
 				<br />
@@ -231,9 +222,17 @@
 				<button id="cancelRoleButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Role')">Cancel</button>
 				<h:form styleClass="inputRoleForm">
 	    			<div id="inputRoleDiv" class="row" style="display: none;">
-						<div class="input-field col s4">
-							<h:inputText styleClass="validate" value="#{manageRoleBean.name}" required="true" />
+						<div class="input-field col s6">
+							<input type="text" class="validate" jsf:value="#{manageRoleBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
+						</div>
+						<div class="input-field col s6">
+							<f:ajax>
+								<h:selectManyMenu value="#{manageRoleBean.permissions}" required="false" >
+									<f:selectItem itemValue="" itemLabel="None" />
+									<f:selectItems value="#{managePermissionBean.permissions}" var="permission" itemValue="#{permission.name}" itemLabel="#{permission.name}" />
+								</h:selectManyMenu>
+							</f:ajax>
 						</div>
 					</div>
 					<h:commandButton styleClass="addRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.addRole()}">
@@ -305,7 +304,7 @@
 				<h:form styleClass="inputPermissionForm">
 	    			<div id="inputPermissionDiv" class="row" style="display: none;">
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" value="#{managePermissionBean.name}" required="true" />
+							<input type="text" class="validate" jsf:value="#{managePermissionBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
 						</div>
 					</div>
@@ -374,31 +373,31 @@
 				<h:form styleClass="inputUserForm">
 	    			<div id="inputUserDiv" class="row" style="display: none;">
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.firstName}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.firstName}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>First Name</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.middleName}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.middleName}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>Middle Name</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.lastName}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.lastName}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>Last Name</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.username}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.username}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>Username</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.password}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.password}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Password</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.department}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.department}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Department</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageUserBean.role}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageUserBean.role}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Role</label>
 						</div>
 					</div>
@@ -431,7 +430,7 @@
 				<h:form styleClass="inputCountryForm">
 	    			<div id="inputCountryDiv" class="row" style="display: none;">
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" value="#{manageCountryBean.name}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageCountryBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
 						</div>
 					</div>
@@ -494,27 +493,27 @@
 				<h:form styleClass="inputEmployeeForm">
 	    			<div id="inputEmployeeDiv" class="row" style="display: none;">
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageEmployeeBean.ssn}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.ssn}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>SSN</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageEmployeeBean.fullName}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.fullName}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Full Name</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageEmployeeBean.cellNo}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.cellNo}" jsf:required="true" maxlength="45" data-length="45" onkeypress="if((event.which &lt; 48 || event.which &gt; 57) &amp;&amp; event.which != 43) return false;" />
 							<label>CellNo</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageEmployeeBean.wage}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.wage}" jsf:equired="true" maxlength="16" data-length="16" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
 							<label>Wage</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageEmployeeBean.country}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.country}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Country</label>
 						</div>
 						<div class="input-field col s2">
-							<h:inputText styleClass="validate" value="#{manageEmployeeBean.sector}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.sector}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Sector</label>
 						</div>
 					</div>
@@ -559,15 +558,15 @@
 				<h:form styleClass="inputChildForm">
 	    			<div id="inputChildDiv" class="row" style="display: none;">
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" value="#{manageChildBean.fullName}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageChildBean.fullName}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Full Name</label>
 						</div>
-						<div class="input-field col s4">
-							<h:inputText styleClass="validate" value="#{manageChildBean.age}" required="true" />
+						<div class="range-field col s4">
 							<label>Age</label>
+							<input type="range" min="0" max="50" jsf:value="#{manageChildBean.age}" jsf:required="true" />
 						</div>
 						<div class="input-field col s4">
-							<h:inputText styleClass="validate" value="#{manageChildBean.parent}" required="true" />
+							<input type="text" class="validate" jsf:value="#{manageChildBean.parent}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Parent</label>
 						</div>
 					</div>

@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import project.dao.RoleDao;
+import project.entity.Permission;
 import project.entity.Role;
 
 @RequestScoped
@@ -16,10 +17,12 @@ public class ManageRoleBean implements Serializable {
 	private Role role = new Role();
 	private List<Role> roles;
 	private String name;
+	private List<String> permissions;
 	@PostConstruct
 	public void init() {
 		roles = roleDao.getRoles();
 		name = null;
+		permissions = null;
 	}
 	public List<Role> getRoles() {
 		return roles;
@@ -34,7 +37,7 @@ public class ManageRoleBean implements Serializable {
 		this.role = role;
 	}
 	public void addRole() {	
-		roleDao.addRole(name);
+		roleDao.addRole(name, permissions);
 		init(); // Refresh.
 	}
 	public void removeRole(String name) {
@@ -46,5 +49,11 @@ public class ManageRoleBean implements Serializable {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public List<String> getPermissions() {
+		return permissions;
+	}
+	public void setPermissions(List<String> permissions) {
+		this.permissions = permissions;
 	}
 }

@@ -1,11 +1,12 @@
 var adding = false;
 var editing = false;
 function showTable(div) {
-	hideTables();
 	if($(div).is(":visible"))
 		$(div).hide("fast");
-	else
+	else {
+		hideTables();
 		$(div).show("fast");
+	}
 }
 function hideTables() {
 	$("#departmentsDiv").hide("fast");
