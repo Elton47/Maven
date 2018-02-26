@@ -8,7 +8,7 @@ import project.util.HibernateUtil;
 
 public class PermissionDao extends DbOps<Permission> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSessionFactory().openSession();
+	private Session session = HibernateUtil.getSession();
 	public List<Permission> getPermissions() {
 		try {
 			List<Permission> permissions = session.createQuery("from Permission where Validity = 1", Permission.class).getResultList();

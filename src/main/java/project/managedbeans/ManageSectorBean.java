@@ -38,12 +38,28 @@ public class ManageSectorBean implements Serializable {
 	}
 	public void addSector() {
 		if(code != null && name != null && department != null) // employee can be null.
-			sectorDao.addSector(code, name, department, employee);
-		init();
+			SessionScopedValuesBean.setSucceeded(sectorDao.addSector(code, name, department, employee));
+		else
+			SessionScopedValuesBean.setSucceeded(false);
+		init(); // Refresh.
 	}
 	public void removeSector(String code) {
-		sectorDao.removeSector(code);
-		init();
+		SessionScopedValuesBean.setCodeToRestoreRecord(code);
+		SessionScopedValuesBean.setSucceeded(sectorDao.removeSector(code));
+		init(); // Refresh.
+	}
+	public void restoreSector() {
+		SessionScopedValuesBean.setSucceeded(sectorDao.restoreSector(SessionScopedValuesBean.getCodeToRestoreRecord()));
+		SessionScopedValuesBean.setCodeToRestoreRecord("");
+		init(); // Refresh.
+	}
+	public void editSector() {
+		if(code != null && name != null && department != null) // employee can be null.
+			SessionScopedValuesBean.setSucceeded(sectorDao.editSector(code, name, department, employee, SessionScopedValuesBean.getCodeToEditRecord()));
+		else
+			SessionScopedValuesBean.setSucceeded(false);
+		SessionScopedValuesBean.setCodeToEditRecord("");
+		init(); // Refresh.
 	}
 	public String getCode() {
 		return code;

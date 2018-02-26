@@ -73,12 +73,10 @@
 						</f:facet>
 						<h:form>
 							#{department.budget}
-							<a class="material-icons secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete" jsf:value="delete" jsf:action="#{manageDepartmentBean.removeDepartment(department.code)}" jsf:onclick="deleteButtonClicked('Department')">
-								<f:ajax execute="none" render="@this departmentsTable sectorsTable usersTable"/>
-							</a>
-							<h:commandLink class="material-icons secondary-content" value="edit" action="#{sessionScopedValuesBean.setCodeToEditRecord(department.code)}" onclick="editButtonClicked('Department')">
-								<f:ajax execute="none" />
-							</h:commandLink>
+							<f:ajax execute="@form" render="departmentsTable">
+								<a class="material-icons secondary-content" jsf:value="delete" jsf:action="#{manageDepartmentBean.removeDepartment(department.code)}" jsf:onclick="deleteButtonClicked('Department')" />
+								<a class="material-icons secondary-content" jsf:value="edit" jsf:action="#{sessionScopedValuesBean.setCodeToEditRecord(department.code)}" jsf:onclick="editButtonClicked('Department')" />
+							</f:ajax>
 						</h:form>
 					</h:column>
 				</h:dataTable>
@@ -102,13 +100,13 @@
 						</div>
 					</div>
 					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable sectorsTable usersTable" />
+						<f:ajax execute="@form" render="departmentsTable" />
 					</h:commandButton>
 					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable sectorsTable usersTable" />
+						<f:ajax execute="@form" render="departmentsTable" />
 					</h:commandButton>
 					<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
-						<f:ajax execute="none" render="departmentsTable sectorsTable usersTable" />
+						<f:ajax execute="none" render="departmentsTable" />
 					</h:commandButton>
 				</h:form>
 			</div>
@@ -138,12 +136,10 @@
 						</f:facet>
 						<h:form>
 							#{sector.employee.fullName}
-							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageSectorBean.removeSector(sector.code)}">
-								<f:ajax execute="@form" render="@form sectorsTable" />
-							</h:commandLink>
-							<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Sector')">
-								<f:ajax execute="none" />
-							</h:commandLink>
+							<f:ajax execute="@form" render="sectorsTable">
+								<a class="material-icons secondary-content" jsf:value="delete" jsf:action="#{manageSectorBean.removeSector(sector.code)}" jsf:onclick="deleteButtonClicked('Sector')"/>
+								<a class="material-icons secondary-content" jsf:value="edit" jsf:action="#{sessionScopedValuesBean.setCodeToEditRecord(sector.code)}" jsf:onclick="editButtonClicked('Sector')"/>
+							</f:ajax>
 						</h:form>
 					</h:column>
 				</h:dataTable>
@@ -182,6 +178,12 @@
 					<h:commandButton styleClass="addSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.addSector()}">
 						<f:ajax execute="@form" render="sectorsTable" />
 					</h:commandButton>
+					<h:commandButton styleClass="editSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.editSector()}">
+						<f:ajax execute="@form" render="sectorsTable"/>
+					</h:commandButton>
+					<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
+						<f:ajax execute="none" render="sectorsTable" />
+					</h:commandButton>
 				</h:form>
 			</div>
 			<div id="rolesDiv" style="display: none;">
@@ -209,7 +211,15 @@
 								<div class="collapsible-header">Show</div>
 								<div class="collapsible-body">
 									<ui:repeat value="#{role.permissions}" var="permission">
-										<div>#{permission.name}</div>
+										<h:form>
+											#{permission.name}
+											<a class="material-icons secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete" jsf:value="delete" jsf:action="#{manageRoleBean.removePermissionFromRole(permission.name)}">
+												<f:ajax execute="none" render="@this rolesTable"/>
+											</a>
+											<h:commandLink class="material-icons secondary-content" value="edit" action="#{sessionScopedValuesBean.setCodeToEditRecord(role.name)}" onclick="editButtonClicked('Role')">
+												<f:ajax execute="none" />
+											</h:commandLink>
+										</h:form>
 									</ui:repeat>
 								</div>
 							</li>

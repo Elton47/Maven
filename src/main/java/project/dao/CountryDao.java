@@ -8,7 +8,7 @@ import project.util.HibernateUtil;
 
 public class CountryDao extends DbOps<Country> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSessionFactory().openSession();
+	private Session session = HibernateUtil.getSession();
 	public List<Country> getCountries() {
 		try {
 			List<Country> countries = session.createQuery("from Country where Validity = 1", Country.class).getResultList();

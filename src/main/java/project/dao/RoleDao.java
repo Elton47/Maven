@@ -10,7 +10,7 @@ import project.util.HibernateUtil;
 
 public class RoleDao extends DbOps<Role> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSessionFactory().openSession();
+	private Session session = HibernateUtil.getSession();
 	public List<Role> getRoles() {
 		try {
 			List<Role> roles = session.createQuery("from Role where Validity = 1", Role.class).getResultList();

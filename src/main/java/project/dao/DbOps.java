@@ -5,7 +5,7 @@ import org.hibernate.Transaction;
 import project.util.HibernateUtil;
 
 public abstract class DbOps<T> {
-    Session session = HibernateUtil.getSessionFactory().openSession();
+    Session session = HibernateUtil.getSession();
     public void save(T t) {
         Transaction trans = null;
         try {
@@ -42,15 +42,17 @@ public abstract class DbOps<T> {
         return false;
     }
     public void writeToDb(String statement) {
-    	if(!session.isOpen())
-    		session = HibernateUtil.getSessionFactory().openSession();
-		session.getTransaction().begin();
+    	Transaction trans = null;
 		try {
+			trans = session.beginTransaction();
 			session.createNativeQuery(statement).executeUpdate();
-		} catch(Exception e) {
+			session.getTransaction().commit();
+		} catch(RuntimeException e) {
 			System.out.println(e.getMessage());
 		}
-	    session.getTransaction().commit();
-    	session.close();
+		finally {
+			if(trans != null)
+                trans.rollback();
+		}
     }
 }

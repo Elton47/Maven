@@ -10,25 +10,16 @@ import project.util.HibernateUtil;
 
 public class UserDao extends DbOps<User> implements Serializable {
 	private static final long serialVersionUID = 1L;
-    private Session session = HibernateUtil.getSessionFactory().openSession();
+    private Session session = HibernateUtil.getSession();
     public List<User> getUsers() {
         try {
             List<User> users = session.createQuery("from User where Validity = 1", User.class).getResultList();
-            if(users.size() > 0)
+            if(!users.isEmpty())
             	return users;
             else
             	return null;
         } catch(Exception e) {
             return null;
-        }
-    }
-    public boolean validateUser(String username, String password) {
-        try {
-            session.beginTransaction(); 
-            List<User> list = session.createQuery("from User where Username = '" + username + "' AND Password = '" + password + "' AND Validity = 1", User.class).getResultList();
-            return list.size() > 0; // User Found.
-        } catch(Exception e) {
-            return false;
         }
     }
     public void addUser(String firstName, String middleName, String lastName, String username, String password, String department, String role) {

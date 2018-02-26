@@ -9,7 +9,7 @@ import project.util.HibernateUtil;
 
 public class ChildDao extends DbOps<Child> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSessionFactory().openSession();
+	private Session session = HibernateUtil.getSession();
 	public List<Child> getChildren() {
 		try {
 			List<Child> children = session.createQuery("from Child where Validity = 1", Child.class).getResultList();

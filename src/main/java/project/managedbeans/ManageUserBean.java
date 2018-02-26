@@ -27,9 +27,6 @@ public class ManageUserBean implements Serializable {
         department = null;
         role = null;
     }
-    public String validateLogin() {
-        return userDao.validateUser(user.getUsername(), user.getPassword()) ? "private/user/index.xhtml?faces-redirect=true" : "";
-    }
     public List<User> getUsers() {
         return users;
     }

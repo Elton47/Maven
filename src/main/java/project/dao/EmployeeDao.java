@@ -10,7 +10,7 @@ import project.util.HibernateUtil;
 
 public class EmployeeDao extends DbOps<Employee> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSessionFactory().openSession();
+	private Session session = HibernateUtil.getSession();
 	public List<Employee> getEmployees() {
 		try {
 			List<Employee> employees = session.createQuery("from Employee where Validity = 1", Employee.class).getResultList();

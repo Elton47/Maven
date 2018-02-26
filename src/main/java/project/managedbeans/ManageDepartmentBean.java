@@ -44,7 +44,7 @@ public class ManageDepartmentBean implements Serializable {
 	}
 	public void removeDepartment(String code) {
 		SessionScopedValuesBean.setCodeToRestoreRecord(code);
-		departmentDao.removeDepartment(code);
+		SessionScopedValuesBean.setSucceeded(departmentDao.removeDepartment(code));
 		init(); // Refresh.
 	}
 	public void restoreDepartment() {
