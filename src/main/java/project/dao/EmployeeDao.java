@@ -13,7 +13,7 @@ public class EmployeeDao extends DbOps<Employee> implements Serializable {
 	private Session session = HibernateUtil.getSession();
 	public List<Employee> getEmployees() {
 		try {
-			List<Employee> employees = session.createQuery("from Employee where Validity = 1", Employee.class).getResultList();
+			List<Employee> employees = session.createQuery("from Employee where Validity = 1 order by ID DESC", Employee.class).getResultList();
 			if(employees.size() > 0)
 				return employees;
 			else

@@ -1,7 +1,6 @@
 package project.dao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import project.entity.Permission;
@@ -13,7 +12,7 @@ public class RoleDao extends DbOps<Role> implements Serializable {
 	private Session session = HibernateUtil.getSession();
 	public List<Role> getRoles() {
 		try {
-			List<Role> roles = session.createQuery("from Role where Validity = 1", Role.class).getResultList();
+			List<Role> roles = session.createQuery("from Role where Validity = 1 order by ID DESC", Role.class).getResultList();
 			if(!roles.isEmpty())
 				return roles;
 			else

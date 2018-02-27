@@ -9,8 +9,6 @@
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">password</property>
 		<property name="hibernate.connection.pool_size">100</property>
-		<property name="hibernate.connection.release_mode">after_statement</property>
-		<property name="hibernate.transaction.auto_close_session">true</property>
 		<property name="show_sql">true</property>
 		<mapping class="project.entity.Department"></mapping>
 		<mapping class="project.entity.Sector"></mapping>

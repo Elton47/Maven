@@ -15,8 +15,7 @@ import project.util.HibernateUtil;
 @RequestScoped
 @ManagedBean(name = "userLoginRequest")
 public class UserLoginRequest {
-	private Session session = HibernateUtil.getSession();
-    private String username, password;
+	private String username, password;
     public String getUsername() {
         return username;
     }
@@ -31,7 +30,6 @@ public class UserLoginRequest {
     }
     public String validateLogin() {
         try {
-            session.beginTransaction();
             List<User> list = new UserLoginDao().validity(username, password);
             if(!list.isEmpty())
             	return "private/user/index.xhtml?faces-redirect=true";

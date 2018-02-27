@@ -4,24 +4,21 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import project.dao.DepartmentDao;
 import project.entity.Department;
 
-@RequestScoped
+@ViewScoped
 @ManagedBean(name = "manageDepartmentBean")
 public class ManageDepartmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final DepartmentDao departmentDao = new DepartmentDao();
-	private Department department = new Department();
+	private Department department = new Department(), departmentToEditOrRestore;
 	private List<Department> departments;
 	private String code, name, budget;
 	@PostConstruct
 	public void init() {
 		departments = departmentDao.getDepartments();
-		code = null;
-		name = null;
-		budget = null;
 	}
 	public List<Department> getDepartments() {
 		return departments;
@@ -36,29 +33,35 @@ public class ManageDepartmentBean implements Serializable {
 		this.department = department;
 	}
 	public void addDepartment() {
-		if(code != null && name != null && budget != null)
-			SessionScopedValuesBean.setSucceeded(departmentDao.addDepartment(code, name, budget));
-		else
-			SessionScopedValuesBean.setSucceeded(false);
-		init(); // Refresh.
+		if(departmentDao.addDepartment(code, name, budget))
+			init(); // Refresh.
+		code = null;
+		name = null;
+		budget = null;
 	}
-	public void removeDepartment(String code) {
-		SessionScopedValuesBean.setCodeToRestoreRecord(code);
-		SessionScopedValuesBean.setSucceeded(departmentDao.removeDepartment(code));
-		init(); // Refresh.
+	public void removeDepartment(Department department) {
+		if(department != null) {
+			departmentToEditOrRestore = department;
+			if(departmentDao.removeDepartment(department))
+				init();
+		}
 	}
 	public void restoreDepartment() {
-		SessionScopedValuesBean.setSucceeded(departmentDao.restoreDepartment(SessionScopedValuesBean.getCodeToRestoreRecord()));
-		SessionScopedValuesBean.setCodeToRestoreRecord("");
-		init(); // Refresh.
+		if(departmentToEditOrRestore != null) {
+			if(departmentDao.restoreDepartment(departmentToEditOrRestore))
+				init();
+			departmentToEditOrRestore = null;
+		}
 	}
 	public void editDepartment() {
-		if(code != null && name != null && budget != null)
-			SessionScopedValuesBean.setSucceeded(departmentDao.editDepartment(code, name, budget, SessionScopedValuesBean.getCodeToEditRecord()));
-		else
-			SessionScopedValuesBean.setSucceeded(false);
-		SessionScopedValuesBean.setCodeToEditRecord("");
-		init(); // Refresh.
+		if(departmentToEditOrRestore != null) {
+			if(departmentDao.editDepartment(code, name, budget, departmentToEditOrRestore))
+				init();
+			code = null;
+			name = null;
+			budget = null;
+			departmentToEditOrRestore = null;
+		}
 	}
 	public String getCode() {
 		return code;
@@ -77,5 +80,11 @@ public class ManageDepartmentBean implements Serializable {
 	}
 	public void setBudget(String budget) {
 		this.budget = budget;
+	}
+	public Department getDepartmentToEditOrRestore() {
+		return departmentToEditOrRestore;
+	}
+	public void setDepartmentToEditOrRestore(Department departmentToEditOrRestore) {
+		this.departmentToEditOrRestore = departmentToEditOrRestore;
 	}
 }

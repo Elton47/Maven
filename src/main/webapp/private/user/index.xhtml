@@ -54,6 +54,31 @@
    		</div>
     	<div id="tableDiv" style="width: auto; height: 80%; position: absolute; top: 50%; left: 20%; right: 64px; transform: translate(32px, -50%);">
     		<div id="departmentsDiv" style="display: none;">
+    			<button id="addDepartmentButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Department')">Add</button>
+				<button id="doneDepartmentButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Department')">Done</button>
+				<button id="cancelDepartmentButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Department')">Cancel</button>
+				<h:form styleClass="inputDepartmentForm">
+	    			<div id="inputDepartmentDiv" class="row" style="display: none;">
+						<div class="input-field col s4">
+							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
+							<label>Code</label>
+						</div>
+						<div class="input-field col s4">
+							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.name}" maxlength="45" data-length="45" />
+							<label>Name</label>
+						</div>
+						<div class="input-field col s4">
+							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+							<label>Budget</label>
+						</div>
+					</div>
+					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
+						<f:ajax execute="@form" render="departmentsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
+						<f:ajax execute="@form" render="departmentsTable" />
+					</h:commandButton>
+				</h:form>
 				<h:dataTable id="departmentsTable" styleClass="highlight" value="#{manageDepartmentBean.departments}" var="department">
 					<h:column>
 						<f:facet name="header">
@@ -71,44 +96,27 @@
 						<f:facet name="header">
 							<h:outputText value="Budget" />
 						</f:facet>
-						<h:form>
 							#{department.budget}
-							<f:ajax execute="@form" render="departmentsTable">
-								<a class="material-icons secondary-content" jsf:value="delete" jsf:action="#{manageDepartmentBean.removeDepartment(department.code)}" jsf:onclick="deleteButtonClicked('Department')" />
-								<a class="material-icons secondary-content" jsf:value="edit" jsf:action="#{sessionScopedValuesBean.setCodeToEditRecord(department.code)}" jsf:onclick="editButtonClicked('Department')" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText styleClass="right" value="Action" />
+						</f:facet>
+						<a class="material-icons secondary-content" href="#" onclick="removeButtonClicked('Department')">delete</a>
+						<a class="material-icons secondary-content" href="#" onclick="editButtonClicked('Department')">edit</a>
+						<h:form>
+							<f:ajax execute="@this" render="departmentsTable">
+								<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.removeDepartment(department)}">
+								</h:commandButton>
+								<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
+								</h:commandButton>
 							</f:ajax>
+							<h:commandButton styleClass="setDepartmentToEditHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}">
+								<f:ajax execute="@this"/>
+							</h:commandButton>
 						</h:form>
 					</h:column>
 				</h:dataTable>
-				<br />
-				<button id="addDepartmentButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Department')">Add</button>
-				<button id="doneDepartmentButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Department')">Done</button>
-				<button id="cancelDepartmentButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Department')">Cancel</button>
-				<h:form styleClass="inputDepartmentForm">
-	    			<div id="inputDepartmentDiv" class="row" style="display: none;">
-						<div class="input-field col s4">
-							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
-							<label>Code</label>
-						</div>
-						<div class="input-field col s4">
-							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.name}" maxlength="45" data-length="45" />
-							<label>Name</label>
-						</div>
-						<div class="input-field col s4">
-							<input type="text" class="validate" jsf:required="true" value="#{manageDepartmentBean.budget}" maxlength="16" data-length="16" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
-							<label>Budget</label>
-						</div>
-					</div>
-					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable" />
-					</h:commandButton>
-					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable" />
-					</h:commandButton>
-					<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
-						<f:ajax execute="none" render="departmentsTable" />
-					</h:commandButton>
-				</h:form>
 			</div>
 			<div id="sectorsDiv" style="display: none;">
 				<h:dataTable id="sectorsTable" styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">

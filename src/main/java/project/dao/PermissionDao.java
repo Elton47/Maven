@@ -11,7 +11,7 @@ public class PermissionDao extends DbOps<Permission> implements Serializable {
 	private Session session = HibernateUtil.getSession();
 	public List<Permission> getPermissions() {
 		try {
-			List<Permission> permissions = session.createQuery("from Permission where Validity = 1", Permission.class).getResultList();
+			List<Permission> permissions = session.createQuery("from Permission where Validity = 1 order by ID DESC", Permission.class).getResultList();
 			if(permissions.size() > 0)
 				return permissions;
 			else

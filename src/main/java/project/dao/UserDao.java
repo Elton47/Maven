@@ -13,7 +13,7 @@ public class UserDao extends DbOps<User> implements Serializable {
     private Session session = HibernateUtil.getSession();
     public List<User> getUsers() {
         try {
-            List<User> users = session.createQuery("from User where Validity = 1", User.class).getResultList();
+            List<User> users = session.createQuery("from User where Validity = 1 order by ID DESC", User.class).getResultList();
             if(!users.isEmpty())
             	return users;
             else

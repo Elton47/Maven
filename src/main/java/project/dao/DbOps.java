@@ -6,16 +6,18 @@ import project.util.HibernateUtil;
 
 public abstract class DbOps<T> {
     Session session = HibernateUtil.getSession();
-    public void save(T t) {
+    public boolean save(T t) {
         Transaction trans = null;
         try {
             trans = session.beginTransaction();
             session.save(t);
             session.getTransaction().commit();
+            return true;
         } catch(RuntimeException e) {
             if(trans != null)
                 trans.rollback();
         }
+        return false;
     }
     public boolean delete(T t) {
         Transaction trans = null;
@@ -23,6 +25,7 @@ public abstract class DbOps<T> {
             trans = session.beginTransaction();
             session.delete(t);
             session.getTransaction().commit();
+            return true;
         } catch(RuntimeException e) {
             if(trans != null)
                 trans.rollback();
@@ -35,6 +38,7 @@ public abstract class DbOps<T> {
             trans = session.beginTransaction();
             session.saveOrUpdate(t);
             session.getTransaction().commit();
+            return true;
         } catch(RuntimeException e) {
             if(trans != null)
                 trans.rollback();
@@ -48,11 +52,9 @@ public abstract class DbOps<T> {
 			session.createNativeQuery(statement).executeUpdate();
 			session.getTransaction().commit();
 		} catch(RuntimeException e) {
-			System.out.println(e.getMessage());
-		}
-		finally {
 			if(trans != null)
                 trans.rollback();
+			System.out.println(e.getMessage());
 		}
     }
 }

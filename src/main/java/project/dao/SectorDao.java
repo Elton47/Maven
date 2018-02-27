@@ -13,7 +13,7 @@ public class SectorDao extends DbOps<Sector> implements Serializable {
 	private Session session = HibernateUtil.getSession();
 	public List<Sector> getSectors() {
 		try {
-			List<Sector> sectors = session.createQuery("from Sector where Validity = 1", Sector.class).getResultList();
+			List<Sector> sectors = session.createQuery("from Sector where Validity = 1 order by ID DESC", Sector.class).getResultList();
 			if(sectors.size() > 0)
 				return sectors;
 			else

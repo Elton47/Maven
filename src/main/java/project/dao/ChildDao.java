@@ -12,7 +12,7 @@ public class ChildDao extends DbOps<Child> implements Serializable {
 	private Session session = HibernateUtil.getSession();
 	public List<Child> getChildren() {
 		try {
-			List<Child> children = session.createQuery("from Child where Validity = 1", Child.class).getResultList();
+			List<Child> children = session.createQuery("from Child where Validity = 1 order by ID DESC", Child.class).getResultList();
 			if(children.size() > 0)
 				return children;
 			else

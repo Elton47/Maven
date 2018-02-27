@@ -11,7 +11,7 @@ public class CountryDao extends DbOps<Country> implements Serializable {
 	private Session session = HibernateUtil.getSession();
 	public List<Country> getCountries() {
 		try {
-			List<Country> countries = session.createQuery("from Country where Validity = 1", Country.class).getResultList();
+			List<Country> countries = session.createQuery("from Country where Validity = 1 order by ID DESC", Country.class).getResultList();
 			if(countries.size() > 0)
 				return countries;
 			else
