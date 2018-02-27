@@ -33,7 +33,6 @@ function editButtonClicked(tableName) { // To Edit Records of ANY Table.
 	editing = true;
 	adding = false;
 	toggleAddEditInputDiv(tableName);
-	document.getElementsByClassName('set' + tableName + 'ToEditHiddenButton')[0].click();
 }
 function doneButtonClicked(tableName) {
 	if(adding) {
@@ -53,7 +52,6 @@ function cancelButtonClicked(tableName) {
 	toggleAddEditInputDiv(tableName);
 }
 function removeButtonClicked(tableName) {
-	document.getElementsByClassName('remove' + tableName + 'HiddenButton')[0].click();
 	var $toastContent = $('<span>' + tableName + ' removed successfully!</span>').add($('<button class="btn-flat toast-action" onclick="restoreButtonClicked(\'' + tableName + '\')">Undo</button>'));
 	Materialize.toast($toastContent, 4000);
 }

@@ -115,7 +115,40 @@
 				</h:form>
 			</div>
 			<div id="sectorsDiv" style="display: none;">
-    			<button id="addSectorButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Sector')">Add</button>
+				<h:dataTable id="sectorsTable" styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Code" />
+						</f:facet>
+						#{sector.code}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						#{sector.name}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Department" />
+						</f:facet>
+						#{sector.department.name}
+					</h:column>
+					<h:column>
+						<f:facet name="header">
+							<h:outputText value="Manager" />
+						</f:facet>
+						<h:form>
+							#{sector.employee.fullName}
+							<f:ajax execute="@form" render="sectorsTable">
+								<a class="material-icons secondary-content" jsf:value="delete" jsf:action="#{manageSectorBean.removeSector(sector.code)}" jsf:onclick="deleteButtonClicked('Sector')"/>
+								<a class="material-icons secondary-content" jsf:value="edit" jsf:action="#{sessionScopedValuesBean.setCodeToEditRecord(sector.code)}" jsf:onclick="editButtonClicked('Sector')"/>
+							</f:ajax>
+						</h:form>
+					</h:column>
+				</h:dataTable>
+				<br />
+				<button id="addSectorButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Sector')">Add</button>
 				<button id="doneSectorButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Sector')">Done</button>
 				<button id="cancelSectorButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Sector')">Cancel</button>
 				<h:form styleClass="inputSectorForm">
@@ -130,7 +163,7 @@
 						</div>
 						<div class="input-field col s3">
 							<f:ajax>
-								<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true" >
+								<h:selectOneMenu value="#{manageSectorBean.department}" required="true" >
 									<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
 								</h:selectOneMenu>
 							</f:ajax>
@@ -138,7 +171,7 @@
 						</div>
 						<div class="input-field col s3">
 							<f:ajax>
-								<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false" >
+								<h:selectOneMenu value="#{manageSectorBean.employee}" required="false" >
 									<f:selectItem itemValue="" itemLabel="None" />
 									<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
 								</h:selectOneMenu>
@@ -150,48 +183,11 @@
 						<f:ajax execute="@form" render="sectorsTable" />
 					</h:commandButton>
 					<h:commandButton styleClass="editSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.editSector()}">
-						<f:ajax execute="@form" render="sectorsTable" />
+						<f:ajax execute="@form" render="sectorsTable"/>
 					</h:commandButton>
-					<h:dataTable id="sectorsTable" styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Code" />
-							</f:facet>
-							#{sector.code}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Name" />
-							</f:facet>
-							#{sector.name}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Department" />
-							</f:facet>
-								#{sector.department.name}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Manager" />
-							</f:facet>
-								#{sector.employee.fullName}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText styleClass="right" value="Action" />
-							</f:facet>
-							<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageSectorBean.removeSector(sector)}" onclick="removeButtonClicked('Sector')">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandLink>
-							<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{manageSectorBean.setSectorToEditOrRestore(sector)}" onclick="editButtonClicked('Sector')">
-								<f:ajax />
-							</h:commandLink>
-							<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandButton>
-						</h:column>
-					</h:dataTable>
+					<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
+						<f:ajax execute="none" render="sectorsTable" />
+					</h:commandButton>
 				</h:form>
 			</div>
 			<div id="rolesDiv" style="display: none;">

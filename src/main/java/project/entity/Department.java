@@ -32,7 +32,7 @@ public class Department implements Serializable {
 		this.code = code;
 		this.name = name;
 		this.budget = budget;
-		this.validity = 1;
+		validity = 1;
 	}
 	public int getId() {
 		return id;

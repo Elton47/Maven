@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import project.dao.DepartmentDao;
 import project.entity.Department;
 
-@ViewScoped
+@SessionScoped
 @ManagedBean(name = "manageDepartmentBean")
 public class ManageDepartmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -35,9 +35,6 @@ public class ManageDepartmentBean implements Serializable {
 	public void addDepartment() {
 		if(departmentDao.addDepartment(code, name, budget))
 			init(); // Refresh.
-		code = null;
-		name = null;
-		budget = null;
 	}
 	public void removeDepartment(Department department) {
 		if(department != null) {
@@ -57,10 +54,6 @@ public class ManageDepartmentBean implements Serializable {
 		if(departmentToEditOrRestore != null) {
 			if(departmentDao.editDepartment(code, name, budget, departmentToEditOrRestore))
 				init();
-			code = null;
-			name = null;
-			budget = null;
-			departmentToEditOrRestore = null;
 		}
 	}
 	public String getCode() {

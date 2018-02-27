@@ -33,6 +33,13 @@ public class Sector implements Serializable {
 	@Column(name = "Validity")
 	private int validity;
 	public Sector () {}
+	public Sector(String code, String name, Department department, Employee employee) {
+		this.code = code;
+		this.name = name;
+		this.department = department;
+		this.employee = employee;
+		validity = 1;
+	}
 	public int getId() {
 		return id;
 	}

@@ -4,25 +4,23 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import project.dao.SectorDao;
+import project.entity.Department;
+import project.entity.Employee;
 import project.entity.Sector;
 
-@RequestScoped
+@SessionScoped
 @ManagedBean(name = "manageSectorBean")
 public class ManageSectorBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final SectorDao sectorDao = new SectorDao();
-	private Sector sector = new Sector();
+	private Sector sector = new Sector(), sectorToEditOrRestore;
 	private List<Sector> sectors;
-	private String code, name, department, employee;
+	private String code, name, departmentName, employeeFullName;
 	@PostConstruct
 	public void init() {
 		sectors = sectorDao.getSectors();
-		code = null;
-		name = null;
-		department = null;
-		employee = null;
 	}
 	public List<Sector> getSectors() {
 		return sectors;
@@ -37,29 +35,28 @@ public class ManageSectorBean implements Serializable {
 		this.sector = sector;
 	}
 	public void addSector() {
-		if(code != null && name != null && department != null) // employee can be null.
-			SessionScopedValuesBean.setSucceeded(sectorDao.addSector(code, name, department, employee));
-		else
-			SessionScopedValuesBean.setSucceeded(false);
-		init(); // Refresh.
+		if(sectorDao.addSector(code, name, departmentName, employeeFullName))
+			init(); // Refresh.
 	}
-	public void removeSector(String code) {
-		SessionScopedValuesBean.setCodeToRestoreRecord(code);
-		SessionScopedValuesBean.setSucceeded(sectorDao.removeSector(code));
-		init(); // Refresh.
+	public void removeSector(Sector sector) {
+		if(sector != null) {
+			sectorToEditOrRestore = sector;
+			if(sectorDao.removeSector(sector))
+				init();
+		}
 	}
 	public void restoreSector() {
-		SessionScopedValuesBean.setSucceeded(sectorDao.restoreSector(SessionScopedValuesBean.getCodeToRestoreRecord()));
-		SessionScopedValuesBean.setCodeToRestoreRecord("");
-		init(); // Refresh.
+		if(sectorToEditOrRestore != null) {
+			if(sectorDao.restoreSector(sectorToEditOrRestore))
+				init();
+			sectorToEditOrRestore = null;
+		}
 	}
 	public void editSector() {
-		if(code != null && name != null && department != null) // employee can be null.
-			SessionScopedValuesBean.setSucceeded(sectorDao.editSector(code, name, department, employee, SessionScopedValuesBean.getCodeToEditRecord()));
-		else
-			SessionScopedValuesBean.setSucceeded(false);
-		SessionScopedValuesBean.setCodeToEditRecord("");
-		init(); // Refresh.
+		if(sectorToEditOrRestore != null) {
+			if(sectorDao.editSector(code, name, departmentName, employeeFullName, sectorToEditOrRestore))
+				init();
+		}
 	}
 	public String getCode() {
 		return code;
@@ -73,16 +70,22 @@ public class ManageSectorBean implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDepartment() {
-		return department;
+	public String getDepartmentName() {
+		return departmentName;
 	}
-	public void setDepartment(String department) {
-		this.department = department;
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
-	public String getEmployee() {
-		return employee;
+	public String getEmployeeFullName() {
+		return employeeFullName;
 	}
-	public void setEmployee(String employee) {
-		this.employee = employee;
+	public void setEmployeeFullName(String employeeFullName) {
+		this.employeeFullName = employeeFullName;
+	}
+	public Sector getSectorToEditOrRestore() {
+		return sectorToEditOrRestore;
+	}
+	public void setSectorToEditOrRestore(Sector sectorToEditOrRestore) {
+		this.sectorToEditOrRestore = sectorToEditOrRestore;
 	}
 }
