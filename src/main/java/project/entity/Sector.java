@@ -21,7 +21,7 @@ public class Sector implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	@NaturalId
+	@NaturalId(mutable = true)
 	@Column(name = "Code")
 	private String code;
 	@Column(name = "Name")

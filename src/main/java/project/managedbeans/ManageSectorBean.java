@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import project.dao.SectorDao;
 import project.entity.Department;
 import project.entity.Employee;
 import project.entity.Sector;
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "manageSectorBean")
 public class ManageSectorBean implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +21,12 @@ public class ManageSectorBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		sectors = sectorDao.getSectors();
+	}
+	public void resetInputFields() {
+		code = null;
+		name = null;
+		departmentName = null;
+		employeeFullName = null;
 	}
 	public List<Sector> getSectors() {
 		return sectors;
@@ -37,6 +43,7 @@ public class ManageSectorBean implements Serializable {
 	public void addSector() {
 		if(sectorDao.addSector(code, name, departmentName, employeeFullName))
 			init(); // Refresh.
+		resetInputFields();
 	}
 	public void removeSector(Sector sector) {
 		if(sector != null) {
@@ -57,6 +64,7 @@ public class ManageSectorBean implements Serializable {
 			if(sectorDao.editSector(code, name, departmentName, employeeFullName, sectorToEditOrRestore))
 				init();
 		}
+		resetInputFields();
 	}
 	public String getCode() {
 		return code;

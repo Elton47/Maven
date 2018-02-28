@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15188216205730" configfile="/maven/src/main/webapp/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" x="122" y="370" id="pf15194261364360" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15194261364371 pf15194261364372" path="/login.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/user/index.xhtml" id="pf15194261364373" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15194261364371" path="private/user/index.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="private/admin/admin.xhtml" id="pf15194261364374" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15194261364372" path="private/admin/admin.xhtml"/>
-  <links id="pf15194261364371" target="pf15194261364373" source="pf15194261364360" outcome="user" redirect="true"/>
-  <links id="pf15194261364372" target="pf15194261364374" source="pf15194261364360" outcome="admin" redirect="true"/>
+  <nodes xsi:type="pageflow:PFPage" name="login.xhtml" x="122" y="370" id="pf15194261364360" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15197759474940 pf15197759474941" path="/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/user/index.xhtml" id="pf15197759474942" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15197759474940" path="/private/user/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="private/admin/admin.xhtml" id="pf15197759474943" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15197759474941" path="/private/admin/admin.xhtml"/>
+  <links id="pf15197759474940" target="pf15197759474942" source="pf15194261364360" outcome="user" redirect="true"/>
+  <links id="pf15197759474941" target="pf15197759474943" source="pf15194261364360" outcome="admin" redirect="true"/>
 </pageflow:Pageflow>

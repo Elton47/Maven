@@ -28,7 +28,7 @@
 		</script>
 	</h:head>
 	<h:body>
-   		<div class="side-nav fixed" style="position: absolute; top: 0; left: 0; bottom: 0; right: 80%; width: auto; height: 100%; transform: translateX(0%) !important;">
+   		<div class="side-nav fixed hoverable" style="position: absolute; top: 0; left: 0; bottom: 0; right: 80%; width: auto; height: 100%; transform: translateX(0%) !important;">
    			<div class="valign-wrapper" style="width: 100%; height: 80%;">
 	   			<ul style="width: 100%;">
 		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#departmentsDiv')">Departments<i class="material-icons">business</i></a></li>
@@ -195,67 +195,74 @@
 				</h:form>
 			</div>
 			<div id="rolesDiv" style="display: none;">
-				<h:dataTable id="rolesTable" styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Name" />
-						</f:facet>
-						#{role.name}
-					</h:column>
-					<h:column>
-						<f:facet name="header">
-							<h:outputText value="Permissions" />
-						</f:facet>
-						<h:form>
-							<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageRoleBean.removeRole(role.name)}">
-								<f:ajax execute="@form" render="@form rolesTable" />
-							</h:commandLink>
-							<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Role')">
-								<f:ajax execute="none" />
-							</h:commandLink>
-						</h:form>
-						<ul class="collapsible left" data-collapsible="accordion" style="margin-left: 50%; width: 300px;">
-							<li>
-								<div class="collapsible-header">Show</div>
-								<div class="collapsible-body">
-									<ui:repeat value="#{role.permissions}" var="permission">
-										<h:form>
-											#{permission.name}
-											<a class="material-icons secondary-content tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete" jsf:value="delete" jsf:action="#{manageRoleBean.removePermissionFromRole(permission.name)}">
-												<f:ajax execute="none" render="@this rolesTable"/>
-											</a>
-											<h:commandLink class="material-icons secondary-content" value="edit" action="#{sessionScopedValuesBean.setCodeToEditRecord(role.name)}" onclick="editButtonClicked('Role')">
-												<f:ajax execute="none" />
-											</h:commandLink>
-										</h:form>
-									</ui:repeat>
-								</div>
-							</li>
-						</ul>
-					</h:column>
-				</h:dataTable>
-				<br />
 				<button id="addRoleButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Role')">Add</button>
 				<button id="doneRoleButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Role')">Done</button>
 				<button id="cancelRoleButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Role')">Cancel</button>
 				<h:form styleClass="inputRoleForm">
 	    			<div id="inputRoleDiv" class="row" style="display: none;">
 						<div class="input-field col s6">
-							<input type="text" class="validate" jsf:value="#{manageRoleBean.name}" jsf:required="true" maxlength="45" data-length="45" />
+							<input  type="text" class="validate" jsf:value="#{manageRoleBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
 						</div>
 						<div class="input-field col s6">
 							<f:ajax>
-								<h:selectManyMenu value="#{manageRoleBean.permissions}" required="false" >
+								<h:selectManyMenu value="#{manageRoleBean.permissionNames}" required="true">
 									<f:selectItem itemValue="" itemLabel="None" />
 									<f:selectItems value="#{managePermissionBean.permissions}" var="permission" itemValue="#{permission.name}" itemLabel="#{permission.name}" />
 								</h:selectManyMenu>
 							</f:ajax>
+							<label>Permissions</label>
 						</div>
 					</div>
 					<h:commandButton styleClass="addRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.addRole()}">
 						<f:ajax execute="@form" render="rolesTable" />
 					</h:commandButton>
+					<h:commandButton styleClass="editRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.editRole()}">
+						<f:ajax execute="@form" render="rolesTable" />
+					</h:commandButton>
+					<h:dataTable id="rolesTable" styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Name" />
+							</f:facet>
+							#{role.name}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Permissions" />
+							</f:facet>
+							<ul class="collapsible left" data-collapsible="accordion" style="margin-left: 50%; width: 300px;">
+								<li>
+									<div class="collapsible-header">Show</div>
+									<div class="collapsible-body">
+										<ui:repeat value="#{role.permissions}" var="permission">
+											#{permission.name}
+											<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageRoleBean.removePermissionFromRole(role, permission)}" onclick="removeButtonClicked('RolePermission')">
+												<f:ajax execute="@this" render="@form" />
+											</h:commandLink>
+										</ui:repeat>
+									</div>
+								</li>
+							</ul>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText styleClass="right" value="Action" />
+							</f:facet>
+							<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageRoleBean.removeRole(role)}" onclick="removeButtonClicked('Role')">
+								<f:ajax execute="@this" render="@form" />
+							</h:commandLink>
+							<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{manageRoleBean.setRoleToEditOrRestore(role)}" onclick="editButtonClicked('Role')">
+								<f:ajax />
+							</h:commandLink>
+							<h:commandButton styleClass="restoreRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.restoreRole()}">
+								<f:ajax execute="@this" render="@form" />
+							</h:commandButton>
+							<h:commandButton styleClass="restoreRolePermissionHiddenButton" style="display: none;" actionListener="#{manageRoleBean.restorePermissionFromRole()}">
+								<f:ajax execute="@this" render="@form" />
+							</h:commandButton>
+						</h:column>
+					</h:dataTable>
 				</h:form>
 			</div>
 			<div id="permissionsDiv" style="display: none;">

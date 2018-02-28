@@ -21,7 +21,7 @@ public class Role implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	@NaturalId
+	@NaturalId(mutable = true)
 	@Column(name = "Name")
 	private String name;
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -29,6 +29,11 @@ public class Role implements Serializable {
 	@Column(name = "Validity")
 	private int validity;
 	public Role() {}
+	public Role(String name, List<Permission> permissions) {
+		this.name = name;
+		this.permissions = permissions;
+		validity = 1;
+	}
 	public int getId() {
 		return id;
 	}

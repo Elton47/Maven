@@ -1,6 +1,7 @@
 package project.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.Session;
 import project.entity.Permission;
@@ -11,39 +12,49 @@ public class RoleDao extends DbOps<Role> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Session session = HibernateUtil.getSession();
 	public List<Role> getRoles() {
-		try {
-			List<Role> roles = session.createQuery("from Role where Validity = 1 order by ID DESC", Role.class).getResultList();
-			if(!roles.isEmpty())
-				return roles;
-			else
-				return null;
-		} catch(Exception e) {
-			return null;
+		return session.createQuery("from Role where Validity = 1 order by ID DESC", Role.class).getResultList();
+	}
+	public boolean addRole(String name, List<String> permissionNames) {
+		if(permissionNames.get(0).equals(""))
+			return save(new Role(name, null));
+		else {
+			List<Permission> permissionsToAdd = new ArrayList<Permission>();
+			for(int i = 0; i < permissionNames.size(); i++)
+				permissionsToAdd.add(session.createQuery("from Permission where Name = ?1", Permission.class).setParameter(1, permissionNames.get(i)).getSingleResult());
+			return save(new Role(name, permissionsToAdd));
 		}
 	}
-	public void addRole(String name, List<String> permissions) {
-		writeToDb("insert into Role(Name, Validity)"
-				+ "values('" + name + "', 1)");
-		List<Role> roles = session.createQuery("from Role where Name = '" + name + "'", Role.class).getResultList();
-		if(!roles.isEmpty()) {
-			if(!permissions.isEmpty()) {
-				for(int i = 0; i < permissions.size(); i++) {
-					List<Permission> permissionsOfRole = session.createQuery("from Permission where Name = '" + permissions.get(i) + "'", Permission.class).getResultList();
-					if(!permissionsOfRole.isEmpty()) {
-						writeToDb("insert into role_permission(Role_ID, permissions_id)"
-								+ "values(" + roles.get(0).getId() + ", " + permissionsOfRole.get(0).getId() + ")");
-					}
-				}
-			}
-			// else: No Permissions.
-		}
+	public boolean removeRole(Role role) {
+		role.setValidity(0);
+		return update(role);
 	}
-	public void removeRole(String name) {
-		List<Role> roles = session.createQuery("from Role where Name = '" + name + "'", Role.class).getResultList();
-		if(!roles.isEmpty()) {
-			writeToDb("update User set Validity = 0 where Role_ID = " + roles.get(0).getId());
-			writeToDb("delete from Role_has_Permission where Role_ID = " + roles.get(0).getId());
-			writeToDb("update Role set Validity = 0 where ID = " + roles.get(0).getId());
+	public boolean restoreRole(Role role) {
+		role.setValidity(1);
+		return update(role);
+	}
+	public boolean removePermissionFromRole(Role role, Permission permission) {
+		List<Permission> updatedPermissions = role.getPermissions();
+		updatedPermissions.remove(permission);
+		role.setPermissions(updatedPermissions);
+		return update(role);
+	}
+	public boolean restorePermissionFromRole(Role role, Permission permission) {
+		List<Permission> updatedPermissions = role.getPermissions();
+		updatedPermissions.add(permission);
+		role.setPermissions(updatedPermissions);
+		return update(role);
+	}
+	public boolean editRole(String name, List<String> permissionNames, Role role) {
+		if(permissionNames.get(0).equals(""))
+			role.setPermissions(null);		
+		else {
+			List<Permission> permissionsToAdd = new ArrayList<Permission>();
+			for(int i = 0; i < permissionNames.size(); i++)
+				permissionsToAdd.add(session.createQuery("from Permission where Name = ?1", Permission.class).setParameter(1, permissionNames.get(i)).getSingleResult());
+			role.setPermissions(permissionsToAdd);
 		}
+		role.setName(name);
+		role.setValidity(1);
+		return update(role);
 	}
 }
