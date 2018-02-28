@@ -2,26 +2,19 @@ package project.managedbeans;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import project.dao.SectorDao;
-import project.entity.Department;
-import project.entity.Employee;
 import project.entity.Sector;
 
+@SuppressWarnings("deprecation")
 @ViewScoped
 @ManagedBean(name = "manageSectorBean")
 public class ManageSectorBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final SectorDao sectorDao = new SectorDao();
-	private Sector sector = new Sector(), sectorToEditOrRestore;
-	private List<Sector> sectors;
+	private Sector sectorToEditOrRestore;
 	private String code, name, departmentName, employeeFullName;
-	@PostConstruct
-	public void init() {
-		sectors = sectorDao.getSectors();
-	}
 	public void resetInputFields() {
 		code = null;
 		name = null;
@@ -29,41 +22,27 @@ public class ManageSectorBean implements Serializable {
 		employeeFullName = null;
 	}
 	public List<Sector> getSectors() {
-		return sectors;
-	}
-	public void setSectors(List<Sector> sectors) {
-		this.sectors = sectors;
-	}
-	public Sector getSector() {
-		return sector;
-	}
-	public void setSector(Sector sector) {
-		this.sector = sector;
+		return sectorDao.getSectors();
 	}
 	public void addSector() {
-		if(sectorDao.addSector(code, name, departmentName, employeeFullName))
-			init(); // Refresh.
+		sectorDao.addSector(code, name, departmentName, employeeFullName);
 		resetInputFields();
 	}
 	public void removeSector(Sector sector) {
 		if(sector != null) {
 			sectorToEditOrRestore = sector;
-			if(sectorDao.removeSector(sector))
-				init();
+			sectorDao.removeSector(sector);
 		}
 	}
 	public void restoreSector() {
 		if(sectorToEditOrRestore != null) {
-			if(sectorDao.restoreSector(sectorToEditOrRestore))
-				init();
+			sectorDao.restoreSector(sectorToEditOrRestore);
 			sectorToEditOrRestore = null;
 		}
 	}
 	public void editSector() {
-		if(sectorToEditOrRestore != null) {
-			if(sectorDao.editSector(code, name, departmentName, employeeFullName, sectorToEditOrRestore))
-				init();
-		}
+		if(sectorToEditOrRestore != null)
+			sectorDao.editSector(code, name, departmentName, employeeFullName, sectorToEditOrRestore);
 		resetInputFields();
 	}
 	public String getCode() {

@@ -3,11 +3,15 @@ package project.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.FetchType;
@@ -21,14 +25,21 @@ public class Permission implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	@NaturalId
+	@NaturalId(mutable = true)
 	@Column(name = "Name")
 	private String name;
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinTable(name = "role_permission", joinColumns = { @JoinColumn(name = "permissions_id")},
+	 									 inverseJoinColumns = { @JoinColumn(name = "role_id")})
 	private List<Role> roles = new ArrayList<Role>();
 	@Column(name = "Validity")
 	private int validity;
 	public Permission() {}
+	public Permission(String name, List<Role> roles) {
+		this.name = name;
+		this.roles = roles;
+		validity = 1;
+	}
 	public int getId() {
 		return id;
 	}

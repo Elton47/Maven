@@ -89,7 +89,7 @@ CREATE TABLE `department` (
   `Validity` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Code` (`Code`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,7 +98,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'D0001','Networking',1000000,1),(2,'D0002','Information Technology',2000000,1),(3,'D0003','Test',3000000,1),(4,'D0004','Testt',100000,1),(5,'D0005','Testtt',200000,1),(7,'D0006','Testttt',300000,1),(8,'D0007','Testtttt',400000,1),(9,'D0008','Testttttt',500000,1),(10,'D0009','Testtttttt',600000,1),(11,'D0010','Testttttttt',700000,1),(12,'asd','a',1,1);
+INSERT INTO `department` VALUES (1,'D0001','Networking',1000000,1),(2,'kljasuhduashdiu','iujasiudh',1,1),(3,'D0003','Test',3000000,1),(4,'D0004','Testt',100000,0),(5,'D0005','Testtt',200000,0),(7,'lalala','kjasd',1,1),(8,'D0007','Testtttt',400000,0),(9,'D0008','Testttttt',500000,0),(10,'lkokkokoko','okok',1,1),(11,'D0010','Testttttttt',700000,0),(12,'okopkokokok','kjaisjdi',1234,1),(13,'workingNowUpdate','asiojd',12346,0),(14,'iuasudihasudhasi','uahsdu1',1,0),(15,'jijijjijjij','iajsij',1,1),(16,'test ok?','ok',213,1);
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -134,7 +134,7 @@ CREATE TABLE `employee` (
 
 LOCK TABLES `employee` WRITE;
 /*!40000 ALTER TABLE `employee` DISABLE KEYS */;
-INSERT INTO `employee` VALUES (5,'E0001','Elton Memishaj','0684826147',1000,1,1,1),(6,'E0002','Test Worker','0680000000',650,2,6,1);
+INSERT INTO `employee` VALUES (5,'E0001','Elton Memishaj','0684826147',1000,1,NULL,1),(6,'E0002','Test Worker','0680000000',650,2,NULL,1);
 /*!40000 ALTER TABLE `employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -151,7 +151,7 @@ CREATE TABLE `permission` (
   `Validity` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -160,7 +160,7 @@ CREATE TABLE `permission` (
 
 LOCK TABLES `permission` WRITE;
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
-INSERT INTO `permission` VALUES (1,'Full Control',1),(2,'Read Only',1),(3,'Denied',1);
+INSERT INTO `permission` VALUES (1,'Full Control',1),(2,'Read Only',1),(3,'Denied',1),(4,'test permission',1),(5,'NewPerm',1);
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -178,7 +178,7 @@ CREATE TABLE `role` (
   `role_permissions` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Name` (`Name`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -187,7 +187,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES (1,'Administrator',1,NULL),(2,'Manager',1,NULL),(3,'User',1,NULL),(4,'asd',1,NULL),(5,'asdasdasd',1,NULL),(6,'sadasdasdasd',1,NULL),(7,'Finally',1,NULL),(8,'123456',1,NULL);
+INSERT INTO `role` VALUES (1,'Administrator',1,NULL),(2,'Manager',1,NULL),(3,'User',1,NULL),(4,'asd',1,NULL),(5,'asdasdasd',1,NULL),(6,'sadasdasdasd',1,NULL),(7,'Finally',1,NULL),(8,'123456',1,NULL),(9,'updatedRole',1,NULL),(10,'testingRoles',1,NULL),(11,'newRoleTest',1,NULL),(12,'testingAgain',1,NULL),(13,'againAndAgain',1,NULL),(14,'testingNewBeanRevamp',1,NULL),(15,'dbTest',1,NULL);
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -214,7 +214,7 @@ CREATE TABLE `role_permission` (
 
 LOCK TABLES `role_permission` WRITE;
 /*!40000 ALTER TABLE `role_permission` DISABLE KEYS */;
-INSERT INTO `role_permission` VALUES (7,1),(7,2),(8,2),(8,3);
+INSERT INTO `role_permission` VALUES (15,5),(15,4),(15,3),(15,2),(15,1);
 /*!40000 ALTER TABLE `role_permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -238,7 +238,7 @@ CREATE TABLE `sector` (
   KEY `Employee_ID` (`Employee_ID`),
   CONSTRAINT `sector_ibfk_1` FOREIGN KEY (`Department_ID`) REFERENCES `department` (`ID`),
   CONSTRAINT `sector_ibfk_2` FOREIGN KEY (`Employee_ID`) REFERENCES `employee` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +247,7 @@ CREATE TABLE `sector` (
 
 LOCK TABLES `sector` WRITE;
 /*!40000 ALTER TABLE `sector` DISABLE KEYS */;
-INSERT INTO `sector` VALUES (1,'S0001','Hardware',1,NULL,1),(6,'S0002','Devices',1,5,1),(7,'S0003','Information',2,NULL,1),(8,'a','a',12,NULL,0),(9,'asd','asd',12,NULL,1),(12,'asdasdas','asdasd',2,NULL,1),(14,'asdasdasdasd','asdaasd',1,NULL,1),(16,'S0004','Finally',3,NULL,1),(17,'adsasdasdasd','asdasd',2,NULL,1),(18,'asdsad','ssssa',4,NULL,1),(19,'asdxzxbn','asd',2,6,1);
+INSERT INTO `sector` VALUES (1,'S0001','Hardware',1,NULL,1),(6,'S0002','Devices',1,5,1),(7,'S0003','Information',2,NULL,1),(8,'a','a',12,NULL,0),(9,'asd','asd',12,NULL,1),(12,'asdasdas','asdasd',2,NULL,1),(14,'asdasdasdasd','asdaasd',1,NULL,1),(16,'S0004','Finally',3,NULL,0),(17,'adsasdasdasd','asdasd',2,NULL,1),(18,'asdsad','ssssa',4,NULL,0),(19,'asdasdasdasdasda','asdasdasdasdasdas',1,NULL,1),(20,'final','testtttt',12,5,1);
 /*!40000 ALTER TABLE `sector` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -296,4 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-25  0:31:01
+-- Dump completed on 2018-02-28 17:55:17

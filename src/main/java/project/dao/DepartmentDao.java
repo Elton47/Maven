@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Session;
 import project.entity.Department;
-import project.entity.Sector;
 import project.util.HibernateUtil;
 
 public class DepartmentDao extends DbOps<Department> implements Serializable {

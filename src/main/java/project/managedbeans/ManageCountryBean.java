@@ -8,6 +8,7 @@ import javax.faces.bean.RequestScoped;
 import project.dao.CountryDao;
 import project.entity.Country;
 
+@SuppressWarnings("deprecation")
 @RequestScoped
 @ManagedBean(name = "manageCountryBean")
 public class ManageCountryBean implements Serializable {

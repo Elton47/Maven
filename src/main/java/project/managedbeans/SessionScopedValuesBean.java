@@ -3,6 +3,7 @@ package project.managedbeans;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+@SuppressWarnings("deprecation")
 @SessionScoped
 @ManagedBean(name = "sessionScopedValuesBean")
 public class SessionScopedValuesBean {

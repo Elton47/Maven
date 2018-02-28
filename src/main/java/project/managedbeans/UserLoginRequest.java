@@ -4,14 +4,10 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.persistence.TypedQuery;
-
-import org.hibernate.Session;
-
 import project.dao.UserLoginDao;
 import project.entity.User;
-import project.util.HibernateUtil;
 
+@SuppressWarnings("deprecation")
 @RequestScoped
 @ManagedBean(name = "userLoginRequest")
 public class UserLoginRequest {

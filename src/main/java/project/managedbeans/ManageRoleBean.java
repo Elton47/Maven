@@ -2,81 +2,60 @@ package project.managedbeans;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import project.dao.RoleDao;
 import project.entity.Permission;
 import project.entity.Role;
 
+@SuppressWarnings("deprecation")
 @ViewScoped
 @ManagedBean(name = "manageRoleBean")
 public class ManageRoleBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final RoleDao roleDao = new RoleDao();
-	private Role role = new Role(), roleToEditOrRestore;
-	private List<Role> roles;
+	private Role roleToEditOrRestore;
 	private String name;
 	private List<String> permissionNames;
 	private Permission permissionToRestore;
-	@PostConstruct
-	public void init() {
-		roles = roleDao.getRoles();
-	}
 	public void resetInputFields() {
 		name = null;
 		permissionNames = null;
 	}
 	public List<Role> getRoles() {
-		return roles;
-	}
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-	public Role getRole() {
-		return role;
-	}
-	public void setRole(Role role) {
-		this.role = role;
+		return roleDao.getRoles();
 	}
 	public void addRole() {
-		if(roleDao.addRole(name, permissionNames))
-			init(); // Refresh.
+		roleDao.addRole(name, permissionNames);
 		resetInputFields();
 	}
 	public void removeRole(Role role) {
 		if(role != null) {
 			roleToEditOrRestore = role;
-			if(roleDao.removeRole(role))
-				init();
+			roleDao.removeRole(role);
 		}
 	}
 	public void restoreRole() {
 		if(roleToEditOrRestore != null) {
-			if(roleDao.restoreRole(roleToEditOrRestore))
-				init();
+			roleDao.restoreRole(roleToEditOrRestore);
 			roleToEditOrRestore = null;
 		}
 	}
 	public void removePermissionFromRole(Role role, Permission permission) {
 		roleToEditOrRestore = role;
 		permissionToRestore = permission;
-		if(roleDao.removePermissionFromRole(role, permission))
-			init();
+		roleDao.removePermissionFromRole(role, permission);
 	}
 	public void restorePermissionFromRole() {
 		if(roleToEditOrRestore != null && permissionToRestore != null) {
-			if(roleDao.restorePermissionFromRole(roleToEditOrRestore, permissionToRestore))
-				init();
+			roleDao.restorePermissionFromRole(roleToEditOrRestore, permissionToRestore);
 			roleToEditOrRestore = null;
 			permissionToRestore = null;
 		}
 	}
 	public void editRole() {
-		if(roleToEditOrRestore != null) {
-			if(roleDao.editRole(name, permissionNames, roleToEditOrRestore))
-				init();
-		}
+		if(roleToEditOrRestore != null)
+			roleDao.editRole(name, permissionNames, roleToEditOrRestore);
 		resetInputFields();
 	}
 	public String getName() {

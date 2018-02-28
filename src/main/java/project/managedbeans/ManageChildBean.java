@@ -8,6 +8,7 @@ import javax.faces.bean.RequestScoped;
 import project.dao.ChildDao;
 import project.entity.Child;
 
+@SuppressWarnings("deprecation")
 @RequestScoped
 @ManagedBean(name = "manageChildBean")
 public class ManageChildBean implements Serializable {

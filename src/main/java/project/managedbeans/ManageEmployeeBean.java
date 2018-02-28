@@ -8,6 +8,7 @@ import javax.faces.bean.RequestScoped;
 import project.dao.EmployeeDao;
 import project.entity.Employee;
 
+@SuppressWarnings("deprecation")
 @RequestScoped
 @ManagedBean(name = "manageEmployeeBean")
 public class ManageEmployeeBean implements Serializable {

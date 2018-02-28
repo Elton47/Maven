@@ -3,14 +3,6 @@
  * Copyright 2014-2017 Materialize
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
-@font-face {
-	font-family: "Product Sans";
-	src: url("fonts/Product_Sans.ttf");
-}
-.no-uppercase {
-	text-transform: none;
-}
-
 .materialize-red {
 	background-color: #e51c23 !important
 }
@@ -2148,7 +2140,6 @@
 }
 	/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 html {
-	font-family: "Product Sans";
 	-ms-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%
 }
@@ -2248,7 +2239,6 @@ pre {
 }
 
 code, kbd, pre, samp {
-	font-family: "Product Sans";
 	font-size: 1em
 }
 
@@ -2720,7 +2710,7 @@ table.striped>tbody>tr:nth-child(odd) {
 	background-color: #f2f2f2
 }
 
-table.striped>tbody>tr>td {
+table.striped>body>tr>td {
 	border-radius: 0
 }
 
@@ -4296,7 +4286,6 @@ a {
 
 html {
 	line-height: 1.5;
-	font-family: "Product Sans";
 	font-weight: normal;
 	color: rgba(0, 0, 0, 0.87)
 }
