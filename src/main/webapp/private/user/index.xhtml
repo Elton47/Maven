@@ -8,19 +8,21 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<h:head>
 		<title>Panel</title>
-		<!--Import Google Icon Font-->
+		<!-- Import Material Icons Font -->
 		<link rel="stylesheet"
-			href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-		<!-- Compiled and minified CSS -->
+			href="../../css/material-icons.css" />
+		<!-- Material Design CSS -->
 		<link rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" />
-		<!--Import jQuery before materialize.js-->
+			href="../../css/materialize.css" />
+		<!-- Import jQuery before materialize.js -->
 		<script type="text/javascript"
-			src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-		<!-- Compiled and minified JavaScript -->
+			src="../../js/jquery-3.2.1.min.js"></script>
+		<!-- Material Design Javascript -->
 		<script type="text/javascript"
-			src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+			src="../../js/materialize.js"></script>
+		<!-- Controller Javascript -->
 		<script type="text/javascript" src="../../js/controller.js"></script>
+		<!-- Initialize Custom Elements -->
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('select').material_select();
@@ -28,37 +30,37 @@
 		</script>
 	</h:head>
 	<h:body>
-   		<div class="side-nav fixed hoverable" style="position: absolute; top: 0; left: 0; bottom: 0; right: 80%; width: auto; height: 100%; transform: translateX(0%) !important;">
-   			<div class="valign-wrapper" style="width: 100%; height: 80%;">
-	   			<ul style="width: 100%;">
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#departmentsDiv')">Departments<i class="material-icons">business</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#sectorsDiv')">Sectors<i class="material-icons">work</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#rolesDiv')">Roles<i class="material-icons">verified_user</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#permissionsDiv')">Permissions<i class="material-icons">thumbs_up_down</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#usersDiv')">Users<i class="material-icons">group</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#countriesDiv')">Countries<i class="material-icons">terrain</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#employeesDiv')">Employees<i class="material-icons">face</i></a></li>
-		  			<li><a class="waves-effect waves-teal lighten-4" onclick="showTable('#childrenDiv')">Children<i class="material-icons">child_care</i></a></li>
-		  			<li><div class="divider"></div></li>
-		  			<li><a class="waves-effect waves-teal lighten-4 dropdown-button" data-activates="settingsDropDown">Settings<i class="material-icons">settings</i></a>
-			  			<ul id="settingsDropDown" class="dropdown-content">
-			  				<li><a class="waves-effect waves-teal lighten-4">Settings<i class="material-icons">settings</i></a></li>
-			  				<li><a class="waves-effect waves-teal lighten-4" >Change Password<i class="material-icons">vpn_key</i></a></li>
-			  				<li><a class="waves-effect waves-teal lighten-4" >Help<i class="material-icons">help_outline</i></a></li>
-			  				<li><a class="waves-effect waves-teal lighten-4" >About<i class="material-icons">info_outline</i></a></li>
-			  				<li><a class="waves-effect waves-teal lighten-4" href="http://localhost:8080/maven/login.xhtml">Logout<i class="material-icons">power_settings_new</i></a></li>
-			  			</ul>
-		  			</li>
-	  			</ul>
-  			</div>
+   		<div id="sideNavigation" class="side-nav fixed hoverable" style="position: absolute; top: 0; left: 0; bottom: 0; right: 80%; width: auto; height: 100%; transform: translateX(0%) !important;">
+   			<ul style="width: 100%; position: absolute; bottom: 33%;">
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#departmentsDiv')">Departments<i class="material-icons">business</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#sectorsDiv')">Sectors<i class="material-icons">work</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#rolesDiv')">Roles<i class="material-icons">verified_user</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#permissionsDiv')">Permissions<i class="material-icons">thumbs_up_down</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#usersDiv')">Users<i class="material-icons">group</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#countriesDiv')">Countries<i class="material-icons">terrain</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#employeesDiv')">Employees<i class="material-icons">face</i></a></li>
+	  			<li><a class="waves-effect waves-indigo" onclick="showTable('#childrenDiv')">Children<i class="material-icons">child_care</i></a></li>
+	  			<li><div class="divider"></div></li>
+	  			<li><a class="waves-effect waves-indigo dropdown-button" data-activates="settingsDropDown">Settings<i class="material-icons">settings</i></a>
+		  			<ul id="settingsDropDown" class="dropdown-content">
+		  				<li><a class="waves-effect waves-indigo">Settings<i class="material-icons">settings</i></a></li>
+		  				<li><a class="waves-effect waves-indigo" >Change Password<i class="material-icons">vpn_key</i></a></li>
+		  				<li><a class="waves-effect waves-indigo" >Help<i class="material-icons">help_outline</i></a></li>
+		  				<li><a class="waves-effect waves-indigo" >About<i class="material-icons">info_outline</i></a></li>
+		  				<li><a class="waves-effect waves-indigo" href="http://localhost:8080/maven/login.xhtml">Logout<i class="material-icons">power_settings_new</i></a></li>
+		  			</ul>
+	  			</li>
+  			</ul>
    		</div>
-    	<div id="tableDiv" style="width: auto; height: 80%; position: absolute; top: 50%; left: 20%; right: 64px; transform: translate(32px, -50%);">
+    	<div id="tableDiv" class="row" style="width: auto; height: 80%; position: absolute; top: 50%; left: 20%; right: 64px; transform: translate(32px, -50%);">
     		<div id="departmentsDiv" style="display: none;">
-    			<button id="addDepartmentButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Department')">Add</button>
-				<button id="doneDepartmentButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Department')">Done</button>
-				<button id="cancelDepartmentButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Department')">Cancel</button>
+    			<div class="col s12" style="padding: 0;">
+	    			<button id="addDepartmentButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Department')">Add</button>
+					<button id="doneDepartmentButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Department')">Done</button>
+					<button id="cancelDepartmentButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Department')">Cancel</button>
+				</div>
 				<h:form styleClass="inputDepartmentForm">
-	    			<div id="inputDepartmentDiv" class="row" style="display: none;">
+	    			<div id="inputDepartmentDiv" style="display: none;">
 						<div class="input-field col s4">
 							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
 							<label>Code</label>
@@ -115,11 +117,13 @@
 				</h:form>
 			</div>
 			<div id="sectorsDiv" style="display: none;">
-    			<button id="addSectorButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Sector')">Add</button>
-				<button id="doneSectorButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Sector')">Done</button>
-				<button id="cancelSectorButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Sector')">Cancel</button>
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addSectorButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Sector')">Add</button>
+					<button id="doneSectorButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Sector')">Done</button>
+					<button id="cancelSectorButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Sector')">Cancel</button>
+				</div>
 				<h:form styleClass="inputSectorForm">
-	    			<div id="inputSectorDiv" class="row" style="display: none;">
+	    			<div id="inputSectorDiv" style="display: none;">
 						<div class="input-field col s3">
 							<input  type="text" class="validate" jsf:value="#{manageSectorBean.code}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>Code</label>
@@ -195,11 +199,13 @@
 				</h:form>
 			</div>
 			<div id="rolesDiv" style="display: none;">
-				<button id="addRoleButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Role')">Add</button>
-				<button id="doneRoleButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Role')">Done</button>
-				<button id="cancelRoleButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Role')">Cancel</button>
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addRoleButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Role')">Add</button>
+					<button id="doneRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Role')">Done</button>
+					<button id="cancelRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Role')">Cancel</button>
+				</div>
 				<h:form styleClass="inputRoleForm">
-	    			<div id="inputRoleDiv" class="row" style="display: none;">
+	    			<div id="inputRoleDiv" style="display: none;">
 						<div class="input-field col s6">
 							<input  type="text" class="validate" jsf:value="#{manageRoleBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
@@ -220,18 +226,18 @@
 					<h:commandButton styleClass="editRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.editRole()}">
 						<f:ajax execute="@form" render="rolesTable" />
 					</h:commandButton>
-					<h:dataTable id="rolesTable" styleClass="highlight" value="#{manageRoleBean.roles}" var="role">
-						<h:column>
+					<h:dataTable id="rolesTable" styleClass="highlight bordered card hoverable" value="#{manageRoleBean.roles}" var="role">
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
 								<h:outputText value="Name" />
 							</f:facet>
 							#{role.name}
 						</h:column>
-						<h:column>
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
 								<h:outputText value="Permissions" />
 							</f:facet>
-							<ul class="collapsible left" data-collapsible="accordion" style="margin-left: 50%; width: 300px;">
+							<ul class="collapsible left" data-collapsible="accordion" style="width: 100%;">
 								<li>
 									<div class="collapsible-header">Show</div>
 									<div class="collapsible-body">
@@ -246,7 +252,7 @@
 								</li>
 							</ul>
 						</h:column>
-						<h:column>
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
 								<h:outputText styleClass="right" value="Action" />
 							</f:facet>
@@ -267,11 +273,13 @@
 				</h:form>
 			</div>
 			<div id="permissionsDiv" style="display: none;">
-				<button id="addPermissionButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Permission')">Add</button>
-				<button id="donePermissionButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Permission')">Done</button>
-				<button id="cancelPermissionButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Permission')">Cancel</button>
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addPermissionButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Permission')">Add</button>
+					<button id="donePermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Permission')">Done</button>
+					<button id="cancelPermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Permission')">Cancel</button>
+				</div>
 				<h:form styleClass="inputPermissionForm">
-	    			<div id="inputPermissionDiv" class="row" style="display: none;">
+	    			<div id="inputPermissionDiv" style="display: none;">
 						<div class="input-field col s6">
 							<input  type="text" class="validate" jsf:value="#{managePermissionBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
@@ -303,7 +311,7 @@
 							<f:facet name="header">
 								<h:outputText value="Roles" />
 							</f:facet>
-							<ul class="collapsible left" data-collapsible="accordion" style="margin-left: 50%; width: 300px;">
+							<ul class="collapsible left" data-collapsible="accordion" style="width: 100%;">
 								<li>
 									<div class="collapsible-header">Show</div>
 									<div class="collapsible-body">
@@ -339,6 +347,11 @@
 				</h:form>
 			</div>
 			<div id="usersDiv" style="display: none;">
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addUserButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('User')">Add</button>
+					<button id="doneUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('User')">Done</button>
+					<button id="cancelUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('User')">Cancel</button>
+				</div>
 				<h:dataTable id="usersTable" styleClass="highlight" value="#{manageUserBean.users}" var="user">
 					<h:column>
 						<f:facet name="header">
@@ -392,11 +405,8 @@
 					</h:column>
 				</h:dataTable>
 				<br />
-				<button id="addUserButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('User')">Add</button>
-				<button id="doneUserButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('User')">Done</button>
-				<button id="cancelUserButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('User')">Cancel</button>
 				<h:form styleClass="inputUserForm">
-	    			<div id="inputUserDiv" class="row" style="display: none;">
+	    			<div id="inputUserDiv" style="display: none;">
 						<div class="input-field col s2">
 							<input type="text" class="validate" jsf:value="#{manageUserBean.firstName}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>First Name</label>
@@ -432,6 +442,11 @@
 				</h:form>
 			</div>
 			<div id="countriesDiv" style="display: none;">
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addCountryButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Country')">Add</button>
+					<button id="doneCountryButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Country')">Done</button>
+					<button id="cancelCountryButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Country')">Cancel</button>
+				</div>
 				<h:dataTable id="countriesTable" styleClass="highlight" value="#{manageCountryBean.countries}" var="country">
 					<h:column>
 						<f:facet name="header">
@@ -449,11 +464,8 @@
 					</h:column>
 				</h:dataTable>
 				<br />
-				<button id="addCountryButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Country')">Add</button>
-				<button id="doneCountryButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Country')">Done</button>
-				<button id="cancelCountryButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Country')">Cancel</button>
 				<h:form styleClass="inputCountryForm">
-	    			<div id="inputCountryDiv" class="row" style="display: none;">
+	    			<div id="inputCountryDiv" style="display: none;">
 						<div class="input-field col s4">
 							<input type="text" class="validate" jsf:value="#{manageCountryBean.name}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Name</label>
@@ -465,6 +477,11 @@
 				</h:form>
 			</div>
 			<div id="employeesDiv" style="display: none;">
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addEmployeeButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Employee')">Add</button>
+					<button id="doneEmployeeButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Employee')">Done</button>
+					<button id="cancelEmployeeButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Employee')">Cancel</button>
+				</div>
 				<h:dataTable id="employeesTable" styleClass="highlight" value="#{manageEmployeeBean.employees}" var="employee">
 					<h:column>
 						<f:facet name="header">
@@ -512,11 +529,8 @@
 					</h:column>
 				</h:dataTable>
 				<br />
-				<button id="addEmployeeButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Employee')">Add</button>
-				<button id="doneEmployeeButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Employee')">Done</button>
-				<button id="cancelEmployeeButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Employee')">Cancel</button>
 				<h:form styleClass="inputEmployeeForm">
-	    			<div id="inputEmployeeDiv" class="row" style="display: none;">
+	    			<div id="inputEmployeeDiv" style="display: none;">
 						<div class="input-field col s2">
 							<input type="text" class="validate" jsf:value="#{manageEmployeeBean.ssn}" jsf:required="true" maxlength="16" data-length="16" />
 							<label>SSN</label>
@@ -548,6 +562,11 @@
 				</h:form>
 			</div>
 			<div id="childrenDiv" style="display: none;">
+				<div class="col s12" style="padding: 0;">
+	    			<button id="addChildButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Child')">Add</button>
+					<button id="doneChildButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Child')">Done</button>
+					<button id="cancelChildButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Child')">Cancel</button>
+				</div>
 				<h:dataTable id="childrenTable" styleClass="highlight" value="#{manageChildBean.children}" var="child">
 					<h:column>
 						<f:facet name="header">
@@ -577,11 +596,8 @@
 					</h:column>
 				</h:dataTable>
 				<br />
-				<button id="addChildButton" style="padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="addButtonClicked('Child')">Add</button>
-				<button id="doneChildButton" style="display: none; padding: 0; width: 64px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="doneButtonClicked('Child')">Done</button>
-				<button id="cancelChildButton" style="display: none; padding: 0; width: 80px; text-transform: none;" class="waves-effect waves-light btn dropdown-button" onclick="cancelButtonClicked('Child')">Cancel</button>
 				<h:form styleClass="inputChildForm">
-	    			<div id="inputChildDiv" class="row" style="display: none;">
+	    			<div id="inputChildDiv" style="display: none;">
 						<div class="input-field col s4">
 							<input type="text" class="validate" jsf:value="#{manageChildBean.fullName}" jsf:required="true" maxlength="45" data-length="45" />
 							<label>Full Name</label>
