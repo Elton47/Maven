@@ -10,10 +10,10 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Session session = HibernateUtil.getSession();
 	public List<Department> getDepartments() {
-		return session.createQuery("from Department where Validity = 1 order by ID DESC", Department.class).getResultList();
+		return session.createQuery("from Department where Validity = 1", Department.class).getResultList();
 	}
 	public boolean addDepartment(String code, String name, String budget) {
-		return save(new Department(code, name, Integer.parseInt(budget)));
+		return (!code.isEmpty() && !name.isEmpty() && !budget.isEmpty()) ? save(new Department(code, name, Integer.parseInt(budget))) : false;
 	}
 	public boolean removeDepartment(Department department) {
 		department.setValidity(0);

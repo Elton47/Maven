@@ -5,6 +5,8 @@ import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
 import project.dao.DepartmentDao;
 import project.entity.Department;
 
@@ -16,7 +18,7 @@ public class ManageDepartmentBean implements Serializable {
 	private final DepartmentDao departmentDao = new DepartmentDao();
 	private Department departmentToEditOrRestore;
 	private String code, name, budget, sortBy = "";
-	private boolean isSortedASC = false;
+	private boolean isSortedASC = false, succeeded;
 	private void resetInputFields() {
 		code = null;
 		name = null;
@@ -26,21 +28,24 @@ public class ManageDepartmentBean implements Serializable {
 		this.sortBy = sortBy;
 		List<Department> departments = departmentDao.getDepartments();
 		if(sortBy.equals("code"))
-			departments.sort(isSortedASC ? compareByCode : compareByCode.reversed());
+			departments.sort(!isSortedASC ? compareByCode.reversed() : compareByCode);
 		else if(sortBy.equals("name"))
-			departments.sort(isSortedASC ? compareByName : compareByName.reversed());
+			departments.sort(!isSortedASC ? compareByName.reversed() : compareByName);
 		else if(sortBy.equals("budget"))
-			departments.sort(isSortedASC ? compareByBudget : compareByBudget.reversed());
+			departments.sort(!isSortedASC ? compareByBudget.reversed() : compareByBudget);
 		else
-			departments.sort(!isSortedASC ? compareById : compareById.reversed()); // Sort DESC by default (ID).
+			departments.sort(compareById.reversed()); // Sort DESC by default (ID).
 		isSortedASC = isSortedASC ? false : true;
 		return departments;
 	}
 	public List<Department> getDepartments() {
 		return sort(sortBy);
 	}
+	public boolean getSucceeded() {
+		return succeeded;
+	}
 	public void addDepartment() {
-		departmentDao.addDepartment(code, name, budget);
+		succeeded = departmentDao.addDepartment(code, name, budget);
 		resetInputFields();
 	}
 	public void removeDepartment() {

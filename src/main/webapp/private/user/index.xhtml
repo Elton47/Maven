@@ -38,6 +38,20 @@
 		</script>
 	</h:head>
 	<h:body>
+		<div id="fabDiv" class="fixed-action-btn vertical click-to-toggle" style="display: none;">
+			<a id="fab" class="waves-effect waves-light btn-floating btn-large indigo" style="transition: background-color 0.3s ease;" title="Add" onclick="fabOnClick()"><i id="fabIcon" class="material-icons" style="transition: transform 0.3s ease;">add</i></a>
+			<ul>
+				<li><a id="removeFabAction" class="waves-effect waves-light btn-floating red" title="Delete" onclick="removeButtonClicked()"><i class="material-icons">delete</i></a></li>
+				<li><a id="doneDepartmentFABOption" class="waves-effect waves-light btn-floating green" title="Done" onclick="doneButtonClicked()"><i class="material-icons">done</i></a></li>
+			</ul>
+		</div>
+		<div class="tap-target" data-activates="fab">
+			<div class="tap-target-content white-text">
+				<h5>Tip:</h5>
+				<p>You can add records from here!</p>
+				<a href="#" class="white-text" onclick="$('.tap-target').tapTarget('close')">Dismiss</a>
+			</div>
+		</div>
 	<style>
 		.side-nav li>a {
 		  padding: 0 16px;
@@ -62,14 +76,14 @@
 			   					<a class="collapsible-header white-text waves-effect waves-indigo"><i class="material-icons white-text ">view_list</i>Tables<i class="material-icons right white-text" style="margin-right: 0;">arrow_drop_down</i></a>
 			   					<div class="collapsible-body z-depth-3">
 			   						<ul>
-				   						<li><a class="waves-effect waves-indigo" onclick="showTable('#departmentsDiv')">Departments<i class="material-icons">business</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#sectorsDiv')">Sectors<i class="material-icons">work</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#rolesDiv')">Roles<i class="material-icons">supervisor_account</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#permissionsDiv')">Permissions<i class="material-icons">thumbs_up_down</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#usersDiv')">Users<i class="material-icons">account_circle</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#countriesDiv')">Countries<i class="material-icons">terrain</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#employeesDiv')">Employees<i class="material-icons">face</i></a></li>
-							  			<li><a class="waves-effect waves-indigo" onclick="showTable('#childrenDiv')">Children<i class="material-icons">child_care</i></a></li>
+				   						<li><a class="waves-effect waves-indigo" onclick="showTable('Department')">Departments<i class="material-icons">business</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('Sector')">Sectors<i class="material-icons">work</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('Role')">Roles<i class="material-icons">supervisor_account</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('Permission')">Permissions<i class="material-icons">thumbs_up_down</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('User')">Users<i class="material-icons">account_circle</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('Country')">Countries<i class="material-icons">terrain</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('Employee')">Employees<i class="material-icons">face</i></a></li>
+							  			<li><a class="waves-effect waves-indigo" onclick="showTable('Child')">Children<i class="material-icons">child_care</i></a></li>
 						  			</ul>
 			   					</div>
 		   					</li>
@@ -97,19 +111,19 @@
 			</div>
 		</nav>
     	<div id="tableDiv" class="row" style="height: 80%; position: absolute; top: 50%; left: 10%; right: 10%; transform: translate(0, -40%);">
-    		<div id="departmentsDiv" style="display: none;">
+    		<div id="divDepartment" style="display: none;">
 				<h:form styleClass="inputDepartmentForm">
 	    			<div id="inputDepartmentDiv" style="display: none;">
 						<div class="input-field col s4" style="margin-bottom: 32px;">
-							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
+							<input type="text" class="validate" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
 							<label>Code</label>
 						</div>
 						<div class="input-field col s4" style="margin-bottom: 32px;">
-							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.name}" maxlength="45" data-length="45" />
+							<input type="text" class="validate" jsf:value="#{manageDepartmentBean.name}" maxlength="45" data-length="45" />
 							<label>Name</label>
 						</div>
 						<div class="input-field col s4" style="margin-bottom: 32px;">
-							<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+							<input type="text" class="validate" jsf:value="#{manageDepartmentBean.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
 							<label>Budget</label>
 						</div>
 					</div>
@@ -140,7 +154,7 @@
 						</h:column>
 						<h:column headerClass="indigo white-text">
 							<f:facet name="header"/>
-							<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}" onclick="editButtonClicked('Department')">
+							<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}" onclick="editOnClick()">
 								<f:ajax />
 							</h:commandLink>
 							<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.removeDepartment()}">
@@ -155,24 +169,12 @@
 							<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
 								<f:ajax execute="@form" render="@form" />
 							</h:commandButton>
+							<input id="succeededDepartment" type="hidden" value="#{manageDepartmentBean.getSucceeded()}"/>
 						</h:column>
 					</h:dataTable>
-					<div class="fixed-action-btn vertical click-to-toggle">
-						<a id="addDepartmentButton" class="waves-effect waves-light btn-floating btn-large indigo" style="transition: background-color 0.3s ease;" title="Add" onclick="addButtonClicked('Department')"><i id="fabDepartmentIcon" class="material-icons" style="transition: transform 0.3s ease;">add</i></a>
-						<ul>
-							<li><a id="removeDepartmentFABOption" class="waves-effect waves-light btn-floating red" title="Delete" onclick="removeButtonClicked('Department')"><i class="material-icons">delete</i></a></li>
-							<li><a id="doneDepartmentFABOption" class="waves-effect waves-light btn-floating green" title="Done" onclick="doneButtonClicked('Department')"><i class="material-icons">done</i></a></li>
-						</ul>
-					</div>
-					<div class="tap-target" data-activates="addDepartmentButton">
-						<div class="tap-target-content">
-							<h5>Title</h5>
-							<p>A bunch of text</p>
-						</div>
-					</div>
 				</h:form>
 			</div>
-			<div id="sectorsDiv" style="display: none;">
+			<div id="divSector" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addSectorButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Sector')">Add</button>
 					<button id="doneSectorButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Sector')">Done</button>
@@ -254,7 +256,7 @@
 					</h:dataTable>
 				</h:form>
 			</div>
-			<div id="rolesDiv" style="display: none;">
+			<div id="divRole" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addRoleButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Role')">Add</button>
 					<button id="doneRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Role')">Done</button>
@@ -328,7 +330,7 @@
 					</h:dataTable>
 				</h:form>
 			</div>
-			<div id="permissionsDiv" style="display: none;">
+			<div id="divPermission" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addPermissionButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Permission')">Add</button>
 					<button id="donePermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Permission')">Done</button>
@@ -402,7 +404,7 @@
 					</h:dataTable>
 				</h:form>
 			</div>
-			<div id="usersDiv" style="display: none;">
+			<div id="divUser" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addUserButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('User')">Add</button>
 					<button id="doneUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('User')">Done</button>
@@ -497,7 +499,7 @@
 					</h:commandButton>
 				</h:form>
 			</div>
-			<div id="countriesDiv" style="display: none;">
+			<div id="divCountry" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addCountryButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Country')">Add</button>
 					<button id="doneCountryButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Country')">Done</button>
@@ -532,7 +534,7 @@
 					</h:commandButton>
 				</h:form>
 			</div>
-			<div id="employeesDiv" style="display: none;">
+			<div id="divEmployee" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addEmployeeButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Employee')">Add</button>
 					<button id="doneEmployeeButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Employee')">Done</button>
@@ -617,7 +619,7 @@
 					</h:commandButton>
 				</h:form>
 			</div>
-			<div id="childrenDiv" style="display: none;">
+			<div id="divChild" style="display: none;">
 				<div class="col s12" style="padding: 0;">
 	    			<button id="addChildButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Child')">Add</button>
 					<button id="doneChildButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Child')">Done</button>

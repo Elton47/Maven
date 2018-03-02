@@ -1,31 +1,43 @@
 var adding = false;
 var editing = false;
-function showTable(div) {
-	if($(div).is(":visible"))
-		$(div).hide("fast");
-	else {
-		hideTables();
-		$(div).show("fast");
+var featureDiscoveryShownOnce = false;
+var currentTableName;
+function showTable(selectedTableName) {
+	if($('#div' + selectedTableName).is(":visible")) {
+		$('#div' + selectedTableName).hide("fast");
+		document.getElementById('fabDiv').style.display = "none";
 	}
-	$('.tap-target').tapTarget('open');
+	else {
+		hideAllTables();
+		$('#div' + selectedTableName).show("fast");
+		document.getElementById('fabDiv').style.display = "";
+	}
+	if(!featureDiscoveryShownOnce) {
+		$('.button-collapse').sideNav('show'); // Hide sideNavigation for first time.
+		$('.tap-target').tapTarget('open');
+	}
+	featureDiscoveryShownOnce = true;
+	currentTableName = selectedTableName;
 }
-function hideTables() {
-	$("#departmentsDiv").hide("fast");
-	$("#sectorsDiv").hide("fast");
-	$("#rolesDiv").hide("fast");
-	$("#permissionsDiv").hide("fast");
-	$("#usersDiv").hide("fast");
-	$("#countriesDiv").hide("fast");
-	$("#employeesDiv").hide("fast");
-	$("#childrenDiv").hide("fast");
+function hideAllTables() {
+	$("#divDepartment").hide("fast");
+	$("#divSector").hide("fast");
+	$("#divRole").hide("fast");
+	$("#divPermission").hide("fast");
+	$("#divUser").hide("fast");
+	$("#divCountry").hide("fast");
+	$("#divEmployee").hide("fast");
+	$("#divChild").hide("fast");
 }
-function fabHandler(tableName) {
-	var fab = document.getElementById('add' + tableName + 'Button');
-	var fabIcon = document.getElementById('fab' + tableName + 'Icon');
+function fabOnClick() {
+	if(!editing)
+		adding = true;
+	var fab = document.getElementById('fab');
+	var fabIcon = document.getElementById('fabIcon');
 	if(adding)
-		document.getElementById('remove' + tableName + 'FABOption').style.display = "none";
+		document.getElementById('removeFabAction').style.display = "none";
 	else
-		document.getElementById('remove' + tableName + 'FABOption').style.display = "";
+		document.getElementById('removeFabAction').style.display = "";
 	if(fabIcon.style.transform != "rotate(45deg)") {
 		fab.classList.remove("indigo");
 		fab.classList.add("red");
@@ -34,7 +46,7 @@ function fabHandler(tableName) {
 		fabIcon.style.msTransform = "rotate(45deg)";
 		fabIcon.style.OTransform = "rotate(45deg)";
 		fabIcon.style.transform = "rotate(45deg)";
-		$('#input' + tableName + 'Div').show('fast');
+		$('#input' + currentTableName + 'Div').show('fast');
 	}
 	else {
 		fab.classList.remove("red");
@@ -44,42 +56,55 @@ function fabHandler(tableName) {
 		fabIcon.style.msTransform = "";
 		fabIcon.style.OTransform = "";
 		fabIcon.style.transform = "";
-		cancelButtonClicked(tableName);
+		cancelButtonClicked();
 	}
 }
-function addButtonClicked(tableName) { // To Add Records for ANY Table.
-	if(!editing)
-		adding = true;
-	fabHandler(tableName);
-}
-function editButtonClicked(tableName) { // To Edit Records of ANY Table.
+function editOnClick() { // To Edit Records of ANY Table.
 	editing = true;
-	document.getElementById('add' + tableName + 'Button').click();
+	$('#fab').click();
 }
-function doneButtonClicked(tableName) {
+function doneButtonClicked() {
 	if(adding) {
-		document.getElementsByClassName('add' + tableName + 'HiddenButton')[0].click()	
-		Materialize.toast(tableName + " added successfully!", 4000);
+		document.getElementsByClassName('add' + currentTableName + 'HiddenButton')[0].click();
+		notify("add");
 	}
 	else if(editing) {
-		document.getElementsByClassName('edit' + tableName + 'HiddenButton')[0].click();
-		Materialize.toast(tableName + " updated successfully!", 4000);
+		document.getElementsByClassName('edit' + currentTableName + 'HiddenButton')[0].click();
+		notify("updat"); // not update.
 	}
-	cancelButtonClicked(tableName); 
+	$('#fab').click();
 }
-function cancelButtonClicked(tableName) {
-	adding = false;
-	editing = false;
-	document.getElementsByClassName('input' + tableName + 'Form')[0].reset();
-	$('#input' + tableName + 'Div').hide('fast');
+function cancelButtonClicked() {
+	if(adding) {
+		Materialize.toast('Adding ' + currentTableName + ' canceled!', 1000);
+		adding = false;
+	}
+	else if(editing) {
+		Materialize.toast('Editing ' + currentTableName + ' canceled!', 1000);
+		editing = false;
+	}
+	document.getElementsByClassName('input' + currentTableName + 'Form')[0].reset();
+	$('#input' + currentTableName + 'Div').hide('fast');
 }
-function removeButtonClicked(tableName) {
-	document.getElementsByClassName('remove' + tableName + 'HiddenButton')[0].click();
-	var toastContent = $('<span>' + tableName + ' removed successfully!</span>').add($('<button class="btn-flat toast-action" style="color: #c5cae9;" onclick="restoreButtonClicked(\'' + tableName + '\')">Undo</button>'));
+function removeButtonClicked() {
+	document.getElementsByClassName('remove' + currentTableName + 'HiddenButton')[0].click();
+	var toastContent = $('<span>' + currentTableName + ' removed successfully!</span>').add($('<button class="btn-flat toast-action" style="color: #c5cae9;" onclick="restoreButtonClicked(\'' + currentTableName + '\')">Undo</button>'));
 	Materialize.toast(toastContent, 4000);
 }
-function restoreButtonClicked(tableName) {
-	document.getElementsByClassName('restore' + tableName + 'HiddenButton')[0].click();
+function restoreButtonClicked() {
+	document.getElementsByClassName('restore' + currentTableName + 'HiddenButton')[0].click();
 	$('.toast').first()[0].M_Toast.remove();
-	Materialize.toast(tableName + " restored successfully!", 4000);
+	Materialize.toast(currentTableName + " restored successfully!", 4000);
+}
+function notify(actionName) {
+	reload('succeeded' + currentTableName);
+	if($('#succeeded' + currentTableName).val() === 'true')
+		Materialize.toast(currentTableName + " " + actionName + "ed successfully!", 4000);
+	else
+		Materialize.toast("Error " + actionName + "ing " + currentTableName + "!", 4000);
+}
+function reload(elementId) {
+	var container = document.getElementById(elementId);
+	var content = container.innerHTML;
+	container.innerHTML = content;
 }
