@@ -46,7 +46,7 @@
 		<nav>
     		<div class="nav-wrapper hoverable">
 	      		<a href="#" data-activates="sideNavigation" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-	      		<a href="#" class="show-on-large" style="margin-right: 16px;"><i class="material-icons">search</i></a>
+	      		<a href="#" class="show-on-large right" style="margin-right: 16px;"><i class="material-icons">search</i></a>
 	   			<ul id="sideNavigation" class="side-nav hoverable" style="transform: translateX(0%) !important;">
 	   				<li class="indigo darken-4">
 	   					<div class="row" style="margin: 0;">
@@ -115,29 +115,37 @@
 					</div>
 					<h:dataTable id="departmentsTable" styleClass="highlight bordered card" value="#{manageDepartmentBean.departments}" var="department">
 						<h:column headerClass="indigo white-text">
-							<f:facet name="header">Code</f:facet>
+							<f:facet name="header">
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageDepartmentBean.sort('code')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
+							</f:facet>
 							#{department.code}
 						</h:column>
 						<h:column headerClass="indigo white-text">
-							<f:facet name="header">Name</f:facet>
+							<f:facet name="header">
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageDepartmentBean.sort('name')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
+							</f:facet>
 							#{department.name}
 						</h:column>
 						<h:column headerClass="indigo white-text">
-							<f:facet name="header">Budget</f:facet>
+							<f:facet name="header">
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Budget" action="#{manageDepartmentBean.sort('budget')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
+							</f:facet>
 							#{department.budget}
 						</h:column>
 						<h:column headerClass="indigo white-text">
-							<f:facet name="header">
-								<a id="addDepartmentButton" href="#" style="text-transform: none; border-radius: 0; padding-right: 16px;" class="waves-effect waves-light white-text right" onclick="addButtonClicked('Department')">Add</a>
-								<a id="doneDepartmentButton" href="#" style="display: none; text-transform: none; border-radius: 0; padding-right: 16px;" class="waves-effect waves-light white-text right" onclick="doneButtonClicked('Department')">Done</a>
-								<a id="cancelDepartmentButton" href="#" style="display: none; text-transform: none; border-radius: 0; padding-right: 16px;" class="waves-effect waves-light white-text right" onclick="cancelButtonClicked('Department')">Cancel</a>
-							</f:facet>
-							<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageDepartmentBean.removeDepartment(department)}" onclick="removeButtonClicked('Department')">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandLink>
-							<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}" onclick="editButtonClicked('Department')">
+							<f:facet name="header"/>
+							<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}" onclick="editButtonClicked('Department')">
 								<f:ajax />
 							</h:commandLink>
+							<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.removeDepartment()}">
+								<f:ajax execute="@this" render="@form" />
+							</h:commandButton>
 							<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
 								<f:ajax execute="@this" render="@form" />
 							</h:commandButton>
@@ -149,6 +157,19 @@
 							</h:commandButton>
 						</h:column>
 					</h:dataTable>
+					<div class="fixed-action-btn vertical click-to-toggle">
+						<a id="addDepartmentButton" class="waves-effect waves-light btn-floating btn-large indigo" style="transition: background-color 0.3s ease;" title="Add" onclick="addButtonClicked('Department')"><i id="fabDepartmentIcon" class="material-icons" style="transition: transform 0.3s ease;">add</i></a>
+						<ul>
+							<li><a id="removeDepartmentFABOption" class="waves-effect waves-light btn-floating red" title="Delete" onclick="removeButtonClicked('Department')"><i class="material-icons">delete</i></a></li>
+							<li><a id="doneDepartmentFABOption" class="waves-effect waves-light btn-floating green" title="Done" onclick="doneButtonClicked('Department')"><i class="material-icons">done</i></a></li>
+						</ul>
+					</div>
+					<div class="tap-target" data-activates="addDepartmentButton">
+						<div class="tap-target-content">
+							<h5>Title</h5>
+							<p>A bunch of text</p>
+						</div>
+					</div>
 				</h:form>
 			</div>
 			<div id="sectorsDiv" style="display: none;">

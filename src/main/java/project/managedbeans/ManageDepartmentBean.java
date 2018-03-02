@@ -1,6 +1,7 @@
 package project.managedbeans;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -14,24 +15,37 @@ public class ManageDepartmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final DepartmentDao departmentDao = new DepartmentDao();
 	private Department departmentToEditOrRestore;
-	private String code, name, budget;
-	public void resetInputFields() {
+	private String code, name, budget, sortBy = "";
+	private boolean isSortedASC = false;
+	private void resetInputFields() {
 		code = null;
 		name = null;
 		budget = null;
 	}
+	public List<Department> sort(String sortBy) {
+		this.sortBy = sortBy;
+		List<Department> departments = departmentDao.getDepartments();
+		if(sortBy.equals("code"))
+			departments.sort(isSortedASC ? compareByCode : compareByCode.reversed());
+		else if(sortBy.equals("name"))
+			departments.sort(isSortedASC ? compareByName : compareByName.reversed());
+		else if(sortBy.equals("budget"))
+			departments.sort(isSortedASC ? compareByBudget : compareByBudget.reversed());
+		else
+			departments.sort(!isSortedASC ? compareById : compareById.reversed()); // Sort DESC by default (ID).
+		isSortedASC = isSortedASC ? false : true;
+		return departments;
+	}
 	public List<Department> getDepartments() {
-		return departmentDao.getDepartments();
+		return sort(sortBy);
 	}
 	public void addDepartment() {
 		departmentDao.addDepartment(code, name, budget);
 		resetInputFields();
 	}
-	public void removeDepartment(Department department) {
-		if(department != null) {
-			departmentToEditOrRestore = department;
-			departmentDao.removeDepartment(department);
-		}
+	public void removeDepartment() {
+		if(departmentToEditOrRestore != null)
+			departmentDao.removeDepartment(departmentToEditOrRestore);
 	}
 	public void restoreDepartment() {
 		if(departmentToEditOrRestore != null) {
@@ -68,4 +82,25 @@ public class ManageDepartmentBean implements Serializable {
 	public void setDepartmentToEditOrRestore(Department departmentToEditOrRestore) {
 		this.departmentToEditOrRestore = departmentToEditOrRestore;
 	}
+	// Comparators.
+	private static Comparator<Department> compareById = new Comparator<Department>() {
+        public int compare(Department one, Department other) {
+            return Integer.valueOf(one.getId()).compareTo(Integer.valueOf(other.getId()));
+        }
+    };
+	private static Comparator<Department> compareByCode = new Comparator<Department>() {
+        public int compare(Department one, Department other) {
+            return one.getCode().compareToIgnoreCase(other.getCode());
+        }
+    };
+    private static Comparator<Department> compareByName = new Comparator<Department>() {
+        public int compare(Department one, Department other) {
+            return one.getName().compareToIgnoreCase(other.getName());
+        }
+    };
+    private static Comparator<Department> compareByBudget = new Comparator<Department>() {
+        public int compare(Department one, Department other) {
+            return Integer.valueOf(one.getBudget()).compareTo(Integer.valueOf(other.getBudget()));
+        }
+    };
 }
