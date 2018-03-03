@@ -14,7 +14,8 @@ function showTable(selectedTableName) {
 	}
 	if(!featureDiscoveryShownOnce) {
 		$('.button-collapse').sideNav('show'); // Hide sideNavigation for first time.
-		$('.tap-target').tapTarget('open');
+		$('.tap-target').tapTarget('open'); // Open Feature-Discovery for FAB.
+		document.getElementById('fab').setAttribute("onclick", "fabOnClick()"); // FAB onclick init.
 	}
 	featureDiscoveryShownOnce = true;
 	currentTableName = selectedTableName;
@@ -90,6 +91,7 @@ function removeButtonClicked() {
 	document.getElementsByClassName('remove' + currentTableName + 'HiddenButton')[0].click();
 	var toastContent = $('<span>' + currentTableName + ' removed successfully!</span>').add($('<button class="btn-flat toast-action" style="color: #c5cae9;" onclick="restoreButtonClicked(\'' + currentTableName + '\')">Undo</button>'));
 	Materialize.toast(toastContent, 4000);
+	$('#fab').click();
 }
 function restoreButtonClicked() {
 	document.getElementsByClassName('restore' + currentTableName + 'HiddenButton')[0].click();
@@ -97,14 +99,8 @@ function restoreButtonClicked() {
 	Materialize.toast(currentTableName + " restored successfully!", 4000);
 }
 function notify(actionName) {
-	reload('succeeded' + currentTableName);
-	if($('#succeeded' + currentTableName).val() === 'true')
+	if($('#succeeded' + currentTableName).val() == 'true')
 		Materialize.toast(currentTableName + " " + actionName + "ed successfully!", 4000);
 	else
 		Materialize.toast("Error " + actionName + "ing " + currentTableName + "!", 4000);
-}
-function reload(elementId) {
-	var container = document.getElementById(elementId);
-	var content = container.innerHTML;
-	container.innerHTML = content;
 }

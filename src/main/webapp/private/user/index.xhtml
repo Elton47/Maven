@@ -8,18 +8,15 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<h:head>
 		<title>Panel</title>
+		<link rel="shortcut icon" type="image/gif" href="../../resources/favicon.gif" />
 		<!-- Import Material Icons Font -->
-		<link rel="stylesheet"
-			href="../../css/material-icons.css" />
+		<link rel="stylesheet" href="../../css/material-icons.css" />
 		<!-- Material Design CSS -->
-		<link rel="stylesheet"
-			href="../../css/materialize.css" />
+		<link rel="stylesheet" href="../../css/materialize.css" />
 		<!-- Import jQuery before materialize.js -->
-		<script type="text/javascript"
-			src="../../js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>
 		<!-- Material Design Javascript -->
-		<script type="text/javascript"
-			src="../../js/materialize.js"></script>
+		<script type="text/javascript" src="../../js/materialize.js"></script>
 		<!-- Controller Javascript -->
 		<script type="text/javascript" src="../../js/controller.js"></script>
 		<!-- Initialize Custom Elements -->
@@ -39,7 +36,7 @@
 	</h:head>
 	<h:body>
 		<div id="fabDiv" class="fixed-action-btn vertical click-to-toggle" style="display: none;">
-			<a id="fab" class="waves-effect waves-light btn-floating btn-large indigo" style="transition: background-color 0.3s ease;" title="Add" onclick="fabOnClick()"><i id="fabIcon" class="material-icons" style="transition: transform 0.3s ease;">add</i></a>
+			<a id="fab" class="waves-effect waves-light btn-floating btn-large indigo" style="transition: background-color 0.3s ease;" title="Add"><i id="fabIcon" class="material-icons" style="transition: transform 0.3s ease;">add</i></a>
 			<ul>
 				<li><a id="removeFabAction" class="waves-effect waves-light btn-floating red" title="Delete" onclick="removeButtonClicked()"><i class="material-icons">delete</i></a></li>
 				<li><a id="doneDepartmentFABOption" class="waves-effect waves-light btn-floating green" title="Done" onclick="doneButtonClicked()"><i class="material-icons">done</i></a></li>
@@ -157,29 +154,24 @@
 							<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}" onclick="editOnClick()">
 								<f:ajax />
 							</h:commandLink>
-							<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.removeDepartment()}">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandButton>
-							<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandButton>
-							<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton>
-							<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
-								<f:ajax execute="@form" render="@form" />
-							</h:commandButton>
-							<input id="succeededDepartment" type="hidden" value="#{manageDepartmentBean.getSucceeded()}"/>
 						</h:column>
 					</h:dataTable>
+					<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.removeDepartment()}">
+						<f:ajax execute="@this" render="departmentsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
+						<f:ajax execute="@this" render="departmentsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
+						<f:ajax execute="@form" render="departmentsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
+						<f:ajax execute="@form" render="departmentsTable" />
+					</h:commandButton>
+					<input id="succeededDepartment" type="hidden" value="#{manageDepartmentBean.getSucceeded()}"/>
 				</h:form>
 			</div>
 			<div id="divSector" style="display: none;">
-				<div class="col s12" style="padding: 0;">
-	    			<button id="addSectorButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Sector')">Add</button>
-					<button id="doneSectorButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Sector')">Done</button>
-					<button id="cancelSectorButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Sector')">Cancel</button>
-				</div>
 				<h:form styleClass="inputSectorForm">
 	    			<div id="inputSectorDiv" style="display: none;">
 						<div class="input-field col s3">
@@ -191,69 +183,72 @@
 							<label>Name</label>
 						</div>
 						<div class="input-field col s3">
-							<f:ajax>
-								<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true" >
-									<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
-								</h:selectOneMenu>
-							</f:ajax>
+							<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true" >
+								<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+							</h:selectOneMenu>
 							<label>Department</label>
 						</div>
 						<div class="input-field col s3">
-							<f:ajax>
-								<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false" >
-									<f:selectItem itemValue="" itemLabel="None" />
-									<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
-								</h:selectOneMenu>
-							</f:ajax>
+							<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false" >
+								<f:selectItem itemValue="" itemLabel="None" />
+								<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
+							</h:selectOneMenu>
 							<label>Manager</label>
 						</div>
 					</div>
-					<h:commandButton styleClass="addSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.addSector()}">
-						<f:ajax execute="@form" render="sectorsTable" />
-					</h:commandButton>
-					<h:commandButton styleClass="editSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.editSector()}">
-						<f:ajax execute="@form" render="sectorsTable" />
-					</h:commandButton>
-					<h:dataTable id="sectorsTable" styleClass="highlight" value="#{manageSectorBean.sectors}" var="sector">
-						<h:column>
+					<h:dataTable id="sectorsTable" styleClass="highlight bordered card" value="#{manageSectorBean.sectors}" var="sector">
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
-								<h:outputText value="Code" />
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageSectorBean.sort('code')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
 							</f:facet>
 							#{sector.code}
 						</h:column>
-						<h:column>
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
-								<h:outputText value="Name" />
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageSectorBean.sort('name')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
 							</f:facet>
 							#{sector.name}
 						</h:column>
-						<h:column>
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
-								<h:outputText value="Department" />
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Department" action="#{manageSectorBean.sort('departmentName')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
 							</f:facet>
-								#{sector.department.name}
+							#{sector.department.name}
 						</h:column>
-						<h:column>
+						<h:column headerClass="indigo white-text">
 							<f:facet name="header">
-								<h:outputText value="Manager" />
+								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Manager" action="#{manageSectorBean.sort('employeeFullName')}">
+									<f:ajax execute="@this" render="@form"/>
+								</h:commandLink>
 							</f:facet>
-								#{sector.employee.fullName}
+							#{sector.employee.fullName}
 						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText styleClass="right" value="Action" />
-							</f:facet>
-							<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageSectorBean.removeSector(sector)}" onclick="removeButtonClicked('Sector')">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandLink>
-							<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{manageSectorBean.setSectorToEditOrRestore(sector)}" onclick="editButtonClicked('Sector')">
+						<h:column headerClass="indigo white-text">
+							<f:facet name="header"/>
+							<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageSectorBean.setSectorToEditOrRestore(sector)}" onclick="editOnClick()">
 								<f:ajax />
 							</h:commandLink>
-							<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
-								<f:ajax execute="@this" render="@form" />
-							</h:commandButton>
 						</h:column>
 					</h:dataTable>
+					<h:commandButton styleClass="removeSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.removeSector()}">
+						<f:ajax execute="@this" render="sectorsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
+						<f:ajax execute="@this" render="sectorsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="addSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.addSector()}">
+						<f:ajax execute="@form" immediate="true" render="sectorsTable" />
+					</h:commandButton>
+					<h:commandButton styleClass="editSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.editSector()}">
+						<f:ajax execute="@form" immediate="true" render="sectorsTable" />
+					</h:commandButton>
+					<input id="succeededSector" type="hidden" value="#{manageSectorBean.getSucceeded()}"/>
 				</h:form>
 			</div>
 			<div id="divRole" style="display: none;">

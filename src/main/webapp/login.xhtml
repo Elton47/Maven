@@ -8,24 +8,21 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<h:head>
 		<title>Insert your uncrative title here</title>
+		<link rel="shortcut icon" type="image/gif" href="resources/favicon.gif" />
 		<!-- Import Material Icons Font -->
-		<link rel="stylesheet"
-			href="css/material-icons.css" />
+		<link rel="stylesheet" href="css/material-icons.css" />
 		<!-- Material Design CSS -->
 		<link rel="stylesheet" href="css/materialize.css" />
 		<!-- Import jQuery before materialize.js -->
-		<script type="text/javascript"
-			src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<!-- Material Design Javascript -->
-		<script type="text/javascript"
-			src="js/materialize.js"></script>
+		<script type="text/javascript" src="js/materialize.js"></script>
 	</h:head>
 	<h:body>
-		<div>
-			<div class="card center-align hoverable"
-				style="width: 256px; height: 256px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-				<h:form
-					style="width: 100%; height: 80%; position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);">
+		<div id="main">
+			<div id="loginCard" class="card center-align hoverable" style="width: 256px; height: 256px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+				<p><b>Insert your uncreative title here</b></p>
+				<h:form style="width: 100%; height: 80%; position: absolute; top: 65%; left: 50%; transform: translate(-50%, -50%);">
 					<div class="input-field col s12" style="width: 60%; margin: auto;">
 						<h:inputText value="#{userLoginRequest.username}" styleClass="validate" required="true" />
 						<label>Username</label>
@@ -34,11 +31,32 @@
 						<h:inputSecret value="#{userLoginRequest.password}" styleClass="validate" required="true" />
 						<label>Password</label>
 					</div>
-					<a class="waves-effect waves-light btn" style="width: 100px; margin: 0 auto; text-transform: none;"
-						jsf:value="Login" jsf:action="#{userLoginRequest.validateLogin()}">
+					<button id="loginButton" class="waves-effect waves-light btn" style="width: 100px; margin: 0 auto; text-transform: none;" jsf:action="#{userLoginRequest.validateLogin()}" onclick="load();">
+						Login
 						<f:ajax execute="@form" />
-					</a>
+					</button>
+				<script>
+					function load() {
+						document.getElementById('loginCard').style.filter = "blur(5px)";
+						document.getElementById('spinner').style.display = "";
+					}
+				</script>
 				</h:form>
+			</div>
+			<div id="spinner" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+				<div class="preloader-wrapper big active">
+					<div class="spinner-layer spinner-blue-only">
+						<div class="circle-clipper left">
+							<div class="circle"></div>
+						</div>
+						<div class="gap-patch">
+							<div class="circle"></div>
+						</div>
+						<div class="circle-clipper right">
+							<div class="circle"></div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</h:body>

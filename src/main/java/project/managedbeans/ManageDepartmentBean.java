@@ -5,8 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
 import project.dao.DepartmentDao;
 import project.entity.Department;
 
@@ -23,6 +21,7 @@ public class ManageDepartmentBean implements Serializable {
 		code = null;
 		name = null;
 		budget = null;
+		departmentToEditOrRestore = null;
 	}
 	public List<Department> sort(String sortBy) {
 		this.sortBy = sortBy;
@@ -45,22 +44,21 @@ public class ManageDepartmentBean implements Serializable {
 		return succeeded;
 	}
 	public void addDepartment() {
-		succeeded = departmentDao.addDepartment(code, name, budget);
+		succeeded = !code.equals("") && !name.equals("") && !budget.equals("") ? departmentDao.addDepartment(code, name, budget) : false;
 		resetInputFields();
 	}
 	public void removeDepartment() {
-		if(departmentToEditOrRestore != null)
+		if(departmentToEditOrRestore != null) // Redundant as departmentToEditOrRestore always gets reassigned from Remove Button onclick.
 			departmentDao.removeDepartment(departmentToEditOrRestore);
 	}
 	public void restoreDepartment() {
-		if(departmentToEditOrRestore != null) {
+		if(departmentToEditOrRestore != null) { // Same.
 			departmentDao.restoreDepartment(departmentToEditOrRestore);
-			departmentToEditOrRestore = null;
+			resetInputFields();
 		}
 	}
 	public void editDepartment() {
-		if(departmentToEditOrRestore != null)
-			departmentDao.editDepartment(code, name, budget, departmentToEditOrRestore);
+		succeeded = !code.equals("") && !name.equals("") && !budget.equals("") && departmentToEditOrRestore != null ? departmentDao.editDepartment(code, name, budget, departmentToEditOrRestore) : false;
 		resetInputFields();
 	}
 	public String getCode() {
