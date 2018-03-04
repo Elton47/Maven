@@ -102,10 +102,13 @@
 	   				</li>
 	   				<li class="divider" style="margin: 0;"/>
 	   				<li class="white">
-		   				<a class="waves-effect waves-indigo" href="http://localhost:8080/maven/login.xhtml">Logout<i class="material-icons">power_settings_new</i></a>
+		   				<a class="waves-effect waves-indigo" onclick="logout()">Logout<i class="material-icons">power_settings_new</i></a>
 	   				</li>
 	  			</ul>
 			</div>
+			<h:form>
+				<h:commandLink class="logoutHiddenButton" style="display: none;" action="#{userLoginRequest.logout()}" />
+			</h:form>
 		</nav>
     	<div id="tableDiv" class="row" style="height: 80%; position: absolute; top: 50%; left: 10%; right: 10%; transform: translate(0, -40%);">
     		<div id="divDepartment" style="display: none;">
@@ -113,15 +116,15 @@
 					<h:form id="addDepartmentForm" styleClass="addDepartmentForm">
 		    			<div id="addDepartmentDiv" style="display: none;">
 							<div class="input-field col s4" style="margin-bottom: 32px;">
-								<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.code}" maxlength="16" data-length="16" />
+								<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.department.code}" maxlength="16" data-length="16" />
 								<label>Code</label>
 							</div>
 							<div class="input-field col s4" style="margin-bottom: 32px;">
-								<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.name}" maxlength="45" data-length="45" />
+								<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.department.name}" maxlength="45" data-length="45" />
 								<label>Name</label>
 							</div>
 							<div class="input-field col s4" style="margin-bottom: 32px;">
-								<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+								<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.department.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
 								<label>Budget</label>
 							</div>
 						</div>

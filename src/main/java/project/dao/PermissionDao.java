@@ -1,16 +1,11 @@
 package project.dao;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.hibernate.Session;
 import project.entity.Permission;
 import project.entity.Role;
-import project.util.HibernateUtil;
 
-public class PermissionDao extends DbOps<Permission> implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSession();
+public class PermissionDao extends DbOps<Permission> {
 	public List<Permission> getPermissions() {
 		return session.createQuery("from Permission where Validity = 1 order by ID DESC", Permission.class).getResultList();
 	}

@@ -1,18 +1,13 @@
 package project.dao;
 
-import java.io.Serializable;
 import java.util.List;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import project.entity.Department;
 import project.entity.Employee;
 import project.entity.Sector;
-import project.util.HibernateUtil;
 
 @SuppressWarnings("deprecation")
-public class SectorDao extends DbOps<Sector> implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSession();
+public class SectorDao extends DbOps<Sector> {
 	private List<Sector> sectors = session.createQuery("from Sector where Validity = 1", Sector.class).getResultList();
 	public List<Sector> getSectors() {
 		return sectors;

@@ -1,16 +1,11 @@
 package project.dao;
 
-import java.io.Serializable;
 import java.util.List;
-import org.hibernate.Session;
 import project.entity.Department;
 import project.entity.Role;
 import project.entity.User;
-import project.util.HibernateUtil;
 
-public class UserDao extends DbOps<User> implements Serializable {
-	private static final long serialVersionUID = 1L;
-    private Session session = HibernateUtil.getSession();
+public class UserDao extends DbOps<User> {
     public List<User> getUsers() {
         try {
             List<User> users = session.createQuery("from User where Validity = 1 order by ID DESC", User.class).getResultList();

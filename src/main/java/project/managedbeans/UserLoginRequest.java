@@ -37,4 +37,8 @@ public class UserLoginRequest implements Serializable {
             return "";
         }
     }
+    public String logout() {
+    	new project.util.UserAuth().destroy();
+    	return "/login.xhtml?faces-redirect=true";
+    }
 }

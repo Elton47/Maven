@@ -110,3 +110,6 @@ function notify(actionName) {
 	else
 		Materialize.toast("Error " + actionName + "ing " + currentTableName + "!", 4000);
 }
+function logout() {
+	document.getElementsByClassName('logoutHiddenButton')[0].click();
+}

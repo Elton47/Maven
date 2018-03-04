@@ -1,15 +1,10 @@
 package project.dao;
 
-import java.io.Serializable;
 import java.util.List;
-import org.hibernate.Session;
 import project.entity.Child;
 import project.entity.Employee;
-import project.util.HibernateUtil;
 
-public class ChildDao extends DbOps<Child> implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSession();
+public class ChildDao extends DbOps<Child> {
 	public List<Child> getChildren() {
 		try {
 			List<Child> children = session.createQuery("from Child where Validity = 1 order by ID DESC", Child.class).getResultList();

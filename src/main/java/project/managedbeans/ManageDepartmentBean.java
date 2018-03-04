@@ -31,14 +31,14 @@ public class ManageDepartmentBean implements Serializable {
 		isSortedASC = isSortedASC ? false : true;
 		return departments;
 	}
+	public List<Department> getDepartments() {
+		return sort(sortBy);
+	}
 	public Department getDepartment() {
 		return department;
 	}
 	public void setDepartment(Department department) {
 		this.department = department;
-	}
-	public List<Department> getDepartments() {
-		return sort(sortBy);
 	}
 	public boolean getSucceeded() {
 		return succeeded;

@@ -1,14 +1,9 @@
 package project.dao;
 
-import java.io.Serializable;
 import java.util.List;
-import org.hibernate.Session;
 import project.entity.Country;
-import project.util.HibernateUtil;
 
-public class CountryDao extends DbOps<Country> implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private Session session = HibernateUtil.getSession();
+public class CountryDao extends DbOps<Country> {
 	public List<Country> getCountries() {
 		try {
 			List<Country> countries = session.createQuery("from Country where Validity = 1 order by ID DESC", Country.class).getResultList();
