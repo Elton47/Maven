@@ -105,12 +105,12 @@
 		   				<a class="waves-effect waves-indigo" onclick="logout()">Logout<i class="material-icons">power_settings_new</i></a>
 	   				</li>
 	  			</ul>
+	  			<h:form>
+					<h:commandLink class="logoutHiddenButton" style="display: none;" action="#{userLoginRequest.logout()}" />
+				</h:form>
 			</div>
-			<h:form>
-				<h:commandLink class="logoutHiddenButton" style="display: none;" action="#{userLoginRequest.logout()}" />
-			</h:form>
 		</nav>
-    	<div id="tableDiv" class="row" style="height: 80%; position: absolute; top: 50%; left: 10%; right: 10%; transform: translate(0, -40%);">
+    	<div id="tableDiv" class="row" style="height: 100%; position: absolute; top: 50%; left: 10%; right: 10%; transform: translate(0, -40%);">
     		<div id="divDepartment" style="display: none;">
 	    		<h:panelGroup id="departmentPanel">
 					<h:form id="addDepartmentForm" styleClass="addDepartmentForm">
