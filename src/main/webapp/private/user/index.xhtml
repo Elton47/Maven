@@ -109,67 +109,77 @@
 		</nav>
     	<div id="tableDiv" class="row" style="height: 80%; position: absolute; top: 50%; left: 10%; right: 10%; transform: translate(0, -40%);">
     		<div id="divDepartment" style="display: none;">
-				<h:form styleClass="inputDepartmentForm">
-	    			<div id="inputDepartmentDiv" style="display: none;">
-						<div class="input-field col s4" style="margin-bottom: 32px;">
-							<input type="text" class="validate" jsf:value="#{manageDepartmentBean.code}" maxlength="16" data-length="16" />
-							<label>Code</label>
+	    		<h:panelGroup id="departmentPanel">
+					<h:form id="addDepartmentForm" styleClass="addDepartmentForm">
+		    			<div id="addDepartmentDiv" style="display: none;">
+							<div class="input-field col s4" style="margin-bottom: 32px;">
+								<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.code}" maxlength="16" data-length="16" />
+								<label>Code</label>
+							</div>
+							<div class="input-field col s4" style="margin-bottom: 32px;">
+								<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.name}" maxlength="45" data-length="45" />
+								<label>Name</label>
+							</div>
+							<div class="input-field col s4" style="margin-bottom: 32px;">
+								<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+								<label>Budget</label>
+							</div>
 						</div>
-						<div class="input-field col s4" style="margin-bottom: 32px;">
-							<input type="text" class="validate" jsf:value="#{manageDepartmentBean.name}" maxlength="45" data-length="45" />
-							<label>Name</label>
-						</div>
-						<div class="input-field col s4" style="margin-bottom: 32px;">
-							<input type="text" class="validate" jsf:value="#{manageDepartmentBean.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
-							<label>Budget</label>
-						</div>
-					</div>
-					<h:dataTable id="departmentsTable" styleClass="highlight bordered card" value="#{manageDepartmentBean.departments}" var="department">
-						<h:column headerClass="indigo white-text">
-							<f:facet name="header">
-								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageDepartmentBean.sort('code')}">
-									<f:ajax execute="@this" render="@form"/>
+						<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;">
+							<f:ajax execute="@form" render="@form editDepartmentForm" listener="#{manageDepartmentBean.addDepartment()}" />
+						</h:commandButton>
+					</h:form>
+					<h:form id="editDepartmentForm">
+						<h:dataTable id="departmentsTable" styleClass="highlight bordered card" value="#{manageDepartmentBean.departments}" var="department">
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageDepartmentBean.sort('code')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								<h:outputText rendered="#{!department.editable}" value="#{department.code}" />
+								<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" value="#{department.code}" maxlength="16" />
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageDepartmentBean.sort('name')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								<h:outputText rendered="#{!department.editable}" value="#{department.name}" />
+								<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" value="#{department.name}" maxlength="45" />
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Budget" action="#{manageDepartmentBean.sort('budget')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								<h:outputText rendered="#{!department.editable}" value="#{department.budget}" />
+								<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" value="#{department.budget}" maxlength="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header"/>
+								<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
+									<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.setEditing(department)}" />
 								</h:commandLink>
-							</f:facet>
-							#{department.code}
-						</h:column>
-						<h:column headerClass="indigo white-text">
-							<f:facet name="header">
-								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageDepartmentBean.sort('name')}">
-									<f:ajax execute="@this" render="@form"/>
-								</h:commandLink>
-							</f:facet>
-							#{department.name}
-						</h:column>
-						<h:column headerClass="indigo white-text">
-							<f:facet name="header">
-								<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Budget" action="#{manageDepartmentBean.sort('budget')}">
-									<f:ajax execute="@this" render="@form"/>
-								</h:commandLink>
-							</f:facet>
-							#{department.budget}
-						</h:column>
-						<h:column headerClass="indigo white-text">
-							<f:facet name="header"/>
-							<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageDepartmentBean.setDepartmentToEditOrRestore(department)}" onclick="editOnClick()">
-								<f:ajax />
-							</h:commandLink>
-						</h:column>
-					</h:dataTable>
-					<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.removeDepartment()}">
-						<f:ajax execute="@this" render="departmentsTable" />
-					</h:commandButton>
-					<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.restoreDepartment()}">
-						<f:ajax execute="@this" render="departmentsTable" />
-					</h:commandButton>
-					<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.addDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable" />
-					</h:commandButton>
-					<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;" actionListener="#{manageDepartmentBean.editDepartment()}">
-						<f:ajax execute="@form" render="departmentsTable" />
-					</h:commandButton>
-					<input id="succeededDepartment" type="hidden" value="#{manageDepartmentBean.getSucceeded()}"/>
-				</h:form>
+								<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;">
+									<f:ajax execute="@form" render="@form addDepartmentForm" listener="#{manageDepartmentBean.editDepartment()}" />
+								</h:commandButton>
+								<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;">
+									<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.removeDepartment()}" />
+								</h:commandButton>
+								<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;">
+									<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.restoreDepartment()}" />
+								</h:commandButton>
+								<h:commandButton styleClass="cancelDepartmentHiddenButton" style="display: none;">
+									<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.cancelEditing()}" />
+								</h:commandButton>
+								<input id="succeededDepartment" type="hidden" value="#{manageDepartmentBean.getSucceeded()}"/>
+							</h:column>
+						</h:dataTable>
+					</h:form>
+				</h:panelGroup>
 			</div>
 			<div id="divSector" style="display: none;">
 				<h:form styleClass="inputSectorForm">

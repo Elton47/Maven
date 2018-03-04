@@ -31,15 +31,18 @@ function hideAllTables() {
 	$("#divChild").hide("fast");
 }
 function fabOnClick() {
-	if(!editing)
-		adding = true;
 	var fab = document.getElementById('fab');
 	var fabIcon = document.getElementById('fabIcon');
-	if(adding)
-		document.getElementById('removeFabAction').style.display = "none";
-	else
-		document.getElementById('removeFabAction').style.display = "";
-	if(fabIcon.style.transform != "rotate(45deg)") {
+	if(fabIcon.style.transform != "rotate(45deg)") { // Add.
+		if(!editing) {
+			adding = true;
+			document.getElementById('removeFabAction').style.display = "none";
+			$('#add' + currentTableName + 'Div').show('fast');
+		}
+		else {
+			$('#add' + currentTableName + 'Div').hide();
+			document.getElementById('removeFabAction').style.display = "";
+		}
 		fab.classList.remove("indigo");
 		fab.classList.add("red");
 		fabIcon.style.webkitTransform = "rotate(45deg)";
@@ -47,9 +50,8 @@ function fabOnClick() {
 		fabIcon.style.msTransform = "rotate(45deg)";
 		fabIcon.style.OTransform = "rotate(45deg)";
 		fabIcon.style.transform = "rotate(45deg)";
-		$('#input' + currentTableName + 'Div').show('fast');
 	}
-	else {
+	else { // Cancel.
 		fab.classList.remove("red");
 		fab.classList.add("indigo");
 		fabIcon.style.webkitTransform = "";
@@ -57,10 +59,24 @@ function fabOnClick() {
 		fabIcon.style.msTransform = "";
 		fabIcon.style.OTransform = "";
 		fabIcon.style.transform = "";
-		cancelButtonClicked();
+		if(adding) { // If was adding.
+			document.getElementsByClassName('add' + currentTableName + 'Form')[0].reset();
+			$('#add' + currentTableName + 'Div').hide('fast');
+			adding = false;
+		}
+		if(editing) { // If was editing.
+			document.getElementsByClassName('cancel' + currentTableName + 'HiddenButton')[0].click();
+			editing = false;
+		}
 	}
 }
-function editOnClick() { // To Edit Records of ANY Table.
+function editOnClick() {
+	if(adding) {
+		adding = false;
+		$('#fab').click();
+	}
+	if(editing)
+		$('#fab').click();
 	editing = true;
 	$('#fab').click();
 }
@@ -68,24 +84,14 @@ function doneButtonClicked() {
 	if(adding) {
 		document.getElementsByClassName('add' + currentTableName + 'HiddenButton')[0].click();
 		notify("add");
+		adding = false;
 	}
 	else if(editing) {
 		document.getElementsByClassName('edit' + currentTableName + 'HiddenButton')[0].click();
 		notify("updat"); // not update.
-	}
-	$('#fab').click();
-}
-function cancelButtonClicked() {
-	if(adding) {
-		Materialize.toast('Adding ' + currentTableName + ' canceled!', 1000);
-		adding = false;
-	}
-	else if(editing) {
-		Materialize.toast('Editing ' + currentTableName + ' canceled!', 1000);
 		editing = false;
 	}
-	document.getElementsByClassName('input' + currentTableName + 'Form')[0].reset();
-	$('#input' + currentTableName + 'Div').hide('fast');
+	$('#fab').click();
 }
 function removeButtonClicked() {
 	document.getElementsByClassName('remove' + currentTableName + 'HiddenButton')[0].click();

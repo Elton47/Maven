@@ -13,8 +13,15 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 	public List<Department> getDepartments() {
 		return departments;
 	}
+	/*
 	public boolean addDepartment(String code, String name, String budget) {
 		Department department = new Department(code, name, Integer.parseInt(budget));
+		boolean succeeded = save(department);
+		if(succeeded)
+			departments.add(department);
+		return succeeded;
+	}*/
+	public boolean addDepartment(Department department) {
 		boolean succeeded = save(department);
 		if(succeeded)
 			departments.add(department);
@@ -33,7 +40,7 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 		if(succeeded)
 			departments.add(department);
 		return succeeded;
-	}
+	}/*
 	public boolean editDepartment(String code, String name, String budget, Department department) {
 		Department backupDepartment = department; // In case editing fails.
 		departments.remove(department); // Remove first.
@@ -41,6 +48,13 @@ public class DepartmentDao extends DbOps<Department> implements Serializable {
 		department.setName(name);
 		department.setBudget(Integer.parseInt(budget));
 		department.setValidity(1);
+		boolean succeeded = update(department);
+		departments.add(succeeded ? department : backupDepartment);
+		return succeeded;
+	}*/
+	public boolean editDepartment(Department department) {
+		Department backupDepartment = department; // In case editing fails.
+		departments.remove(department); // Remove first.
 		boolean succeeded = update(department);
 		departments.add(succeeded ? department : backupDepartment);
 		return succeeded;

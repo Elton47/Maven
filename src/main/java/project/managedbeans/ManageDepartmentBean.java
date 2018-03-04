@@ -14,15 +14,9 @@ import project.entity.Department;
 public class ManageDepartmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final DepartmentDao departmentDao = new DepartmentDao();
-	private Department departmentToEditOrRestore;
-	private String code, name, budget, sortBy = "";
+	private Department departmentToRestore, department = new Department();
+	private String sortBy = "";
 	private boolean isSortedASC = false, succeeded;
-	private void resetInputFields() {
-		code = null;
-		name = null;
-		budget = null;
-		departmentToEditOrRestore = null;
-	}
 	public List<Department> sort(String sortBy) {
 		this.sortBy = sortBy;
 		List<Department> departments = departmentDao.getDepartments();
@@ -37,6 +31,12 @@ public class ManageDepartmentBean implements Serializable {
 		isSortedASC = isSortedASC ? false : true;
 		return departments;
 	}
+	public Department getDepartment() {
+		return department;
+	}
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 	public List<Department> getDepartments() {
 		return sort(sortBy);
 	}
@@ -44,46 +44,36 @@ public class ManageDepartmentBean implements Serializable {
 		return succeeded;
 	}
 	public void addDepartment() {
-		succeeded = !code.equals("") && !name.equals("") && !budget.equals("") ? departmentDao.addDepartment(code, name, budget) : false;
-		resetInputFields();
+		succeeded = departmentDao.addDepartment(department);
+		department = new Department(); // If more deparments are added continuously.
 	}
 	public void removeDepartment() {
-		if(departmentToEditOrRestore != null) // Redundant as departmentToEditOrRestore always gets reassigned from Remove Button onclick.
-			departmentDao.removeDepartment(departmentToEditOrRestore);
+		departmentToRestore = department;
+		succeeded = departmentDao.removeDepartment(department);
+		cancelEditing();
 	}
 	public void restoreDepartment() {
-		if(departmentToEditOrRestore != null) { // Same.
-			departmentDao.restoreDepartment(departmentToEditOrRestore);
-			resetInputFields();
-		}
+		succeeded = departmentDao.restoreDepartment(departmentToRestore);
+		departmentToRestore.setEditable(false);
+		departmentToRestore = null;
 	}
 	public void editDepartment() {
-		succeeded = !code.equals("") && !name.equals("") && !budget.equals("") && departmentToEditOrRestore != null ? departmentDao.editDepartment(code, name, budget, departmentToEditOrRestore) : false;
-		resetInputFields();
-	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getBudget() {
-		return budget;
-	}
-	public void setBudget(String budget) {
-		this.budget = budget;
+		succeeded = departmentDao.editDepartment(department);
+		department.setEditable(false);
+		cancelEditing();
 	}
 	public Department getDepartmentToEditOrRestore() {
-		return departmentToEditOrRestore;
+		return departmentToRestore;
 	}
-	public void setDepartmentToEditOrRestore(Department departmentToEditOrRestore) {
-		this.departmentToEditOrRestore = departmentToEditOrRestore;
+	public void setEditing(Department department) {
+		this.department = department;
+		this.department.setEditable(true);
+	}
+	public void cancelEditing() {
+		if(department != null) {
+			department.setEditable(false);
+			department = new Department();
+		}
 	}
 	// Comparators.
 	private static Comparator<Department> compareById = new Comparator<Department>() {
