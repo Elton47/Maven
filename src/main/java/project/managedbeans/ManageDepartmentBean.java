@@ -16,20 +16,26 @@ public class ManageDepartmentBean implements Serializable {
 	private final DepartmentDao departmentDao = new DepartmentDao();
 	private Department departmentToRestore, department = new Department();
 	private String sortBy = "";
-	private boolean isSortedASC = false, succeeded;
+	private boolean sortedASC = false, succeeded;
 	public List<Department> sort(String sortBy) {
 		this.sortBy = sortBy;
 		List<Department> departments = departmentDao.getDepartments();
 		if(sortBy.equals("code"))
-			departments.sort(!isSortedASC ? compareByCode.reversed() : compareByCode);
+			departments.sort(!sortedASC ? compareByCode.reversed() : compareByCode);
 		else if(sortBy.equals("name"))
-			departments.sort(!isSortedASC ? compareByName.reversed() : compareByName);
+			departments.sort(!sortedASC ? compareByName.reversed() : compareByName);
 		else if(sortBy.equals("budget"))
-			departments.sort(!isSortedASC ? compareByBudget.reversed() : compareByBudget);
+			departments.sort(!sortedASC ? compareByBudget.reversed() : compareByBudget);
 		else
 			departments.sort(compareById.reversed()); // Sort DESC by default (ID).
-		isSortedASC = isSortedASC ? false : true;
+		sortedASC = sortedASC ? false : true;
 		return departments;
+	}
+	public boolean isSortedASC() {
+		return sortedASC;
+	}
+	public String getSortBy() {
+		return sortBy;
 	}
 	public List<Department> getDepartments() {
 		return sort(sortBy);

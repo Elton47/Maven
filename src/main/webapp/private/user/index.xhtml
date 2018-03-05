@@ -53,11 +53,21 @@
 		.side-nav li>a {
 		  padding: 0 16px;
 		}
+		relativeCenter {
+			position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;
+		}
+		absoluteCenter {
+			position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;
+		}
 	</style>
 		<nav>
     		<div class="nav-wrapper hoverable">
-	      		<a href="#" data-activates="sideNavigation" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-	      		<a href="#" class="show-on-large right" style="margin-right: 16px;"><i class="material-icons">search</i></a>
+    			<div style="width: 64px; height: 64px; float: left !important;">
+	      			<a href="#" data-activates="sideNavigation" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+	      		</div>
+	      		<div style="width: 64px; height: 64px; float: right !important;">
+	      			<a href="#" class="show-on-large relativeCenter" style="margin: 0 18px;"><i class="material-icons">search</i></a>
+	      		</div>
 	   			<ul id="sideNavigation" class="side-nav hoverable" style="transform: translateX(0%) !important;">
 	   				<li class="indigo darken-4">
 	   					<div class="row" style="margin: 0;">
@@ -70,7 +80,12 @@
 	   				<li class="indigo darken-4">
 		   				<ul class="collapsible collapsible-accordion">
 			   				<li>
-			   					<a class="collapsible-header white-text waves-effect waves-indigo"><i class="material-icons white-text ">view_list</i>Tables<i class="material-icons right white-text" style="margin-right: 0;">arrow_drop_down</i></a>
+			   					<a class="collapsible-header white-text waves-effect waves-indigo"
+			   					onclick="document.getElementById('tablesArrow').style.transform = document.getElementById('tablesArrow').style.transform == '' ? 'rotateX(180deg)' : '';">
+			   						<i class="material-icons white-text ">view_list</i>
+			   						Tables
+			   						<i id="tablesArrow" class="material-icons right white-text" style="margin-right: 0; transition: all 0.3s ease;">arrow_drop_down</i>
+			   					</a>
 			   					<div class="collapsible-body z-depth-3">
 			   						<ul>
 				   						<li><a class="waves-effect waves-indigo" onclick="showTable('Department')">Departments<i class="material-icons">business</i></a></li>
@@ -89,7 +104,12 @@
 	   				<li class="white">
 		   				<ul class="collapsible collapsible-accordion">
 			   				<li>
-			   					<a class="collapsible-header waves-effect waves-indigo"><i class="material-icons">settings</i>Settings<i class="material-icons right" style="margin-right: 0;">arrow_drop_down</i></a>
+			   					<a class="collapsible-header waves-effect waves-indigo"
+			   					onclick="document.getElementById('settingsArrow').style.transform = document.getElementById('settingsArrow').style.transform == '' ? 'rotateX(180deg)' : '';">
+			   						<i class="material-icons">settings</i>
+			   						Settings
+			   						<i id="settingsArrow" class="material-icons right" style="margin-right: 0; transition: all 0.3s ease;">arrow_drop_down</i>
+			   					</a>
 			   					<div class="collapsible-body z-depth-3">
 			   						<ul>
 						  				<li><a class="waves-effect waves-indigo" >Change Password<i class="material-icons">vpn_key</i></a></li>
@@ -110,7 +130,7 @@
 				</h:form>
 			</div>
 		</nav>
-    	<div id="tableDiv" class="row" style="height: 100%; position: absolute; top: 50%; left: 10%; right: 10%; transform: translate(0, -40%);">
+    	<div id="tableDiv" class="row" style="margin: 64px 128px;">
     		<div id="divDepartment" style="display: none;">
 	    		<h:panelGroup id="departmentPanel">
 					<h:form id="addDepartmentForm" styleClass="addDepartmentForm">
@@ -136,35 +156,44 @@
 						<h:dataTable id="departmentsTable" styleClass="highlight bordered card" value="#{manageDepartmentBean.departments}" var="department">
 							<h:column headerClass="indigo white-text">
 								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageDepartmentBean.sort('code')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
+									<div style="position: relative;">
+										<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageDepartmentBean.sort('code')}">
+											<f:ajax execute="@this" render="@form"/>
+										</h:commandLink>
+										<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'name' or manageDepartmentBean.sortBy == 'budget' or (!manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'code')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'name' or manageDepartmentBean.sortBy == 'budget' or (manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'code')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+									</div>
 								</f:facet>
 								<h:outputText rendered="#{!department.editable}" value="#{department.code}" />
 								<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" value="#{department.code}" maxlength="16" />
 							</h:column>
 							<h:column headerClass="indigo white-text">
 								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageDepartmentBean.sort('name')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
+									<div style="position: relative;">
+										<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageDepartmentBean.sort('name')}">
+											<f:ajax execute="@this" render="@form"/>
+										</h:commandLink>
+										<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'budget' or (!manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'budget' or (manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+									</div>
 								</f:facet>
 								<h:outputText rendered="#{!department.editable}" value="#{department.name}" />
 								<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" value="#{department.name}" maxlength="45" />
 							</h:column>
 							<h:column headerClass="indigo white-text">
 								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Budget" action="#{manageDepartmentBean.sort('budget')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
+									<div style="position: relative;">
+										<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Budget" action="#{manageDepartmentBean.sort('budget')}">
+											<f:ajax execute="@this" render="@form"/>
+										</h:commandLink>
+										<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'name' or (!manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'budget')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'name' or (manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'budget')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+									</div>
 								</f:facet>
 								<h:outputText rendered="#{!department.editable}" value="#{department.budget}" />
 								<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" value="#{department.budget}" maxlength="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header"/>
 								<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
-									<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.setEditing(department)}" />
+								<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.setEditing(department)}" />
 								</h:commandLink>
 								<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;">
 									<f:ajax execute="@form" render="@form addDepartmentForm" listener="#{manageDepartmentBean.editDepartment()}" />
