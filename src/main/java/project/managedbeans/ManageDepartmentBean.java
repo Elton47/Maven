@@ -1,6 +1,7 @@
 package project.managedbeans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -17,6 +18,7 @@ public class ManageDepartmentBean implements Serializable {
 	private Department departmentToRestore, department = new Department();
 	private String sortBy = "";
 	private boolean sortedASC = false, succeeded;
+	private List<Department> searchResults = new ArrayList<Department>();
 	public List<Department> sort(String sortBy) {
 		this.sortBy = sortBy;
 		List<Department> departments = departmentDao.getDepartments();
@@ -38,6 +40,8 @@ public class ManageDepartmentBean implements Serializable {
 		return sortBy;
 	}
 	public List<Department> getDepartments() {
+		if(searchResults != null && !searchResults.isEmpty())
+			return searchResults;
 		return sort(sortBy);
 	}
 	public Department getDepartment() {
@@ -52,6 +56,9 @@ public class ManageDepartmentBean implements Serializable {
 	public void addDepartment() {
 		succeeded = departmentDao.addDepartment(department);
 		department = new Department(); // If more deparments are added continuously.
+	}
+	public void searchDepartment() {
+		searchResults = departmentDao.getDepartments(department);
 	}
 	public void removeDepartment() {
 		departmentToRestore = department;

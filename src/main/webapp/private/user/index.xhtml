@@ -23,6 +23,7 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('select').material_select();
+				$('.modal').modal();
 				$('.button-collapse').sideNav({
 				    menuWidth: 300,
 				    edge: 'left',
@@ -62,12 +63,20 @@
 	</style>
 		<nav>
     		<div class="nav-wrapper hoverable">
-    			<div style="width: 64px; height: 64px; float: left !important;">
-	      			<a href="#" data-activates="sideNavigation" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
-	      		</div>
-	      		<div style="width: 64px; height: 64px; float: right !important;">
-	      			<a href="#" class="show-on-large relativeCenter" style="margin: 0 18px;"><i class="material-icons">search</i></a>
-	      		</div>
+    			<a href="" class="brand-logo center">Insert uncreative title here.
+    				<img src="../../resources/favicon.gif" style="filter: invert(1);"/>
+    			</a>
+      			<a href="#" data-activates="sideNavigation" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+      			<a href="#" class="relativeCenter right modal-trigger" style="margin-right: 18px;" onclick="searchOnClick();"><i class="material-icons">search</i></a>
+      			<div id="searchModal" class="modal">
+				    <div class="modal-content">
+				      <h4>Modal Header</h4>
+				      <p>A bunch of text</p>
+				    </div>
+				    <div class="modal-footer">
+				      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+				    </div>
+				</div>
 	   			<ul id="sideNavigation" class="side-nav hoverable" style="transform: translateX(0%) !important;">
 	   				<li class="indigo darken-4">
 	   					<div class="row" style="margin: 0;">
@@ -150,6 +159,9 @@
 						</div>
 						<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;">
 							<f:ajax execute="@form" render="@form editDepartmentForm" listener="#{manageDepartmentBean.addDepartment()}" />
+						</h:commandButton>
+						<h:commandButton styleClass="searchDepartmentHiddenButton" style="display: none;">
+							<f:ajax execute="@form" immediate="true" render="@form editDepartmentForm" listener="#{manageDepartmentBean.searchDepartment()}" />
 						</h:commandButton>
 					</h:form>
 					<h:form id="editDepartmentForm">

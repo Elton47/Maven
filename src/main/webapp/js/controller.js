@@ -1,5 +1,6 @@
 var adding = false;
 var editing = false;
+var searching = false;
 var featureDiscoveryShownOnce = false;
 var currentTableName;
 function showTable(selectedTableName) {
@@ -33,15 +34,19 @@ function hideAllTables() {
 function fabOnClick() {
 	var fab = document.getElementById('fab');
 	var fabIcon = document.getElementById('fabIcon');
-	if(fabIcon.style.transform != "rotate(45deg)") { // Add.
-		if(!editing) {
+	if(fabIcon.style.transform != "rotate(45deg)") {
+		if(!editing && !searching) { // Adding
 			adding = true;
 			document.getElementById('removeFabAction').style.display = "none";
 			$('#add' + currentTableName + 'Div').show('fast');
 		}
-		else {
+		else if(editing) {
 			$('#add' + currentTableName + 'Div').hide();
 			document.getElementById('removeFabAction').style.display = "";
+		}
+		else if(searching) {
+			document.getElementById('removeFabAction').style.display = "none";
+			$('#add' + currentTableName + 'Div').show('fast');
 		}
 		fab.classList.remove("indigo");
 		fab.classList.add("red");
@@ -59,26 +64,37 @@ function fabOnClick() {
 		fabIcon.style.msTransform = "";
 		fabIcon.style.OTransform = "";
 		fabIcon.style.transform = "";
-		if(adding) { // If was adding.
+		if(adding) {
 			document.getElementsByClassName('add' + currentTableName + 'Form')[0].reset();
 			$('#add' + currentTableName + 'Div').hide('fast');
 			adding = false;
 		}
-		if(editing) { // If was editing.
+		if(editing) {
 			document.getElementsByClassName('cancel' + currentTableName + 'HiddenButton')[0].click();
 			editing = false;
+		}
+		if(searching) {
+			document.getElementsByClassName('add' + currentTableName + 'Form')[0].reset();
+			$('#add' + currentTableName + 'Div').hide('fast');
+			searching = false;
 		}
 	}
 }
 function editOnClick() {
-	if(adding) {
-		adding = false;
-		$('#fab').click();
-	}
-	if(editing)
+	if(adding || searching)
 		$('#fab').click();
 	editing = true;
 	$('#fab').click();
+}
+function searchOnClick() {
+	if(adding)
+		$('#fab').click();
+	if(!editing) {
+		searching = true;
+		$('#fab').click();
+	}
+	else
+		$('#fab').click();
 }
 function doneButtonClicked() {
 	if(adding) {
@@ -90,6 +106,10 @@ function doneButtonClicked() {
 		document.getElementsByClassName('edit' + currentTableName + 'HiddenButton')[0].click();
 		notify("updat"); // not update.
 		editing = false;
+	}
+	else if(searching) {
+		document.getElementsByClassName('search' + currentTableName + 'HiddenButton')[0].click();
+		searching = false;
 	}
 	$('#fab').click();
 }
