@@ -16,7 +16,7 @@ public class ManageDepartmentBean implements Serializable {
 	private final DepartmentDao departmentDao = new DepartmentDao();
 	private Department departmentToRestore, department = new Department(), searchDepartment;
 	private String sortBy = "";
-	private boolean sortedASC = false, succeeded;
+	private boolean sortedASC = false, succeeded, editing;
 	private List<Department> departments = departmentDao.getDepartments();
 	
 	public List<Department> sort(String sortBy) {
@@ -38,8 +38,13 @@ public class ManageDepartmentBean implements Serializable {
 		return sortBy;
 	}
 	public List<Department> getDepartments() {
+		List<Department> departments = sort(sortBy);
+		if(!editing) // In case department is being edited but page got refreshed, reset editing to false;
+			for(Department d : departments)
+				if(d.isEditable())
+					d.setEditable(false);
 		sortedASC = !sortedASC; // To keep sorting order.
-		return sort(sortBy);
+		return departments;
 	}
 	public Department getDepartment() {
 		return department;
@@ -64,9 +69,11 @@ public class ManageDepartmentBean implements Serializable {
 		cancelEditing();
 	}
 	public void restoreDepartment() {
-		succeeded = departmentDao.restoreDepartment(departmentToRestore);
-		departmentToRestore.setEditable(false);
-		departmentToRestore = null;
+		if(departmentToRestore != null) {
+			succeeded = departmentDao.restoreDepartment(departmentToRestore);
+			departmentToRestore.setEditable(false);
+			departmentToRestore = null;
+		}
 	}
 	public void editDepartment() {
 		succeeded = departmentDao.editDepartment(department);
@@ -76,12 +83,14 @@ public class ManageDepartmentBean implements Serializable {
 	public void setEditing(Department department) {
 		this.department = department;
 		this.department.setEditable(true);
+		editing = true;
 	}
 	public void cancelEditing() {
 		if(department != null) {
 			department.setEditable(false);
 			department = new Department();
 		}
+		editing = false;
 	}
 	// Comparators (for sort).
 	private static Comparator<Department> compareByCode = new Comparator<Department>() {

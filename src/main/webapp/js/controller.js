@@ -83,6 +83,8 @@ function fabOnClick() {
 function editOnClick() {
 	if(adding)
 		$('#fab').click();
+	if(editing)
+		$('#fab').click();
 	editing = true;
 	$('#fab').click();
 }

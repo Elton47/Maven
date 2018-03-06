@@ -1,7 +1,6 @@
 package project.entity;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
 import org.hibernate.annotations.NaturalId;
 
 @Entity
@@ -31,7 +29,7 @@ public class Department implements Serializable {
 	private int validity;
 	@Transient
 	private boolean editable;
-	public Department() {this.validity = 1;}
+	public Department() {validity = 1;}
 	public Department(String code, String name, int budget) {
 		this.code = code;
 		this.name = name;

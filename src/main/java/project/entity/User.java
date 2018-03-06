@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "User")
@@ -35,7 +36,9 @@ public class User implements Serializable {
 	private Role role;
 	@Column(name = "Validity")
 	private int validity;
-	public User() {}
+	@Transient
+	private boolean editable;
+	public User() {validity = 1;}
 	public int getId() {
 		return id;
 	}
@@ -89,5 +92,11 @@ public class User implements Serializable {
 	}
 	public void setValidity(int validity) {
 		this.validity = validity;
+	}
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }

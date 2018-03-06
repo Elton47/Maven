@@ -6,6 +6,8 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import project.dao.SectorDao;
+import project.entity.Department;
+import project.entity.Employee;
 import project.entity.Sector;
 
 @SuppressWarnings("deprecation")
@@ -14,67 +16,46 @@ import project.entity.Sector;
 public class ManageSectorBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final SectorDao sectorDao = new SectorDao();
-	private Sector sectorToEditOrRestore;
-	private String code, name, departmentName, employeeFullName, sortBy = "";
-	private boolean isSortedASC = false, succeeded;
-	private void resetInputFields() {
-		code = null;
-		name = null;
-		departmentName = null;
-		employeeFullName = null;
-		sectorToEditOrRestore = null;
-	}
+	private Sector sectorToRestore, sector = new Sector(), searchSector;
+	private String sortBy = "";
+	private boolean sortedASC = false, succeeded, editing;
+	private String departmentName, employeeFullName;
+	private List<Sector> sectors = sectorDao.getSectors();
+	
 	public List<Sector> sort(String sortBy) {
 		this.sortBy = sortBy;
-		List<Sector> sectors = sectorDao.getSectors();
+		sectors = searchSector != null ? sectorDao.getSectors(searchSector) : sectorDao.getSectors();
 		if(sortBy.equals("code"))
-			sectors.sort(!isSortedASC ? compareByCode.reversed() : compareByCode);
+			sectors.sort(!sortedASC ? compareByCode.reversed() : compareByCode);
 		else if(sortBy.equals("name"))
-			sectors.sort(!isSortedASC ? compareByName.reversed() : compareByName);
-		else if(sortBy.equals("departmentName"))
-			sectors.sort(!isSortedASC ? compareByDepartmentName.reversed() : compareByDepartmentName);
-		else if(sortBy.equals("employeeFullName"))
-			sectors.sort(!isSortedASC ? compareByEmployeeFullName.reversed() : compareByEmployeeFullName);
-		else
-			sectors.sort(compareById.reversed()); // Sort DESC by default (ID).
-		isSortedASC = isSortedASC ? false : true;
+			sectors.sort(!sortedASC ? compareByName.reversed() : compareByName);
+		else if(sortBy.equals("department"))
+			sectors.sort(!sortedASC ? compareByDepartment.reversed() : compareByDepartment);
+		else if(sortBy.equals("employee"))
+			sectors.sort(!sortedASC ? compareByEmployee.reversed() : compareByEmployee);
+		sortedASC = !sortedASC;
 		return sectors;
 	}
+	public boolean isSortedASC() { // Used for sort arrows at xhtml file.
+		return sortedASC;
+	}
+	public String getSortBy() { // Also this one.
+		return sortBy;
+	}
 	public List<Sector> getSectors() {
-		return sort(sortBy);
+		List<Sector> sectors = sort(sortBy);
+		if(!editing) // In case sector is being edited but page got refreshed, reset editing to false;
+			for(Sector s : sectors)
+				if(s.isEditable())
+					s.setEditable(false);
+		sortedASC = !sortedASC; // To keep sorting order.
+		return sectors;
 	}
-	public boolean getSucceeded() {
-		return succeeded;
+	public Sector getSector() {
+		return sector;
 	}
-	public void addSector() {
-		succeeded = code != null && name != null && departmentName != null ? sectorDao.addSector(code, name, departmentName, employeeFullName) : false;
-		resetInputFields();
-	}
-	public void removeSector() {
-		if(sectorToEditOrRestore != null) // Redundant as sectorToEditOrRestore always gets reassigned from Remove Button onclick.
-			sectorDao.removeSector(sectorToEditOrRestore);
-	}
-	public void restoreSector() {
-		if(sectorToEditOrRestore != null) { // Same.
-			sectorDao.restoreSector(sectorToEditOrRestore);
-			resetInputFields();
-		}
-	}
-	public void editSector() {
-		succeeded = code != null && name != null && departmentName != null && sectorToEditOrRestore != null ? sectorDao.editSector(code, name, departmentName, employeeFullName, sectorToEditOrRestore) : false;
-		resetInputFields();
-	}
-	public String getCode() {
-		return code;
-	}
-	public void setCode(String code) {
-		this.code = code;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
+	public void setSector(Sector sector) {
+		this.sector = sector;
 	}
 	public String getDepartmentName() {
 		return departmentName;
@@ -88,18 +69,59 @@ public class ManageSectorBean implements Serializable {
 	public void setEmployeeFullName(String employeeFullName) {
 		this.employeeFullName = employeeFullName;
 	}
-	public Sector getSectorToEditOrRestore() {
-		return sectorToEditOrRestore;
+	public boolean getSucceeded() { // For notifications.
+		return succeeded;
 	}
-	public void setSectorToEditOrRestore(Sector sectorToEditOrRestore) {
-		this.sectorToEditOrRestore = sectorToEditOrRestore;
+	public void addSector() {
+		succeeded = sectorDao.addSector(sector, departmentName, employeeFullName);
+		sector = new Sector(); // Reset form if more sectors are added continuously.
+		departmentName = "";
+		employeeFullName = "";
 	}
-	// Comparators.
-	private static Comparator<Sector> compareById = new Comparator<Sector>() {
-        public int compare(Sector one, Sector other) {
-            return Integer.valueOf(one.getId()).compareTo(Integer.valueOf(other.getId()));
-        }
-    };
+	public void searchSector() {
+		searchSector = sector; // For later use (at sort or get method).
+		if(searchSector.getDepartment() == null)
+			searchSector.setDepartment(new Department());
+		searchSector.getDepartment().setName(departmentName);
+		if(searchSector.getEmployee() == null)
+			searchSector.setEmployee(new Employee());
+		searchSector.getEmployee().setFullName(employeeFullName);
+		sector = new Sector(); // Reset form.
+		departmentName = "";
+		employeeFullName = "";
+	}
+	public void removeSector() {
+		sectorToRestore = sector;
+		succeeded = sectorDao.removeSector(sector);
+		cancelEditing();
+	}
+	public void restoreSector() {
+		if(sectorToRestore != null) {
+			succeeded = sectorDao.restoreSector(sectorToRestore);
+			sectorToRestore.setEditable(false);
+			sectorToRestore = null;
+		}
+	}
+	public void editSector() {
+		succeeded = sectorDao.editSector(sector, departmentName, employeeFullName);
+		sector.setEditable(false);
+		cancelEditing();
+	}
+	public void setEditing(Sector sector) {
+		this.sector = sector;
+		this.sector.setEditable(true);
+		editing = true;
+	}
+	public void cancelEditing() {
+		if(sector != null) {
+			sector.setEditable(false);
+			sector = new Sector();
+		}
+		editing = false;
+		departmentName = "";
+		employeeFullName = "";
+	}
+	// Comparators (for sort).
 	private static Comparator<Sector> compareByCode = new Comparator<Sector>() {
         public int compare(Sector one, Sector other) {
             return one.getCode().compareToIgnoreCase(other.getCode());
@@ -110,25 +132,20 @@ public class ManageSectorBean implements Serializable {
             return one.getName().compareToIgnoreCase(other.getName());
         }
     };
-    private static Comparator<Sector> compareByDepartmentName = new Comparator<Sector>() {
+    private static Comparator<Sector> compareByDepartment = new Comparator<Sector>() {
         public int compare(Sector one, Sector other) {
             return one.getDepartment().getName().compareToIgnoreCase(other.getDepartment().getName());
         }
     };
-    private static Comparator<Sector> compareByEmployeeFullName = new Comparator<Sector>() {
+    private static Comparator<Sector> compareByEmployee = new Comparator<Sector>() {
         public int compare(Sector one, Sector other) {
-        	if(one.getEmployee() != null) {
-        		if(other.getEmployee() != null)
-        			return one.getEmployee().getFullName().compareToIgnoreCase(other.getEmployee().getFullName());
-        		else
-        			return one.getEmployee().getFullName().compareToIgnoreCase("");
-        	}
-        	else {
-        		if(other.getEmployee() != null)
-        			return "".compareToIgnoreCase(other.getEmployee().getFullName());
-        		else
-        			return "".compareToIgnoreCase(""); // or return 0;
-        	}
+        	if(one.getEmployee() == null && other.getEmployee() == null)
+        		return 0;
+        	if(one.getEmployee() == null)
+        		return "".compareToIgnoreCase(other.getEmployee().getFullName());
+        	if(other.getEmployee() == null)
+        		return one.getEmployee().getFullName().compareToIgnoreCase("");
+            return one.getEmployee().getFullName().compareToIgnoreCase(other.getEmployee().getFullName());
         }
     };
 }

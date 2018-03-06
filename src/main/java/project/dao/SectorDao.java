@@ -1,50 +1,44 @@
 package project.dao;
 
 import java.util.List;
-import org.hibernate.criterion.Restrictions;
 import project.entity.Department;
 import project.entity.Employee;
 import project.entity.Sector;
 
-@SuppressWarnings("deprecation")
 public class SectorDao extends DbOps<Sector> {
-	private List<Sector> sectors = session.createQuery("from Sector where Validity = 1", Sector.class).getResultList();
 	public List<Sector> getSectors() {
-		return sectors;
+		return session.createQuery("from Sector where validity = 1 order by id desc", Sector.class).getResultList();
 	}
-	public boolean addSector(String code, String name, String departmentName, String employeeFullName) {
-		Sector sector = new Sector(code, name, session.createQuery("from Department where Name = ?1", Department.class).setParameter(1, departmentName).getSingleResult(), 
-				employeeFullName == null || employeeFullName.equals("") ? null : (Employee) session.createCriteria(Employee.class, "e").add(Restrictions.eq("fullName", employeeFullName)).list().get(0));
-		boolean succeeded = save(sector);
-		if(succeeded)
-			sectors.add(sector);
-		return succeeded;
+	public List<Sector> getSectors(Sector sector) {
+		if(!sector.getEmployee().getFullName().equals(""))
+			return session.createQuery("from Sector where validity = 1 and code like ?1 and name like ?2 and department.name like ?3 and employee.fullName like ?4", Sector.class).setParameter(1, sector.getCode() + "%").setParameter(2, sector.getName() + "%").setParameter(3, sector.getDepartment().getName() + "%").setParameter(4, sector.getEmployee().getFullName() + "%").getResultList();
+		return session.createQuery("from Sector where validity = 1 and code like ?1 and name like ?2 and department.name like ?3", Sector.class).setParameter(1, sector.getCode() + "%").setParameter(2, sector.getName() + "%").setParameter(3, sector.getDepartment().getName() + "%").getResultList();
+	}
+	public boolean addSector(Sector sector, String departmentName, String employeeFullName) {
+		sector.setDepartment(session.createQuery("from Department where name = ?1", Department.class).setParameter(1, departmentName).getSingleResult());
+		if(employeeFullName != null) {
+			if(!employeeFullName.equals(""))
+				sector.setEmployee(session.createQuery("from Employee where fullName = ?1", Employee.class).setParameter(1, employeeFullName).getSingleResult());
+		}
+		else
+			sector.setEmployee(null);
+		return save(sector);
 	}
 	public boolean removeSector(Sector sector) {
 		sector.setValidity(0);
-		boolean succeeded = update(sector);
-		if(succeeded)
-			sectors.remove(sector);
-		return succeeded;
+		return update(sector);
 	}
 	public boolean restoreSector(Sector sector) {
 		sector.setValidity(1);
-		boolean succeeded = update(sector);
-		if(succeeded)
-			sectors.add(sector);
-		return succeeded;
+		return update(sector);
 	}
-	public boolean editSector(String code, String name, String departmentName, String employeeFullName, Sector sector) {
+	public boolean editSector(Sector sector, String departmentName, String employeeFullName) {
 		Sector backupSector = sector; // In case editing fails.
-		sectors.remove(sector); // Remove first.
-		sector.setCode(code);
-		sector.setName(name);
-		sector.setDepartment(session.createQuery("from Department where Name = ?1", Department.class).setParameter(1, departmentName).getSingleResult());
-		sector.setEmployee(employeeFullName == null || employeeFullName.equals("") ? null : (Employee) session.createCriteria(Employee.class, "e").add(Restrictions.eq("fullName", employeeFullName)).list().get(0));
-		sector.setValidity(1);
+		sector.setDepartment(session.createQuery("from Department where name = ?1", Department.class).setParameter(1, departmentName).getSingleResult());
+		sector.setEmployee(employeeFullName != null && !employeeFullName.equals("") ? session.createQuery("from Employee where fullName = ?1", Employee.class).setParameter(1, employeeFullName).getSingleResult() : null);
 		boolean succeeded = update(sector);
-		sectors.add(succeeded ? sector : backupSector);
+		if(!succeeded)
+			update(backupSector);
 		return succeeded;
 	}
 }
-// This way, the number of Database `SELECT` Queries is significantly decreased. - Elton47.

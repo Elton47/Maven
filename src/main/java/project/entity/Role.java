@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import org.hibernate.annotations.NaturalId;
 
 @Entity
@@ -32,7 +34,9 @@ public class Role implements Serializable {
 	private List<Permission> permissions = new ArrayList<Permission>();
 	@Column(name = "Validity")
 	private int validity;
-	public Role() {}
+	@Transient
+	private boolean editable;
+	public Role() {validity = 1;}
 	public Role(String name, List<Permission> permissions) {
 		this.name = name;
 		this.permissions = permissions;
@@ -61,5 +65,11 @@ public class Role implements Serializable {
 	}
 	public void setValidity(int validity) {
 		this.validity = validity;
+	}
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }

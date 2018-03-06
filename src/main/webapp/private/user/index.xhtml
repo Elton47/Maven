@@ -308,329 +308,513 @@
 					</h:panelGroup>
 				</div>
 				<!-- END of Departments-Related Code -->
-				<div id="divSector" style="display: none;">
-					<h:form styleClass="inputSectorForm">
-		    			<div id="inputSectorDiv" style="display: none;">
-							<div class="input-field col s3">
-								<input  type="text" class="validate" jsf:value="#{manageSectorBean.code}" jsf:required="true" maxlength="16" data-length="16" />
-								<label>Code</label>
+				<!-- START of Sectors-Related Code -->
+	    		<div id="divSector" style="display: none;">
+		    		<h:panelGroup id="sectorPanel">
+						<h:form id="addSectorForm" styleClass="addSectorForm">
+							<script>$('select').material_select();</script>
+			    			<div id="addSectorDiv" style="display: none;">
+								<div class="input-field col s3" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{manageSectorBean.sector.code}" maxlength="16" data-length="16" />
+									<label>Code</label>
+								</div>
+								<div class="input-field col s3" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{manageSectorBean.sector.name}" maxlength="45" data-length="45" />
+									<label>Name</label>
+								</div>
+								<div class="input-field col s3" style="margin-bottom: 32px;">
+									<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true" >
+										<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+									</h:selectOneMenu>
+									<label>Department</label>
+								</div>
+								<div class="input-field col s3" style="margin-bottom: 32px;">
+									<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false" >
+										<f:selectItem itemValue="" itemLabel="None" />
+										<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
+									</h:selectOneMenu>
+									<label>Manager</label>
+								</div>
 							</div>
-							<div class="input-field col s3">
-								<input type="text" class="validate" jsf:value="#{manageSectorBean.name}" jsf:required="true" maxlength="45" data-length="45" />
-								<label>Name</label>
+							<h:commandButton styleClass="addSectorHiddenButton" style="display: none">
+								<f:ajax execute="@form" render="@form editSectorForm" listener="#{manageSectorBean.addSector()}" />
+							</h:commandButton>
+						</h:form>
+						<h:form id="editSectorForm">
+							<script>$('select').material_select();</script>
+							<h:dataTable id="sectorsTable" styleClass="highlight bordered card" value="#{manageSectorBean.sectors}" var="sector">
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" title="Sort" action="#{manageSectorBean.sort('code')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'name' or manageSectorBean.sortBy == 'department' or manageSectorBean.sortBy == 'employee' or (!manageSectorBean.sortedASC and manageSectorBean.sortBy == 'code')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'name' or manageSectorBean.sortBy == 'department' or manageSectorBean.sortBy == 'employee' or (manageSectorBean.sortedASC and manageSectorBean.sortBy == 'code')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!sector.editable}" value="#{sector.code}" />
+									<h:inputText rendered="#{sector.editable}" class="input-field col s3 validate" style="width: 100%; margin-left: 16px;" value="#{sector.code}" maxlength="16" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" title="Sort" action="#{manageSectorBean.sort('name')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'code' or manageSectorBean.sortBy == 'department' or manageSectorBean.sortBy == 'employee' or (!manageSectorBean.sortedASC and manageSectorBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'code'  or manageSectorBean.sortBy == 'department' or manageSectorBean.sortBy == 'employee' or (manageSectorBean.sortedASC and manageSectorBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!sector.editable}" value="#{sector.name}" />
+									<h:inputText rendered="#{sector.editable}" class="input-field col s3 validate" style="width: 100%; margin-left: 16px;" value="#{sector.name}" maxlength="45" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Department" title="Sort" action="#{manageSectorBean.sort('department')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'code' or manageSectorBean.sortBy == 'name' or manageSectorBean.sortBy == 'employee' or (!manageSectorBean.sortedASC and manageSectorBean.sortBy == 'department')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'code' or manageSectorBean.sortBy == 'name' or manageSectorBean.sortBy == 'employee' or (manageSectorBean.sortedASC and manageSectorBean.sortBy == 'department')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!sector.editable}" value="#{sector.department.name}" />
+									<h:panelGroup rendered="#{sector.editable}" class="input-field col s3" style="width: 80%; margin-left: 16px;">
+										<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true">
+											<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+										</h:selectOneMenu>
+									</h:panelGroup>
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Manager" title="Sort" action="#{manageSectorBean.sort('employee')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'code' or manageSectorBean.sortBy == 'name' or manageSectorBean.sortBy == 'department' or (!manageSectorBean.sortedASC and manageSectorBean.sortBy == 'employee')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageSectorBean.sortBy == '' or manageSectorBean.sortBy == 'code'  or manageSectorBean.sortBy == 'name' or manageSectorBean.sortBy == 'department' or (manageSectorBean.sortedASC and manageSectorBean.sortBy == 'employee')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!sector.editable}" value="#{sector.employee.fullName}" />
+									<h:panelGroup rendered="#{sector.editable}" class="input-field col s3" style="width: 80%; margin-left: 16px;">
+										<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false">
+											<f:selectItem itemValue="" itemLabel="None" />
+											<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
+										</h:selectOneMenu>
+									</h:panelGroup>
+									<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
+										<f:ajax execute="@this" render="@form addSectorForm" listener="#{manageSectorBean.setEditing(sector)}" />
+									</h:commandLink>
+									<h:commandButton styleClass="editSectorHiddenButton" style="display: none;">
+										<f:ajax execute="@form" render="@form addSectorForm" listener="#{manageSectorBean.editSector()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="removeSectorHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addSectorForm" listener="#{manageSectorBean.removeSector()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addSectorForm" listener="#{manageSectorBean.restoreSector()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="cancelSectorHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addSectorForm" listener="#{manageSectorBean.cancelEditing()}" />
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</h:form>
+						<h:form id="searchSectorForm">
+							<div id="searchSectorModal" class="modal">
+							    <div class="modal-content">
+							    	<h5 class="center" style="font-family: 'Product Sans';">Search Sectors</h5>
+							    	<div class="row">
+								     	<div class="input-field col s3">
+											<input type="text" class="validate" jsf:value="#{manageSectorBean.sector.code}" maxlength="16" data-length="16" />
+											<label>Code</label>
+										</div>
+										<div class="input-field col s3">
+											<input type="text" class="validate" jsf:value="#{manageSectorBean.sector.name}" maxlength="45" data-length="45" />
+											<label>Name</label>
+										</div>
+										<div class="input-field col s3">
+											<input type="text" class="validate" jsf:value="#{manageSectorBean.departmentName}" maxlength="45" data-length="45" />
+											<label>Department</label>
+										</div>
+										<div class="input-field col s3">
+											<input type="text" class="validate" jsf:value="#{manageSectorBean.employeeFullName}" maxlength="45" data-length="45" />
+											<label>Manager</label>
+										</div>
+							    	</div>
+							    	<a href="#" class="right" style="margin-bottom: 16px;" onclick="searchActionOnClick()"><i class="material-icons black-text">search</i></a>
+							    </div>
 							</div>
-							<div class="input-field col s3">
-								<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true" >
-									<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
-								</h:selectOneMenu>
-								<label>Department</label>
-							</div>
-							<div class="input-field col s3">
-								<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false" >
-									<f:selectItem itemValue="" itemLabel="None" />
-									<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
-								</h:selectOneMenu>
-								<label>Manager</label>
-							</div>
-						</div>
-						<h:dataTable id="sectorsTable" styleClass="highlight bordered card" value="#{manageSectorBean.sectors}" var="sector">
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageSectorBean.sort('code')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
-								</f:facet>
-								#{sector.code}
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageSectorBean.sort('name')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
-								</f:facet>
-								#{sector.name}
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Department" action="#{manageSectorBean.sort('departmentName')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
-								</f:facet>
-								#{sector.department.name}
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Manager" action="#{manageSectorBean.sort('employeeFullName')}">
-										<f:ajax execute="@this" render="@form"/>
-									</h:commandLink>
-								</f:facet>
-								#{sector.employee.fullName}
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header"/>
-								<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageSectorBean.setSectorToEditOrRestore(sector)}" onclick="editOnClick()">
-									<f:ajax />
-								</h:commandLink>
-							</h:column>
-						</h:dataTable>
-						<h:commandButton styleClass="removeSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.removeSector()}">
-							<f:ajax execute="@this" render="sectorsTable" />
-						</h:commandButton>
-						<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
-							<f:ajax execute="@this" render="sectorsTable" />
-						</h:commandButton>
-						<h:commandButton styleClass="addSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.addSector()}">
-							<f:ajax execute="@form" immediate="true" render="sectorsTable" />
-						</h:commandButton>
-						<h:commandButton styleClass="editSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.editSector()}">
-							<f:ajax execute="@form" immediate="true" render="sectorsTable" />
-						</h:commandButton>
-						<input id="succeededSector" type="hidden" value="#{manageSectorBean.getSucceeded()}"/>
-					</h:form>
+							<h:commandButton styleClass="searchSectorHiddenButton" style="display: none;">
+								<f:ajax execute="@form" render="@form addSectorForm editSectorForm" listener="#{manageSectorBean.searchSector()}" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGroup>
 				</div>
-				<div id="divRole" style="display: none;">
-					<div class="col s12" style="padding: 0;">
-		    			<button id="addRoleButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Role')">Add</button>
-						<button id="doneRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Role')">Done</button>
-						<button id="cancelRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Role')">Cancel</button>
-					</div>
-					<h:form styleClass="inputRoleForm">
-		    			<div id="inputRoleDiv" style="display: none;">
-							<div class="input-field col s6">
-								<input  type="text" class="validate" jsf:value="#{manageRoleBean.name}" jsf:required="true" maxlength="45" data-length="45" />
-								<label>Name</label>
-							</div>
-							<div class="input-field col s6">
-								<f:ajax>
-									<h:selectManyMenu value="#{manageRoleBean.permissionNames}" required="true">
+				<!-- END of Sectors-Related Code -->
+				<!-- START of Roles-Related Code -->
+	    		<div id="divRole" style="display: none;">
+		    		<h:panelGroup id="rolePanel">
+						<h:form id="addRoleForm" styleClass="addRoleForm">
+							<script>$('select').material_select();</script>
+			    			<div id="addRoleDiv" style="display: none;">
+								<div class="input-field col s6" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{manageRoleBean.role.name}" maxlength="45" data-length="45" />
+									<label>Name</label>
+								</div>
+								<div class="input-field col s6" style="margin-bottom: 32px;">
+									<h:selectManyMenu value="#{manageRoleBean.permissionNames}">
 										<f:selectItem itemValue="" itemLabel="None" />
 										<f:selectItems value="#{managePermissionBean.permissions}" var="permission" itemValue="#{permission.name}" itemLabel="#{permission.name}" />
 									</h:selectManyMenu>
-								</f:ajax>
-								<label>Permissions</label>
+									<label>Permissions</label>
+								</div>
 							</div>
-						</div>
-						<h:commandButton styleClass="addRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.addRole()}">
-							<f:ajax execute="@form" render="rolesTable" />
-						</h:commandButton>
-						<h:commandButton styleClass="editRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.editRole()}">
-							<f:ajax execute="@form" render="rolesTable" />
-						</h:commandButton>
-						<h:dataTable id="rolesTable" styleClass="highlight bordered card hoverable" value="#{manageRoleBean.roles}" var="role">
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:outputText value="Name" />
-								</f:facet>
-								#{role.name}
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:outputText value="Permissions" />
-								</f:facet>
-								<ul class="collapsible left" data-collapsible="accordion" style="width: 100%;">
-									<li>
-										<div class="collapsible-header">Show</div>
-										<div class="collapsible-body">
-											<ui:repeat value="#{role.permissions}" var="permission">
-												<div>#{permission.name}
-													<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageRoleBean.removePermissionFromRole(role, permission)}" onclick="removeButtonClicked('RolePermission')">
-														<f:ajax execute="@this" render="@form" />
-													</h:commandLink>
-												</div>
-											</ui:repeat>
+							<h:commandButton styleClass="addRoleHiddenButton" style="display: none">
+								<f:ajax execute="@form" render="@form editRoleForm" listener="#{manageRoleBean.addRole()}" />
+							</h:commandButton>
+						</h:form>
+						<h:form id="editRoleForm">
+							<script>$('select').material_select();</script>
+							<h:dataTable id="rolesTable" styleClass="highlight bordered card" value="#{manageRoleBean.roles}" var="role">
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" title="Sort" action="#{manageRoleBean.sort('name')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageRoleBean.sortBy == '' or manageRoleBean.sortBy == 'permissions' or (!manageRoleBean.sortedASC and manageRoleBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageRoleBean.sortBy == '' or manageRoleBean.sortBy == 'permissions'  or (manageRoleBean.sortedASC and manageRoleBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
 										</div>
-									</li>
-								</ul>
-							</h:column>
-							<h:column headerClass="indigo white-text">
-								<f:facet name="header">
-									<h:outputText styleClass="right" value="Action" />
-								</f:facet>
-								<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageRoleBean.removeRole(role)}" onclick="removeButtonClicked('Role')">
-									<f:ajax execute="@this" render="@form" />
-								</h:commandLink>
-								<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{manageRoleBean.setRoleToEditOrRestore(role)}" onclick="editButtonClicked('Role')">
-									<f:ajax />
-								</h:commandLink>
-								<h:commandButton styleClass="restoreRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.restoreRole()}">
-									<f:ajax execute="@this" render="@form" />
-								</h:commandButton>
-								<h:commandButton styleClass="restoreRolePermissionHiddenButton" style="display: none;" actionListener="#{manageRoleBean.restorePermissionFromRole()}">
-									<f:ajax execute="@this" render="@form" />
-								</h:commandButton>
-							</h:column>
-						</h:dataTable>
-					</h:form>
-				</div>
-				<div id="divPermission" style="display: none;">
-					<div class="col s12" style="padding: 0;">
-		    			<button id="addPermissionButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Permission')">Add</button>
-						<button id="donePermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Permission')">Done</button>
-						<button id="cancelPermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Permission')">Cancel</button>
-					</div>
-					<h:form styleClass="inputPermissionForm">
-		    			<div id="inputPermissionDiv" style="display: none;">
-							<div class="input-field col s6">
-								<input  type="text" class="validate" jsf:value="#{managePermissionBean.name}" jsf:required="true" maxlength="45" data-length="45" />
-								<label>Name</label>
+									</f:facet>
+									<h:outputText rendered="#{!role.editable}" value="#{role.name}" />
+									<h:inputText rendered="#{role.editable}" class="input-field col s6 validate" style="width: 100%; margin-left: 16px;" value="#{role.name}" maxlength="45" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										Permissions
+									</f:facet>
+									<h:panelGroup rendered="#{!role.editable}">
+										<h:selectManyMenu readonly="true">
+											<f:selectItem itemLabel="Show" />
+											<f:selectItems value="#{role.permissions}" var="permission" itemLabel="#{permission.name}" />
+										</h:selectManyMenu>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{role.editable}" class="input-field col s6" style="width: 80%; margin-left: 16px;">
+										<h:selectManyMenu value="#{manageRoleBean.permissionNames}" required="true">
+											<f:selectItem itemValue="" itemLabel="None" />
+											<f:selectItems value="#{managePermissionBean.permissions}" var="permission" itemValue="#{permission.name}" itemLabel="#{permission.name}" />
+										</h:selectManyMenu>
+									</h:panelGroup>
+									<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
+										<f:ajax execute="@this" render="@form addRoleForm" listener="#{manageRoleBean.setEditing(role)}" />
+									</h:commandLink>
+									<h:commandButton styleClass="editRoleHiddenButton" style="display: none;">
+										<f:ajax execute="@form" render="@form addRoleForm" listener="#{manageRoleBean.editRole()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="removeRoleHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addRoleForm" listener="#{manageRoleBean.removeRole()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="restoreRoleHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addRoleForm" listener="#{manageRoleBean.restoreRole()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="cancelRoleHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addRoleForm" listener="#{manageRoleBean.cancelEditing()}" />
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</h:form>
+						<h:form id="searchRoleForm">
+							<div id="searchRoleModal" class="modal" style="width: 25%;">
+							    <div class="modal-content">
+							    	<h5 class="center" style="font-family: 'Product Sans';">Search Roles</h5>
+							    	<div class="row">
+										<div class="input-field col s12">
+											<input type="text" class="validate" jsf:value="#{manageRoleBean.role.name}" maxlength="45" data-length="45" />
+											<label>Name</label>
+										</div>
+							    	</div>
+							    	<a href="#" class="right" style="margin-bottom: 16px;" onclick="searchActionOnClick()"><i class="material-icons black-text">search</i></a>
+							    </div>
 							</div>
-							<div class="input-field col s6">
-								<f:ajax>
-									<h:selectManyMenu value="#{managePermissionBean.roleNames}" required="true">
+							<h:commandButton styleClass="searchRoleHiddenButton" style="display: none;">
+								<f:ajax execute="@form" render="@form addRoleForm editRoleForm" listener="#{manageRoleBean.searchRole()}" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGroup>
+				</div>
+				<!-- END of Roles-Related Code -->
+				<!-- START of Permissions-Related Code -->
+	    		<div id="divPermission" style="display: none;">
+		    		<h:panelGroup id="permissionPanel">
+						<h:form id="addPermissionForm" styleClass="addPermissionForm">
+							<script>$('select').material_select();</script>
+			    			<div id="addPermissionDiv" style="display: none;">
+								<div class="input-field col s6" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{managePermissionBean.permission.name}" maxlength="45" data-length="45" />
+									<label>Name</label>
+								</div>
+								<div class="input-field col s6" style="margin-bottom: 32px;">
+									<h:selectManyMenu value="#{managePermissionBean.roleNames}">
 										<f:selectItem itemValue="" itemLabel="None" />
 										<f:selectItems value="#{manageRoleBean.roles}" var="role" itemValue="#{role.name}" itemLabel="#{role.name}" />
 									</h:selectManyMenu>
-								</f:ajax>
-								<label>Roles</label>
+									<label>Permissions</label>
+								</div>
 							</div>
-						</div>
-						<h:commandButton styleClass="addPermissionHiddenButton" style="display: none;" actionListener="#{managePermissionBean.addPermission()}">
-							<f:ajax execute="@form" render="permissionsTable" />
-						</h:commandButton>
-						<h:commandButton styleClass="editPermissionHiddenButton" style="display: none;" actionListener="#{managePermissionBean.editPermission()}">
-							<f:ajax execute="@form" render="permissionsTable" />
-						</h:commandButton>
-						<h:dataTable id="permissionsTable" styleClass="highlight" value="#{managePermissionBean.permissions}" var="permission">
-							<h:column>
-								<f:facet name="header">
-									<h:outputText value="Name" />
-								</f:facet>
-								#{permission.name}
-							</h:column>
-							<h:column>
-								<f:facet name="header">
-									<h:outputText value="Roles" />
-								</f:facet>
-								<ul class="collapsible left" data-collapsible="accordion" style="width: 100%;">
-									<li>
-										<div class="collapsible-header">Show</div>
-										<div class="collapsible-body">
-											<ui:repeat value="#{permission.roles}" var="role">
-												<div>#{role.name}
-													<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{managePermissionBean.removeRoleFromPermission(permission, role)}" onclick="removeButtonClicked('PermissionRole')">
-														<f:ajax execute="@this" render="@form" />
-													</h:commandLink>
-												</div>
-											</ui:repeat>
+							<h:commandButton styleClass="addPermissionHiddenButton" style="display: none">
+								<f:ajax execute="@form" render="@form editPermissionForm" listener="#{managePermissionBean.addPermission()}" />
+							</h:commandButton>
+						</h:form>
+						<h:form id="editPermissionForm">
+							<script>$('select').material_select();</script>
+							<h:dataTable id="permissionsTable" styleClass="highlight bordered card" value="#{managePermissionBean.permissions}" var="permission">
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" title="Sort" action="#{managePermissionBean.sort('name')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{managePermissionBean.sortBy == '' or (!managePermissionBean.sortedASC and managePermissionBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{managePermissionBean.sortBy == '' or (managePermissionBean.sortedASC and managePermissionBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
 										</div>
-									</li>
-								</ul>
-							</h:column>
-							<h:column>
-								<f:facet name="header">
-									<h:outputText styleClass="right" value="Action" />
-								</f:facet>
-								<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{managePermissionBean.removePermission(permission)}" onclick="removeButtonClicked('Permission')">
-									<f:ajax execute="@this" render="@form" />
-								</h:commandLink>
-								<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{managePermissionBean.setPermissionToEditOrRestore(permission)}" onclick="editButtonClicked('Permission')">
-									<f:ajax />
-								</h:commandLink>
-								<h:commandButton styleClass="restorePermissionHiddenButton" style="display: none;" actionListener="#{managePermissionBean.restorePermission()}">
-									<f:ajax execute="@this" render="@form" />
-								</h:commandButton>
-								<h:commandButton styleClass="restorePermissionRoleHiddenButton" style="display: none;" actionListener="#{managePermissionBean.restoreRoleFromPermission()}">
-									<f:ajax execute="@this" render="@form" />
-								</h:commandButton>
-							</h:column>
-						</h:dataTable>
-					</h:form>
+									</f:facet>
+									<h:outputText rendered="#{!permission.editable}" value="#{permission.name}" />
+									<h:inputText rendered="#{permission.editable}" class="input-field col s6 validate" style="width: 100%; margin-left: 16px;" value="#{permission.name}" maxlength="45" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										Permissions
+									</f:facet>
+									<h:panelGroup rendered="#{!permission.editable}">
+										<h:selectManyMenu readonly="true">
+											<f:selectItem itemLabel="Show" />
+											<f:selectItems value="#{permission.roles}" var="role" itemLabel="#{role.name}" />
+										</h:selectManyMenu>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{permission.editable}" class="input-field col s6" style="width: 80%; margin-left: 16px;">
+										<h:selectManyMenu value="#{managePermissionBean.roleNames}" required="true">
+											<f:selectItem itemValue="" itemLabel="None" />
+											<f:selectItems value="#{manageRoleBean.roles}" var="role" itemValue="#{role.name}" itemLabel="#{role.name}" />
+										</h:selectManyMenu>
+									</h:panelGroup>
+									<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
+										<f:ajax execute="@this" render="@form addPermissionForm" listener="#{managePermissionBean.setEditing(permission)}" />
+									</h:commandLink>
+									<h:commandButton styleClass="editPermissionHiddenButton" style="display: none;">
+										<f:ajax execute="@form" render="@form addPermissionForm" listener="#{managePermissionBean.editPermission()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="removePermissionHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addPermissionForm" listener="#{managePermissionBean.removePermission()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="restorePermissionHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addPermissionForm" listener="#{managePermissionBean.restorePermission()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="cancelPermissionHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addPermissionForm" listener="#{managePermissionBean.cancelEditing()}" />
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</h:form>
+						<h:form id="searchPermissionForm">
+							<div id="searchPermissionModal" class="modal" style="width: 25%;">
+							    <div class="modal-content">
+							    	<h5 class="center" style="font-family: 'Product Sans';">Search Permissions</h5>
+							    	<div class="row">
+										<div class="input-field col s12">
+											<input type="text" class="validate" jsf:value="#{managePermissionBean.permission.name}" maxlength="45" data-length="45" />
+											<label>Name</label>
+										</div>
+							    	</div>
+							    	<a href="#" class="right" style="margin-bottom: 16px;" onclick="searchActionOnClick()"><i class="material-icons black-text">search</i></a>
+							    </div>
+							</div>
+							<h:commandButton styleClass="searchPermissionHiddenButton" style="display: none;">
+								<f:ajax execute="@form" render="@form addPermissionForm editPermissionForm" listener="#{managePermissionBean.searchPermission()}" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGroup>
 				</div>
-				<div id="divUser" style="display: none;">
-					<div class="col s12" style="padding: 0;">
-		    			<button id="addUserButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('User')">Add</button>
-						<button id="doneUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('User')">Done</button>
-						<button id="cancelUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('User')">Cancel</button>
-					</div>
-					<h:dataTable id="usersTable" styleClass="highlight" value="#{manageUserBean.users}" var="user">
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="First Name" />
-							</f:facet>
-							#{user.firstName}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Middle Name" />
-							</f:facet>
-							#{user.middleName}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Last Name" />
-							</f:facet>
-							#{user.lastName}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Username" />
-							</f:facet>
-							#{user.username}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Password" />
-							</f:facet>
-							#{user.password}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Department" />
-							</f:facet>
-							#{user.department.name}
-						</h:column>
-						<h:column>
-							<f:facet name="header">
-								<h:outputText value="Role" />
-							</f:facet>
-							<h:form>
-								#{user.role.name}
-								<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageUserBean.removeUser(user.username)}">
-									<f:ajax execute="@form" render="@form usersTable" />
-								</h:commandLink>
-								<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('User')">
-									<f:ajax execute="none" />
-								</h:commandLink>
-							</h:form>
-						</h:column>
-					</h:dataTable>
-					<br />
-					<h:form styleClass="inputUserForm">
-		    			<div id="inputUserDiv" style="display: none;">
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.firstName}" jsf:required="true" maxlength="16" data-length="16" />
-								<label>First Name</label>
+				<!-- END of Permissions-Related Code -->
+				<!-- START of Users-Related Code -->
+	    		<div id="divUser" style="display: none;">
+		    		<h:panelGroup id="userPanel">
+						<h:form id="addUserForm" styleClass="addUserForm">
+							<script>$('select').material_select();</script>
+			    			<div id="addUserDiv" style="display: none;">
+				    			<div class="input-field col s2">
+									<input type="text" class="validate" jsf:value="#{manageUserBean.user.firstName}" jsf:required="true" maxlength="16" data-length="16" />
+									<label>First Name</label>
+								</div>
+								<div class="input-field col s2">
+									<input type="text" class="validate" jsf:value="#{manageUserBean.user.middleName}" jsf:required="true" maxlength="16" data-length="16" />
+									<label>Middle Name</label>
+								</div>
+								<div class="input-field col s2">
+									<input type="text" class="validate" jsf:value="#{manageUserBean.user.lastName}" jsf:required="true" maxlength="16" data-length="16" />
+									<label>Last Name</label>
+								</div>
+								<div class="input-field col s2">
+									<input type="text" class="validate" jsf:value="#{manageUserBean.user.username}" jsf:required="true" maxlength="16" data-length="16" />
+									<label>Username</label>
+								</div>
+								<div class="input-field col s2">
+									<input type="password" class="validate" jsf:value="#{manageUserBean.user.password}" jsf:required="true" maxlength="45" data-length="45" />
+									<label>Password</label>
+								</div>
+								<div class="input-field col s2" style="margin-bottom: 32px;">
+									<h:selectOneMenu value="#{manageUserBean.departmentName}" required="true" >
+										<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+									</h:selectOneMenu>
+									<label>Department</label>
+								</div>
+								<div class="input-field col s2" style="margin-bottom: 32px;">
+									<h:selectOneMenu value="#{manageUserBean.roleName}" required="false" >
+										<f:selectItem itemValue="" itemLabel="None" />
+										<f:selectItems value="#{manageRoleBean.roles}" var="role" itemValue="#{role.name}" itemLabel="#{role.name}" />
+									</h:selectOneMenu>
+									<label>Role</label>
+								</div>
 							</div>
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.middleName}" jsf:required="true" maxlength="16" data-length="16" />
-								<label>Middle Name</label>
+							<h:commandButton styleClass="addUserHiddenButton" style="display: none">
+								<f:ajax execute="@form" render="@form editUserForm" listener="#{manageUserBean.addUser()}" />
+							</h:commandButton>
+						</h:form>
+						<h:form id="editUserForm">
+							<script>$('select').material_select();</script>
+							<h:dataTable id="usersTable" styleClass="highlight bordered card" value="#{manageUserBean.users}" var="user">
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="First Name" title="Sort" action="#{manageUserBean.sort('firstName')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or (!manageUserBean.sortedASC and manageUserBean.sortBy == 'firstName')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or (manageUserBean.sortedASC and manageUserBean.sortBy == 'firstName')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!user.editable}" value="#{user.firstName}" />
+									<h:inputText rendered="#{user.editable}" class="input-field col s2 validate" style="width: 100%; margin-left: 16px;" value="#{user.firstName}" maxlength="16" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Middle Name" title="Sort" action="#{manageUserBean.sort('lastName')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'department' or manageUserBean.sortBy == 'role' or (!manageUserBean.sortedASC and manageUserBean.sortBy == 'middleName')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'department' or manageUserBean.sortBy == 'role' or (manageUserBean.sortedASC and manageUserBean.sortBy == 'middleName')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!user.editable}" value="#{user.middleName}" />
+									<h:inputText rendered="#{user.editable}" class="input-field col s2 validate" style="width: 100%; margin-left: 16px;" value="#{user.middleName}" maxlength="16" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Last Name" title="Sort" action="#{manageUserBean.sort('lastName')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'department' or manageUserBean.sortBy == 'role' or (!manageUserBean.sortedASC and manageUserBean.sortBy == 'lastName')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'department' or manageUserBean.sortBy == 'role' or (manageUserBean.sortedASC and manageUserBean.sortBy == 'lastName')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!user.editable}" value="#{user.lastName}" />
+									<h:inputText rendered="#{user.editable}" class="input-field col s2 validate" style="width: 100%; margin-left: 16px;" value="#{user.lastName}" maxlength="16" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Username" title="Sort" action="#{manageUserBean.sort('username')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'department' or manageUserBean.sortBy == 'role' or (!manageUserBean.sortedASC and manageUserBean.sortBy == 'username')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'department' or manageUserBean.sortBy == 'role' or (manageUserBean.sortedASC and manageUserBean.sortBy == 'username')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!user.editable}" value="#{user.username}" />
+									<h:inputText rendered="#{user.editable}" class="input-field col s2 validate" style="width: 100%; margin-left: 16px;" value="#{user.username}" maxlength="16" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Department" title="Sort" action="#{manageUserBean.sort('department')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'role' or (!manageUserBean.sortedASC and manageUserBean.sortBy == 'department')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'role' or (manageUserBean.sortedASC and manageUserBean.sortBy == 'department')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!user.editable}" value="#{user.department.name}" />
+									<h:panelGroup rendered="#{user.editable}" class="input-field col s2" style="width: 80%; margin-left: 16px;">
+										<h:selectOneMenu value="#{manageUserBean.departmentName}" required="true">
+											<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+										</h:selectOneMenu>
+									</h:panelGroup>
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Role" title="Sort" action="#{manageUserBean.sort('role')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'department' or (!manageUserBean.sortedASC and manageUserBean.sortBy == 'role')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageUserBean.sortBy == '' or manageUserBean.sortBy == 'firstName' or manageUserBean.sortBy == 'middleName' or manageUserBean.sortBy == 'lastName' or manageUserBean.sortBy == 'username' or manageUserBean.sortBy == 'department' or (manageUserBean.sortedASC and manageUserBean.sortBy == 'role')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!user.editable}" value="#{user.role.name}" />
+									<h:panelGroup rendered="#{user.editable}" class="input-field col s2" style="width: 80%; margin-left: 16px;">
+										<h:selectOneMenu value="#{manageUserBean.roleName}" required="true">
+											<f:selectItems value="#{manageRoleBean.roles}" var="role" itemValue="#{role.name}" itemLabel="#{role.name}" />
+										</h:selectOneMenu>
+									</h:panelGroup>
+									<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
+										<f:ajax execute="@this" render="@form addUserForm" listener="#{manageUserBean.setEditing(user)}" />
+									</h:commandLink>
+									<h:commandButton styleClass="editUserHiddenButton" style="display: none;">
+										<f:ajax execute="@form" render="@form addUserForm" listener="#{manageUserBean.editUser()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="removeUserHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addUserForm" listener="#{manageUserBean.removeUser()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="restoreUserHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addUserForm" listener="#{manageUserBean.restoreUser()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="cancelUserHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addUserForm" listener="#{manageUserBean.cancelEditing()}" />
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</h:form>
+						<h:form id="searchUserForm">
+							<div id="searchUserModal" class="modal">
+							    <div class="modal-content">
+							    	<h5 class="center" style="font-family: 'Product Sans';">Search Users</h5>
+							    	<div class="row">
+								     	<div class="input-field col s4">
+											<input type="text" class="validate" jsf:value="#{manageUserBean.user.firstName}" maxlength="16" data-length="16" />
+											<label>First Name</label>
+										</div>
+										<div class="input-field col s4">
+											<input type="text" class="validate" jsf:value="#{manageUserBean.user.lastName}" maxlength="16" data-length="16" />
+											<label>Last Name</label>
+										</div>
+										<div class="input-field col s4">
+											<input type="text" class="validate" jsf:value="#{manageUserBean.user.username}" maxlength="16" data-length="16" />
+											<label>Username</label>
+										</div>
+							    	</div>
+							    	<a href="#" class="right" style="margin-bottom: 16px;" onclick="searchActionOnClick()"><i class="material-icons black-text">search</i></a>
+							    </div>
 							</div>
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.lastName}" jsf:required="true" maxlength="16" data-length="16" />
-								<label>Last Name</label>
-							</div>
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.username}" jsf:required="true" maxlength="16" data-length="16" />
-								<label>Username</label>
-							</div>
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.password}" jsf:required="true" maxlength="45" data-length="45" />
-								<label>Password</label>
-							</div>
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.department}" jsf:required="true" maxlength="45" data-length="45" />
-								<label>Department</label>
-							</div>
-							<div class="input-field col s2">
-								<input type="text" class="validate" jsf:value="#{manageUserBean.role}" jsf:required="true" maxlength="45" data-length="45" />
-								<label>Role</label>
-							</div>
-						</div>
-						<h:commandButton styleClass="addUserHiddenButton" style="display: none;" actionListener="#{manageUserBean.addUser()}">
-							<f:ajax execute="@form" render="usersTable" />
-						</h:commandButton>
-					</h:form>
+							<h:commandButton styleClass="searchUserHiddenButton" style="display: none;">
+								<f:ajax execute="@form" render="@form addUserForm editUserForm" listener="#{manageUserBean.searchUser()}" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGroup>
 				</div>
+				<!-- END of Users-Related Code -->
 				<div id="divCountry" style="display: none;">
 					<div class="col s12" style="padding: 0;">
 		    			<button id="addCountryButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Country')">Add</button>

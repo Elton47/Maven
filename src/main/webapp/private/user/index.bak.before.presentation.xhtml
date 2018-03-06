@@ -1,0 +1,847 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:jsf="http://xmlns.jcp.org/jsf"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<h:head>
+		<title>Panel</title>
+		<link rel="shortcut icon" type="image/gif" href="../../resources/favicon.gif" />
+		<!-- Import Material Icons Font -->
+		<link rel="stylesheet" href="../../css/material-icons.css" />
+		<!-- Material Design CSS -->
+		<link rel="stylesheet" href="../../css/materialize.css" />
+		<!-- Import jQuery before materialize.js -->
+		<script type="text/javascript" src="../../js/jquery-3.2.1.min.js"></script>
+		<!-- Material Design Javascript -->
+		<script type="text/javascript" src="../../js/materialize.js"></script>
+		<!-- Controller Javascript -->
+		<script type="text/javascript" src="../../js/controller.js"></script>
+		<!-- Initialize Custom Elements -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('select').material_select();
+				$('.button-collapse').sideNav({
+				    menuWidth: 300,
+				    edge: 'left',
+				    closeOnClick: false,
+				    draggable: true
+					}
+				);
+				$('.button-collapse').sideNav('show');
+		  	});
+		</script>
+		<style>
+			.side-nav li>a {
+			  padding: 0 16px;
+			}
+			body {
+				display: flex;
+				min-height: 100vh;
+				flex-direction: column;
+			}
+			main {
+				flex: 1 0 auto;
+			}
+			footer {
+				font-family: 'Product Sans';
+			}
+		</style>
+	</h:head>
+	<h:body>
+		<main>
+			<div id="fabDiv" class="fixed-action-btn vertical click-to-toggle" style="display: none;">
+				<a id="fab" class="waves-effect waves-light btn-floating btn-large indigo" style="transition: background-color 0.3s ease;" title="Add"><i id="fabIcon" class="material-icons" style="transition: transform 0.3s ease;">add</i></a>
+				<ul>
+					<li><a id="removeFabAction" class="waves-effect waves-light btn-floating red" title="Delete" onclick="removeButtonClicked()"><i class="material-icons">delete</i></a></li>
+					<li><a id="doneDepartmentFABOption" class="waves-effect waves-light btn-floating green" title="Done" onclick="doneButtonClicked()"><i class="material-icons">done</i></a></li>
+				</ul>
+			</div>
+			<div class="tap-target" data-activates="fab">
+				<div class="tap-target-content white-text">
+					<h5>Tip:</h5>
+					<p>You can add records from here!</p>
+					<a href="#" class="white-text" onclick="$('.tap-target').tapTarget('close')">Dismiss</a>
+				</div>
+			</div>
+			<nav>
+	    		<div class="nav-wrapper hoverable">
+	    			<a href="" class="brand-logo center">cPanel</a>
+	      			<a href="#" data-activates="sideNavigation" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
+	      			<a id="searchIcon" href="#" class="right" style="margin-right: 18px; display: none;" onclick="searchOnClick();"><i class="material-icons">search</i></a>
+		   			<ul id="sideNavigation" class="side-nav hoverable" style="transform: translateX(0%) !important;">
+		   				<li class="indigo darken-4">
+		   					<div class="row" style="margin: 0;">
+		   						<div class="col s4" style="margin: 32px 32px 0;">
+		   							<i class="material-icons white-text" style="font-size: 32pt;">person_pin</i>
+		   							#{userLoginRequest.username}
+		   						</div>
+		   					</div>
+		  				</li>
+		   				<li class="indigo darken-4">
+			   				<ul class="collapsible collapsible-accordion">
+				   				<li>
+				   					<a class="collapsible-header white-text waves-effect waves-light"
+				   					onclick="document.getElementById('tablesArrow').style.transform = document.getElementById('tablesArrow').style.transform == '' ? 'rotateX(180deg)' : '';">
+				   						<i class="material-icons white-text ">view_list</i>
+				   						Tables
+				   						<i id="tablesArrow" class="material-icons right white-text" style="margin-right: 0; transition: all 0.3s ease;">arrow_drop_down</i>
+				   					</a>
+				   					<div class="collapsible-body">
+				   						<ul>
+					   						<li><a class="waves-effect waves-indigo" onclick="showTable('Department')">Departments<i class="material-icons">business</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('Sector')">Sectors<i class="material-icons">work</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('Role')">Roles<i class="material-icons">supervisor_account</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('Permission')">Permissions<i class="material-icons">thumbs_up_down</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('User')">Users<i class="material-icons">account_circle</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('Country')">Countries<i class="material-icons">terrain</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('Employee')">Employees<i class="material-icons">face</i></a></li>
+								  			<li><a class="waves-effect waves-indigo" onclick="showTable('Child')">Children<i class="material-icons">child_care</i></a></li>
+							  			</ul>
+				   					</div>
+			   					</li>
+			   				</ul>
+		   				</li>
+		   				<li class="white">
+			   				<ul class="collapsible collapsible-accordion">
+				   				<li>
+				   					<a class="collapsible-header waves-effect waves-indigo"
+				   					onclick="document.getElementById('settingsArrow').style.transform = document.getElementById('settingsArrow').style.transform == '' ? 'rotateX(180deg)' : '';">
+				   						<i class="material-icons">settings</i>
+				   						Settings
+				   						<i id="settingsArrow" class="material-icons right" style="margin-right: 0; transition: all 0.3s ease;">arrow_drop_down</i>
+				   					</a>
+				   					<div class="collapsible-body">
+				   						<ul>
+							  				<li><a href="#" onclick="$('.button-collapse').sideNav('show'); $('#changePasswordModal').modal(); $('#changePasswordModal').modal('open');"><i class="material-icons">vpn_key</i>Change Password</a></li>
+							  				<li>
+								  				<ul class="collapsible collapsible-accordion">
+							  						<li>
+									  					<a class="collapsible-header waves-effect waves-indigo" >Help<i class="material-icons">help_outline</i></a>
+									  					<div class="collapsible-body">
+								  							<ul class="grey-text" style="padding-left: 62px;">
+							  									<li>
+							  										Hold on.
+							  									</li>
+								  							</ul>
+									  					</div>
+								  					</li>
+							  					</ul>
+							  				</li>
+							  				<li>
+								  				<ul class="collapsible collapsible-accordion">
+							  						<li>
+									  					<a class="collapsible-header waves-effect waves-indigo" >About<i class="material-icons">info_outline</i></a>
+									  					<div class="collapsible-body">
+								  							<ul class="grey-text" style="padding-left: 62px;">
+							  									<li>
+							  										Nothing to see here.
+							  									</li>
+								  							</ul>
+									  					</div>
+								  					</li>
+							  					</ul>
+							  				</li>
+							  			</ul>
+				   					</div>
+			   					</li>
+			   				</ul>
+		   				</li>
+		   				<li class="divider" style="margin: 0;"/>
+		   				<li class="white">
+			   				<a class="waves-effect waves-indigo" onclick="logout()">Logout<i class="material-icons">power_settings_new</i></a>
+		   				</li>
+		  			</ul>
+		  			<h:form>
+						<h:commandLink class="logoutHiddenButton" style="display: none;" action="#{userLoginRequest.logout()}" />
+					</h:form>
+				</div>
+			</nav>
+	    	<div id="tableDiv" class="row" style="margin: 64px 128px;">
+	    		<div id="backFromSearch" style="display: none;">
+	    			<a onclick="backFromSearchOnClick()">
+	    				<i class="material-icons black-text" style="cursor: pointer;">arrow_back</i>
+	    			</a>
+	    		</div>
+	    		<h:form id="changePasswordForm">
+					<div id="changePasswordModal" class="modal">
+				    	<div class="modal-content">
+					    		<h5 class="center" style="font-family: 'Product Sans';">Changing Password for User: #{userLoginRequest.username}</h5>
+					    	<div class="input-field" style="width: 60%; margin: auto;">
+								<input type="password" class="validate" jsf:required="true" />
+								<label>Current Password</label>
+							</div>
+							<div class="input-field" style="width: 60%; margin: auto;">
+								<input type="password" styleClass="validate" jsf:required="true" />
+								<label>New Password</label>
+							</div>
+							<div class="input-field" style="width: 60%; margin: auto;">
+								<input type="password" styleClass="validate" jsf:required="true" />
+								<label>Confirm New Password</label>
+							</div>
+						    	<a href="#" class="right" style="margin-bottom: 16px;" onclick="searchActionOnClick()"><i class="material-icons black-text">done</i></a>
+					    </div>
+					</div>
+					<h:commandButton styleClass="changePasswordHiddenButton" style="display: none;">
+						<f:ajax execute="@form" render="@form" listener="#{manageDepartmentBean.searchDepartment()}" />
+					</h:commandButton>
+				</h:form>
+				<div id="welcomeDiv">
+					<h1 id="welcomeDateAndTime" class="center" style="font-family: 'Product Sans';">
+					<script type="text/javascript">
+						document.getElementById('welcomeDateAndTime').innerHTML = new Date().toLocaleString().substring(new Date().toLocaleString().indexOf("2018") + 6, new Date().toLocaleString().length);
+						function dateAndTime() {
+							document.getElementById('welcomeDateAndTime').innerHTML = new Date().toLocaleString().substring(new Date().toLocaleString().indexOf("2018") + 6, new Date().toLocaleString().length);
+						}
+						setInterval(dateAndTime, 1000);
+					</script></h1>
+					<h4 class="center" style="font-family: 'Product Sans';">Logged user: #{userLoginRequest.username}</h4>
+					<h4 class="center" style="font-family: 'Product Sans';">Password: -.-</h4>
+				</div>
+				<!-- START of Departments-Related Code -->
+	    		<div id="divDepartment" style="display: none;">
+		    		<h:panelGroup id="departmentPanel">
+						<h:form id="addDepartmentForm" styleClass="addDepartmentForm">
+			    			<div id="addDepartmentDiv" style="display: none;">
+								<div class="input-field col s4" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.department.code}" maxlength="16" data-length="16" />
+									<label>Code</label>
+								</div>
+								<div class="input-field col s4" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.department.name}" maxlength="45" data-length="45" />
+									<label>Name</label>
+								</div>
+								<div class="input-field col s4" style="margin-bottom: 32px;">
+									<input type="text" class="validate" jsf:required="true" jsf:value="#{manageDepartmentBean.department.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+									<label>Budget</label>
+								</div>
+							</div>
+							<h:commandButton styleClass="addDepartmentHiddenButton" style="display: none;">
+								<f:ajax execute="@form" render="@form editDepartmentForm" listener="#{manageDepartmentBean.addDepartment()}" />
+							</h:commandButton>
+						</h:form>
+						<h:form id="editDepartmentForm">
+							<h:dataTable id="departmentsTable" styleClass="highlight bordered card" value="#{manageDepartmentBean.departments}" var="department">
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" title="Sort" action="#{manageDepartmentBean.sort('code')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'name' or manageDepartmentBean.sortBy == 'budget' or (!manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'code')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'name' or manageDepartmentBean.sortBy == 'budget' or (manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'code')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!department.editable}" value="#{department.code}" />
+									<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" style="width: 100%; margin-left: 16px;" value="#{department.code}" maxlength="16" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" title="Sort" action="#{manageDepartmentBean.sort('name')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'budget' or (!manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'budget' or (manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'name')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!department.editable}" value="#{department.name}" />
+									<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" style="width: 100%; margin-left: 16px;" value="#{department.name}" maxlength="45" />
+								</h:column>
+								<h:column headerClass="indigo white-text">
+									<f:facet name="header">
+										<div style="position: relative;">
+											<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Budget" title="Sort" action="#{manageDepartmentBean.sort('budget')}">
+												<f:ajax execute="@this" render="@form"/>
+											</h:commandLink>
+											<span style="width: 8px; position: absolute; bottom: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'name' or (!manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'budget')}"><i class="material-icons right white-text">arrow_drop_up</i></h:panelGroup></span>
+											<span style="width: 8px; position: absolute; top: 2px; right: 0;"><h:panelGroup rendered="#{manageDepartmentBean.sortBy == '' or manageDepartmentBean.sortBy == 'code' or manageDepartmentBean.sortBy == 'name' or (manageDepartmentBean.sortedASC and manageDepartmentBean.sortBy == 'budget')}"><i class="material-icons right white-text">arrow_drop_down</i></h:panelGroup></span>
+										</div>
+									</f:facet>
+									<h:outputText rendered="#{!department.editable}" value="#{department.budget}" />
+									<h:inputText rendered="#{department.editable}" class="input-field col s4 validate" style="width: 80%; margin-left: 16px;" value="#{department.budget}" maxlength="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+									<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" onclick="editOnClick()">
+										<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.setEditing(department)}" />
+									</h:commandLink>
+									<h:commandButton styleClass="editDepartmentHiddenButton" style="display: none;">
+										<f:ajax execute="@form" render="@form addDepartmentForm" listener="#{manageDepartmentBean.editDepartment()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="removeDepartmentHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.removeDepartment()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="restoreDepartmentHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.restoreDepartment()}" />
+									</h:commandButton>
+									<h:commandButton styleClass="cancelDepartmentHiddenButton" style="display: none;">
+										<f:ajax execute="@this" render="@form addDepartmentForm" listener="#{manageDepartmentBean.cancelEditing()}" />
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
+						</h:form>
+						<h:form id="searchDepartmentForm">
+							<div id="searchDepartmentModal" class="modal">
+							    <div class="modal-content">
+							    	<h5 class="center" style="font-family: 'Product Sans';">Search Departments</h5>
+							    	<div class="row">
+								     	<div class="input-field col s4">
+											<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.code}" maxlength="16" data-length="16" />
+											<label>Code</label>
+										</div>
+										<div class="input-field col s4">
+											<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.name}" maxlength="45" data-length="45" />
+											<label>Name</label>
+										</div>
+										<div class="input-field col s4">
+											<input type="text" class="validate" jsf:value="#{manageDepartmentBean.department.budget}" maxlength="9" data-length="9" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+											<label>Budget</label>
+										</div>
+							    	</div>
+							    	<a href="#" class="right" style="margin-bottom: 16px;" onclick="searchActionOnClick()"><i class="material-icons black-text">search</i></a>
+							    </div>
+							</div>
+							<h:commandButton styleClass="searchDepartmentHiddenButton" style="display: none;">
+								<f:ajax execute="@form" render="@form addDepartmentForm editDepartmentForm" listener="#{manageDepartmentBean.searchDepartment()}" />
+							</h:commandButton>
+						</h:form>
+					</h:panelGroup>
+				</div>
+				<!-- END of Departments-Related Code -->
+				<div id="divSector" style="display: none;">
+					<h:form styleClass="inputSectorForm">
+		    			<div id="inputSectorDiv" style="display: none;">
+							<div class="input-field col s3">
+								<input  type="text" class="validate" jsf:value="#{manageSectorBean.code}" jsf:required="true" maxlength="16" data-length="16" />
+								<label>Code</label>
+							</div>
+							<div class="input-field col s3">
+								<input type="text" class="validate" jsf:value="#{manageSectorBean.name}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Name</label>
+							</div>
+							<div class="input-field col s3">
+								<h:selectOneMenu value="#{manageSectorBean.departmentName}" required="true" >
+									<f:selectItems value="#{manageDepartmentBean.departments}" var="department" itemValue="#{department.name}" itemLabel="#{department.name}" />
+								</h:selectOneMenu>
+								<label>Department</label>
+							</div>
+							<div class="input-field col s3">
+								<h:selectOneMenu value="#{manageSectorBean.employeeFullName}" required="false" >
+									<f:selectItem itemValue="" itemLabel="None" />
+									<f:selectItems value="#{manageEmployeeBean.employees}" var="employee" itemValue="#{employee.fullName}" itemLabel="#{employee.fullName}" />
+								</h:selectOneMenu>
+								<label>Manager</label>
+							</div>
+						</div>
+						<h:dataTable id="sectorsTable" styleClass="highlight bordered card" value="#{manageSectorBean.sectors}" var="sector">
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Code" action="#{manageSectorBean.sort('code')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								#{sector.code}
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Name" action="#{manageSectorBean.sort('name')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								#{sector.name}
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Department" action="#{manageSectorBean.sort('departmentName')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								#{sector.department.name}
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:commandLink style="color: white; width: 100%; margin: 0 auto;" value="Manager" action="#{manageSectorBean.sort('employeeFullName')}">
+										<f:ajax execute="@this" render="@form"/>
+									</h:commandLink>
+								</f:facet>
+								#{sector.employee.fullName}
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header"/>
+								<h:commandLink styleClass="material-icons secondary-content" title="Edit" value="edit" action="#{manageSectorBean.setSectorToEditOrRestore(sector)}" onclick="editOnClick()">
+									<f:ajax />
+								</h:commandLink>
+							</h:column>
+						</h:dataTable>
+						<h:commandButton styleClass="removeSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.removeSector()}">
+							<f:ajax execute="@this" render="sectorsTable" />
+						</h:commandButton>
+						<h:commandButton styleClass="restoreSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.restoreSector()}">
+							<f:ajax execute="@this" render="sectorsTable" />
+						</h:commandButton>
+						<h:commandButton styleClass="addSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.addSector()}">
+							<f:ajax execute="@form" immediate="true" render="sectorsTable" />
+						</h:commandButton>
+						<h:commandButton styleClass="editSectorHiddenButton" style="display: none;" actionListener="#{manageSectorBean.editSector()}">
+							<f:ajax execute="@form" immediate="true" render="sectorsTable" />
+						</h:commandButton>
+						<input id="succeededSector" type="hidden" value="#{manageSectorBean.getSucceeded()}"/>
+					</h:form>
+				</div>
+				<div id="divRole" style="display: none;">
+					<div class="col s12" style="padding: 0;">
+		    			<button id="addRoleButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Role')">Add</button>
+						<button id="doneRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Role')">Done</button>
+						<button id="cancelRoleButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Role')">Cancel</button>
+					</div>
+					<h:form styleClass="inputRoleForm">
+		    			<div id="inputRoleDiv" style="display: none;">
+							<div class="input-field col s6">
+								<input  type="text" class="validate" jsf:value="#{manageRoleBean.name}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Name</label>
+							</div>
+							<div class="input-field col s6">
+								<f:ajax>
+									<h:selectManyMenu value="#{manageRoleBean.permissionNames}" required="true">
+										<f:selectItem itemValue="" itemLabel="None" />
+										<f:selectItems value="#{managePermissionBean.permissions}" var="permission" itemValue="#{permission.name}" itemLabel="#{permission.name}" />
+									</h:selectManyMenu>
+								</f:ajax>
+								<label>Permissions</label>
+							</div>
+						</div>
+						<h:commandButton styleClass="addRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.addRole()}">
+							<f:ajax execute="@form" render="rolesTable" />
+						</h:commandButton>
+						<h:commandButton styleClass="editRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.editRole()}">
+							<f:ajax execute="@form" render="rolesTable" />
+						</h:commandButton>
+						<h:dataTable id="rolesTable" styleClass="highlight bordered card hoverable" value="#{manageRoleBean.roles}" var="role">
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:outputText value="Name" />
+								</f:facet>
+								#{role.name}
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:outputText value="Permissions" />
+								</f:facet>
+								<ul class="collapsible left" data-collapsible="accordion" style="width: 100%;">
+									<li>
+										<div class="collapsible-header">Show</div>
+										<div class="collapsible-body">
+											<ui:repeat value="#{role.permissions}" var="permission">
+												<div>#{permission.name}
+													<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageRoleBean.removePermissionFromRole(role, permission)}" onclick="removeButtonClicked('RolePermission')">
+														<f:ajax execute="@this" render="@form" />
+													</h:commandLink>
+												</div>
+											</ui:repeat>
+										</div>
+									</li>
+								</ul>
+							</h:column>
+							<h:column headerClass="indigo white-text">
+								<f:facet name="header">
+									<h:outputText styleClass="right" value="Action" />
+								</f:facet>
+								<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{manageRoleBean.removeRole(role)}" onclick="removeButtonClicked('Role')">
+									<f:ajax execute="@this" render="@form" />
+								</h:commandLink>
+								<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{manageRoleBean.setRoleToEditOrRestore(role)}" onclick="editButtonClicked('Role')">
+									<f:ajax />
+								</h:commandLink>
+								<h:commandButton styleClass="restoreRoleHiddenButton" style="display: none;" actionListener="#{manageRoleBean.restoreRole()}">
+									<f:ajax execute="@this" render="@form" />
+								</h:commandButton>
+								<h:commandButton styleClass="restoreRolePermissionHiddenButton" style="display: none;" actionListener="#{manageRoleBean.restorePermissionFromRole()}">
+									<f:ajax execute="@this" render="@form" />
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:form>
+				</div>
+				<div id="divPermission" style="display: none;">
+					<div class="col s12" style="padding: 0;">
+		    			<button id="addPermissionButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Permission')">Add</button>
+						<button id="donePermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Permission')">Done</button>
+						<button id="cancelPermissionButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Permission')">Cancel</button>
+					</div>
+					<h:form styleClass="inputPermissionForm">
+		    			<div id="inputPermissionDiv" style="display: none;">
+							<div class="input-field col s6">
+								<input  type="text" class="validate" jsf:value="#{managePermissionBean.name}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Name</label>
+							</div>
+							<div class="input-field col s6">
+								<f:ajax>
+									<h:selectManyMenu value="#{managePermissionBean.roleNames}" required="true">
+										<f:selectItem itemValue="" itemLabel="None" />
+										<f:selectItems value="#{manageRoleBean.roles}" var="role" itemValue="#{role.name}" itemLabel="#{role.name}" />
+									</h:selectManyMenu>
+								</f:ajax>
+								<label>Roles</label>
+							</div>
+						</div>
+						<h:commandButton styleClass="addPermissionHiddenButton" style="display: none;" actionListener="#{managePermissionBean.addPermission()}">
+							<f:ajax execute="@form" render="permissionsTable" />
+						</h:commandButton>
+						<h:commandButton styleClass="editPermissionHiddenButton" style="display: none;" actionListener="#{managePermissionBean.editPermission()}">
+							<f:ajax execute="@form" render="permissionsTable" />
+						</h:commandButton>
+						<h:dataTable id="permissionsTable" styleClass="highlight" value="#{managePermissionBean.permissions}" var="permission">
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Name" />
+								</f:facet>
+								#{permission.name}
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText value="Roles" />
+								</f:facet>
+								<ul class="collapsible left" data-collapsible="accordion" style="width: 100%;">
+									<li>
+										<div class="collapsible-header">Show</div>
+										<div class="collapsible-body">
+											<ui:repeat value="#{permission.roles}" var="role">
+												<div>#{role.name}
+													<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{managePermissionBean.removeRoleFromPermission(permission, role)}" onclick="removeButtonClicked('PermissionRole')">
+														<f:ajax execute="@this" render="@form" />
+													</h:commandLink>
+												</div>
+											</ui:repeat>
+										</div>
+									</li>
+								</ul>
+							</h:column>
+							<h:column>
+								<f:facet name="header">
+									<h:outputText styleClass="right" value="Action" />
+								</f:facet>
+								<h:commandLink styleClass="material-icons secondary-content" value="delete" action="#{managePermissionBean.removePermission(permission)}" onclick="removeButtonClicked('Permission')">
+									<f:ajax execute="@this" render="@form" />
+								</h:commandLink>
+								<h:commandLink styleClass="material-icons secondary-content" value="edit" action="#{managePermissionBean.setPermissionToEditOrRestore(permission)}" onclick="editButtonClicked('Permission')">
+									<f:ajax />
+								</h:commandLink>
+								<h:commandButton styleClass="restorePermissionHiddenButton" style="display: none;" actionListener="#{managePermissionBean.restorePermission()}">
+									<f:ajax execute="@this" render="@form" />
+								</h:commandButton>
+								<h:commandButton styleClass="restorePermissionRoleHiddenButton" style="display: none;" actionListener="#{managePermissionBean.restoreRoleFromPermission()}">
+									<f:ajax execute="@this" render="@form" />
+								</h:commandButton>
+							</h:column>
+						</h:dataTable>
+					</h:form>
+				</div>
+				<div id="divUser" style="display: none;">
+					<div class="col s12" style="padding: 0;">
+		    			<button id="addUserButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('User')">Add</button>
+						<button id="doneUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('User')">Done</button>
+						<button id="cancelUserButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('User')">Cancel</button>
+					</div>
+					<h:dataTable id="usersTable" styleClass="highlight" value="#{manageUserBean.users}" var="user">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="First Name" />
+							</f:facet>
+							#{user.firstName}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Middle Name" />
+							</f:facet>
+							#{user.middleName}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Last Name" />
+							</f:facet>
+							#{user.lastName}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Username" />
+							</f:facet>
+							#{user.username}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Password" />
+							</f:facet>
+							#{user.password}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Department" />
+							</f:facet>
+							#{user.department.name}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Role" />
+							</f:facet>
+							<h:form>
+								#{user.role.name}
+								<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageUserBean.removeUser(user.username)}">
+									<f:ajax execute="@form" render="@form usersTable" />
+								</h:commandLink>
+								<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('User')">
+									<f:ajax execute="none" />
+								</h:commandLink>
+							</h:form>
+						</h:column>
+					</h:dataTable>
+					<br />
+					<h:form styleClass="inputUserForm">
+		    			<div id="inputUserDiv" style="display: none;">
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.firstName}" jsf:required="true" maxlength="16" data-length="16" />
+								<label>First Name</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.middleName}" jsf:required="true" maxlength="16" data-length="16" />
+								<label>Middle Name</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.lastName}" jsf:required="true" maxlength="16" data-length="16" />
+								<label>Last Name</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.username}" jsf:required="true" maxlength="16" data-length="16" />
+								<label>Username</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.password}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Password</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.department}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Department</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageUserBean.role}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Role</label>
+							</div>
+						</div>
+						<h:commandButton styleClass="addUserHiddenButton" style="display: none;" actionListener="#{manageUserBean.addUser()}">
+							<f:ajax execute="@form" render="usersTable" />
+						</h:commandButton>
+					</h:form>
+				</div>
+				<div id="divCountry" style="display: none;">
+					<div class="col s12" style="padding: 0;">
+		    			<button id="addCountryButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Country')">Add</button>
+						<button id="doneCountryButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Country')">Done</button>
+						<button id="cancelCountryButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Country')">Cancel</button>
+					</div>
+					<h:dataTable id="countriesTable" styleClass="highlight" value="#{manageCountryBean.countries}" var="country">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Name" />
+							</f:facet>
+							<h:form>
+								#{country.name}
+								<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageCountryBean.removeCountry(country.name)}">
+									<f:ajax execute="@form" render="@form countriesTable" />
+								</h:commandLink>
+								<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Country')">
+									<f:ajax execute="none" />
+								</h:commandLink>
+							</h:form>
+						</h:column>
+					</h:dataTable>
+					<br />
+					<h:form styleClass="inputCountryForm">
+		    			<div id="inputCountryDiv" style="display: none;">
+							<div class="input-field col s4">
+								<input type="text" class="validate" jsf:value="#{manageCountryBean.name}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Name</label>
+							</div>
+						</div>
+						<h:commandButton styleClass="addCountryHiddenButton" style="display: none;" actionListener="#{manageCountryBean.addCountry()}">
+							<f:ajax execute="@form" render="countriesTable" />
+						</h:commandButton>
+					</h:form>
+				</div>
+				<div id="divEmployee" style="display: none;">
+					<div class="col s12" style="padding: 0;">
+		    			<button id="addEmployeeButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Employee')">Add</button>
+						<button id="doneEmployeeButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Employee')">Done</button>
+						<button id="cancelEmployeeButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Employee')">Cancel</button>
+					</div>
+					<h:dataTable id="employeesTable" styleClass="highlight" value="#{manageEmployeeBean.employees}" var="employee">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="SSN" />
+							</f:facet>
+							#{employee.ssn}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Full Name" />
+							</f:facet>
+							#{employee.fullName}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="CellNo" />
+							</f:facet>
+							#{employee.cellNo}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Wage" />
+							</f:facet>
+							#{employee.wage}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Country" />
+							</f:facet>
+							#{employee.country.name}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Sector" />
+							</f:facet>
+							<h:form>
+								#{employee.sector.name}
+								<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageEmployeeBean.removeEmployee(employee.ssn)}">
+									<f:ajax execute="@form" render="@form employeesTable" />
+								</h:commandLink>
+								<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Employee')">
+									<f:ajax execute="none" />
+								</h:commandLink>
+							</h:form>
+						</h:column>
+					</h:dataTable>
+					<br />
+					<h:form styleClass="inputEmployeeForm">
+		    			<div id="inputEmployeeDiv" style="display: none;">
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageEmployeeBean.ssn}" jsf:required="true" maxlength="16" data-length="16" />
+								<label>SSN</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageEmployeeBean.fullName}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Full Name</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageEmployeeBean.cellNo}" jsf:required="true" maxlength="45" data-length="45" onkeypress="if((event.which &lt; 48 || event.which &gt; 57) &amp;&amp; event.which != 43) return false;" />
+								<label>CellNo</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageEmployeeBean.wage}" jsf:equired="true" maxlength="16" data-length="16" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" />
+								<label>Wage</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageEmployeeBean.country}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Country</label>
+							</div>
+							<div class="input-field col s2">
+								<input type="text" class="validate" jsf:value="#{manageEmployeeBean.sector}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Sector</label>
+							</div>
+						</div>
+						<h:commandButton styleClass="addEmployeeHiddenButton" style="display: none;" actionListener="#{manageEmployeeBean.addEmployee()}">
+							<f:ajax execute="@form" render="employeesTable" />
+						</h:commandButton>
+					</h:form>
+				</div>
+				<div id="divChild" style="display: none;">
+					<div class="col s12" style="padding: 0;">
+		    			<button id="addChildButton" style="text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="addButtonClicked('Child')">Add</button>
+						<button id="doneChildButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="doneButtonClicked('Child')">Done</button>
+						<button id="cancelChildButton" style="display: none; text-transform: none; border-radius: 0;" class="waves-effect waves-light btn right" onclick="cancelButtonClicked('Child')">Cancel</button>
+					</div>
+					<h:dataTable id="childrenTable" styleClass="highlight" value="#{manageChildBean.children}" var="child">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Full Name" />
+							</f:facet>
+							#{child.fullName}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Age" />
+							</f:facet>
+							#{child.age}
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Parent" />
+							</f:facet>
+							<h:form>
+								#{child.employee.fullName}
+								<h:commandLink class="material-icons secondary-content" value="delete" action="#{manageChildBean.removeChild(child.fullName)}">
+									<f:ajax execute="@form" render="@form childrenTable" />
+								</h:commandLink>
+								<h:commandLink class="material-icons secondary-content" value="edit" onclick="editButtonClicked('Child')">
+									<f:ajax execute="none" />
+								</h:commandLink>
+							</h:form>
+						</h:column>
+					</h:dataTable>
+					<br />
+					<h:form styleClass="inputChildForm">
+		    			<div id="inputChildDiv" style="display: none;">
+							<div class="input-field col s4">
+								<input type="text" class="validate" jsf:value="#{manageChildBean.fullName}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Full Name</label>
+							</div>
+							<div class="range-field col s4">
+								<label>Age</label>
+								<input type="range" min="0" max="50" jsf:value="#{manageChildBean.age}" jsf:required="true" />
+							</div>
+							<div class="input-field col s4">
+								<input type="text" class="validate" jsf:value="#{manageChildBean.parent}" jsf:required="true" maxlength="45" data-length="45" />
+								<label>Parent</label>
+							</div>
+						</div>
+						<h:commandButton styleClass="addChildHiddenButton" style="display: none;" actionListener="#{manageChildBean.addChild()}">
+							<f:ajax execute="@form" render="childrenTable" />
+						</h:commandButton>
+					</h:form>
+				</div>
+			</div>
+		</main>
+	</h:body>
+	<footer class="page-footer">
+		<div class="container">
+			<div class="row">
+				<div class="col s6">
+					<h5 class="white-text">Footer Content</h5>
+					<p class="grey-text text-lighten-4">Nothing much to see here.</p>
+				</div>
+				<div class="col s2 offset-s2">
+					<h5 class="white-text">Links</h5>
+					<ul>
+						<li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+						<li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				<a class="grey-text text-lighten-1 left">
+					<script type="text/javascript">
+						document.write('© Copyright ' + new Date().getFullYear() + ' Elton Memishaj');
+					</script>
+				</a>
+				<a id="dateAndTime" class="grey-text text-lighten-1 right">
+					<script type="text/javascript">
+					document.getElementById('dateAndTime').innerHTML = new Date().toLocaleString();
+					function dateAndTime() {
+						document.getElementById('dateAndTime').innerHTML = new Date().toLocaleString();
+					}
+					setInterval(dateAndTime, 1000);
+					</script>
+				</a>
+			</div>
+		</div>
+	</footer>
+</html>

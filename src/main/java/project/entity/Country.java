@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -19,12 +20,18 @@ public class Country implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	@NaturalId
+	@NaturalId(mutable = true)
 	@Column(name = "Name")
 	private String name;
 	@Column(name = "Validity")
 	private int validity;
-	public Country() {}
+	@Transient
+	private boolean editable;
+	public Country() {validity = 1;}
+	public Country(String name) {
+		this.name = name;
+		validity = 1;
+	}
 	public int getId() {
 		return id;
 	}
@@ -42,5 +49,11 @@ public class Country implements Serializable {
 	}
 	public void setValidity(int validity) {
 		this.validity = validity;
+	}
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }

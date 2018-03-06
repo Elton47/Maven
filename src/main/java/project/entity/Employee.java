@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -21,7 +22,7 @@ public class Employee implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private int id;
-	@NaturalId
+	@NaturalId(mutable = true)
 	@Column(name = "SSN")
 	private String ssn;
 	@Column(name = "`Full Name`")
@@ -36,7 +37,18 @@ public class Employee implements Serializable {
 	private Sector sector;
 	@Column(name = "Validity")
 	private int validity;
-	public Employee() {}
+	@Transient
+	private boolean editable;
+	public Employee() {validity = 1;}
+	public Employee(String ssn, String fullName, String cellNo, int wage, Country country, Sector sector) {
+		this.ssn = ssn;
+		this.fullName = fullName;
+		this.cellNo = cellNo;
+		this.wage = wage;
+		this.country = country;
+		this.sector = sector;
+		validity = 1;
+	}
 	public int getId() {
 		return id;
 	}
@@ -84,5 +96,11 @@ public class Employee implements Serializable {
 	}
 	public void setValidity(int validity) {
 		this.validity = validity;
+	}
+	public boolean isEditable() {
+		return editable;
+	}
+	public void setEditable(boolean editable) {
+		this.editable = editable;
 	}
 }
