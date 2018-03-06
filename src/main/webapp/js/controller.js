@@ -1,17 +1,24 @@
 var adding = false;
 var editing = false;
-var searching = false;
+var isSearched = false;
 var featureDiscoveryShownOnce = false;
 var currentTableName;
 function showTable(selectedTableName) {
 	if($('#div' + selectedTableName).is(":visible")) {
 		$('#div' + selectedTableName).hide("fast");
 		document.getElementById('fabDiv').style.display = "none";
+		document.getElementById('searchIcon').style.display = "none";
+		$('#backFromSearch').hide('fast');
+		$('#welcomeDiv').show();
 	}
 	else {
 		hideAllTables();
 		$('#div' + selectedTableName).show("fast");
+		$('#welcomeDiv').hide("fast");
 		document.getElementById('fabDiv').style.display = "";
+		document.getElementById('searchIcon').style.display = "";
+		if(isSearched)
+			$('#backFromSearch').show('fast');
 	}
 	if(!featureDiscoveryShownOnce) {
 		$('.button-collapse').sideNav('show'); // Hide sideNavigation for first time.
@@ -35,7 +42,7 @@ function fabOnClick() {
 	var fab = document.getElementById('fab');
 	var fabIcon = document.getElementById('fabIcon');
 	if(fabIcon.style.transform != "rotate(45deg)") {
-		if(!editing && !searching) { // Adding
+		if(!editing) { // Adding
 			adding = true;
 			document.getElementById('removeFabAction').style.display = "none";
 			$('#add' + currentTableName + 'Div').show('fast');
@@ -44,12 +51,9 @@ function fabOnClick() {
 			$('#add' + currentTableName + 'Div').hide();
 			document.getElementById('removeFabAction').style.display = "";
 		}
-		else if(searching) {
-			document.getElementById('removeFabAction').style.display = "none";
-			$('#add' + currentTableName + 'Div').show('fast');
-		}
 		fab.classList.remove("indigo");
 		fab.classList.add("red");
+		fab.title = "Cancel";
 		fabIcon.style.webkitTransform = "rotate(45deg)";
 		fabIcon.style.MozTransform = "rotate(45deg)";
 		fabIcon.style.msTransform = "rotate(45deg)";
@@ -59,6 +63,7 @@ function fabOnClick() {
 	else { // Cancel.
 		fab.classList.remove("red");
 		fab.classList.add("indigo");
+		fab.title = "Add";
 		fabIcon.style.webkitTransform = "";
 		fabIcon.style.MozTransform = "";
 		fabIcon.style.msTransform = "";
@@ -73,49 +78,47 @@ function fabOnClick() {
 			document.getElementsByClassName('cancel' + currentTableName + 'HiddenButton')[0].click();
 			editing = false;
 		}
-		if(searching) {
-			document.getElementsByClassName('add' + currentTableName + 'Form')[0].reset();
-			$('#add' + currentTableName + 'Div').hide('fast');
-			searching = false;
-		}
 	}
 }
 function editOnClick() {
-	if(adding || searching)
+	if(adding)
 		$('#fab').click();
 	editing = true;
 	$('#fab').click();
 }
 function searchOnClick() {
-	if(adding)
+	if(adding || editing)
 		$('#fab').click();
-	if(!editing) {
-		searching = true;
+	$('#search' + currentTableName + 'Modal').modal(); // Init.
+	$('#search' + currentTableName + 'Modal').modal('open');
+}
+function searchActionOnClick() {
+	document.getElementsByClassName('search' + currentTableName + 'HiddenButton')[0].click();
+	$('#search' + currentTableName + 'Modal').modal('close');
+	$('#backFromSearch').show('fast');
+	isSearched = true;
+}
+function backFromSearchOnClick() {
+	if(adding || editing)
 		$('#fab').click();
-	}
-	else
-		$('#fab').click();
+	document.getElementsByClassName('search' + currentTableName + 'HiddenButton')[0].click();
+	$('#backFromSearch').hide('fast');
+	isSearched = false;
 }
 function doneButtonClicked() {
 	if(adding) {
 		document.getElementsByClassName('add' + currentTableName + 'HiddenButton')[0].click();
-		notify("add");
 		adding = false;
 	}
 	else if(editing) {
 		document.getElementsByClassName('edit' + currentTableName + 'HiddenButton')[0].click();
-		notify("updat"); // not update.
 		editing = false;
-	}
-	else if(searching) {
-		document.getElementsByClassName('search' + currentTableName + 'HiddenButton')[0].click();
-		searching = false;
 	}
 	$('#fab').click();
 }
 function removeButtonClicked() {
 	document.getElementsByClassName('remove' + currentTableName + 'HiddenButton')[0].click();
-	var toastContent = $('<span>' + currentTableName + ' removed successfully!</span>').add($('<button class="btn-flat toast-action" style="color: #c5cae9;" onclick="restoreButtonClicked(\'' + currentTableName + '\')">Undo</button>'));
+	var toastContent = $('<span>' + currentTableName + ' removed successfully!</span>').add($('<button class="btn-flat toast-action" style="color: #9fa8da;" onclick="restoreButtonClicked(\'' + currentTableName + '\')">Undo</button>'));
 	Materialize.toast(toastContent, 4000);
 	$('#fab').click();
 }
@@ -123,12 +126,6 @@ function restoreButtonClicked() {
 	document.getElementsByClassName('restore' + currentTableName + 'HiddenButton')[0].click();
 	$('.toast').first()[0].M_Toast.remove();
 	Materialize.toast(currentTableName + " restored successfully!", 4000);
-}
-function notify(actionName) {
-	if($('#succeeded' + currentTableName).val() == 'true')
-		Materialize.toast(currentTableName + " " + actionName + "ed successfully!", 4000);
-	else
-		Materialize.toast("Error " + actionName + "ing " + currentTableName + "!", 4000);
 }
 function logout() {
 	document.getElementsByClassName('logoutHiddenButton')[0].click();

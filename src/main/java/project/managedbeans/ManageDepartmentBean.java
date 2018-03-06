@@ -1,7 +1,6 @@
 package project.managedbeans;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -15,33 +14,31 @@ import project.entity.Department;
 public class ManageDepartmentBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private final DepartmentDao departmentDao = new DepartmentDao();
-	private Department departmentToRestore, department = new Department();
+	private Department departmentToRestore, department = new Department(), searchDepartment;
 	private String sortBy = "";
 	private boolean sortedASC = false, succeeded;
-	private List<Department> searchResults = new ArrayList<Department>();
+	private List<Department> departments = departmentDao.getDepartments();
+	
 	public List<Department> sort(String sortBy) {
 		this.sortBy = sortBy;
-		List<Department> departments = departmentDao.getDepartments();
+		departments = searchDepartment != null ? departmentDao.getDepartments(searchDepartment) : departmentDao.getDepartments();
 		if(sortBy.equals("code"))
 			departments.sort(!sortedASC ? compareByCode.reversed() : compareByCode);
 		else if(sortBy.equals("name"))
 			departments.sort(!sortedASC ? compareByName.reversed() : compareByName);
 		else if(sortBy.equals("budget"))
 			departments.sort(!sortedASC ? compareByBudget.reversed() : compareByBudget);
-		else
-			departments.sort(compareById.reversed()); // Sort DESC by default (ID).
-		sortedASC = sortedASC ? false : true;
+		sortedASC = !sortedASC;
 		return departments;
 	}
-	public boolean isSortedASC() {
+	public boolean isSortedASC() { // Used for sort arrows at xhtml file.
 		return sortedASC;
 	}
-	public String getSortBy() {
+	public String getSortBy() { // Also this one.
 		return sortBy;
 	}
 	public List<Department> getDepartments() {
-		if(searchResults != null && !searchResults.isEmpty())
-			return searchResults;
+		sortedASC = !sortedASC; // To keep sorting order.
 		return sort(sortBy);
 	}
 	public Department getDepartment() {
@@ -50,15 +47,16 @@ public class ManageDepartmentBean implements Serializable {
 	public void setDepartment(Department department) {
 		this.department = department;
 	}
-	public boolean getSucceeded() {
+	public boolean getSucceeded() { // For notifications.
 		return succeeded;
 	}
 	public void addDepartment() {
 		succeeded = departmentDao.addDepartment(department);
-		department = new Department(); // If more deparments are added continuously.
+		department = new Department(); // Reset form if more deparments are added continuously.
 	}
 	public void searchDepartment() {
-		searchResults = departmentDao.getDepartments(department);
+		searchDepartment = department; // For later use (at sort or get method).
+		department = new Department(); // Reset form.
 	}
 	public void removeDepartment() {
 		departmentToRestore = department;
@@ -75,9 +73,6 @@ public class ManageDepartmentBean implements Serializable {
 		department.setEditable(false);
 		cancelEditing();
 	}
-	public Department getDepartmentToEditOrRestore() {
-		return departmentToRestore;
-	}
 	public void setEditing(Department department) {
 		this.department = department;
 		this.department.setEditable(true);
@@ -88,12 +83,7 @@ public class ManageDepartmentBean implements Serializable {
 			department = new Department();
 		}
 	}
-	// Comparators.
-	private static Comparator<Department> compareById = new Comparator<Department>() {
-        public int compare(Department one, Department other) {
-            return Integer.valueOf(one.getId()).compareTo(Integer.valueOf(other.getId()));
-        }
-    };
+	// Comparators (for sort).
 	private static Comparator<Department> compareByCode = new Comparator<Department>() {
         public int compare(Department one, Department other) {
             return one.getCode().compareToIgnoreCase(other.getCode());
